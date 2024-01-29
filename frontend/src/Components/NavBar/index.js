@@ -97,8 +97,6 @@ const Navbar = ({ toggle }) => {
                             aria-label='Discord'>
                                 <FDiscord src={DiscordSVG} />
                             </SocialIconLink>
-                            <NavBtnLink to="/register">Register</NavBtnLink>
-
                             <NavBtnLink to="/signin">Sign In</NavBtnLink>
                 </NavBtn>
             </NavbarContainer>          

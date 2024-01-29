@@ -1,7 +1,7 @@
 import React from 'react'
-import { Container, Form, FormContent, FormH1, FormButton, Text, FormInput, FormLabel, FormWrap, Icon, Text2 } from './SigninElements'
+import { Container, Form, FormContent, FormH1, FormButton, FormInput, FormLabel, FormWrap, Icon, Text } from './SignupElements'
 
-const SignIn = () => {
+const SignUp = () => {
     return (
         <>
         <Container>
@@ -9,14 +9,15 @@ const SignIn = () => {
                 <Icon to="/">Ball play</Icon>
                 <FormContent>
                     <Form action="#">
-                        <FormH1>Sign in to your account</FormH1>
+                        <FormH1>Sign up for your account</FormH1>
                         <FormLabel htmlFor='for'>Email</FormLabel>
                         <FormInput type='email' required />
                         <FormLabel htmlFor='for'>Password</FormLabel>
                         <FormInput type='password' required />
-                        <Text2 to='/account-recovery'>Forgot Password?</Text2>
+                        <FormLabel htmlFor='for'>Confirm Password</FormLabel>
+                        <FormInput type='password' required />
                         <FormButton type='submit'>Continue</FormButton>
-                        <Text to='/signup'>New User? Sign up</Text>
+                        <Text to='/signin'>Already have an account? Sign in</Text>
                     </Form>
                 </FormContent>
             </FormWrap>            
@@ -25,4 +26,4 @@ const SignIn = () => {
     );
 };
 
-export default SignIn;
+export default SignUp;

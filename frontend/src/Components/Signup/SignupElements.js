@@ -106,11 +106,3 @@ margin-top: 24px;
 color: #fff;
 font-size: 14px;
 `;
-
-export const Text2 = styled(Link)`
-text-align: left;
-margin-top: -20px;
-margin-bottom: 30px;
-color: #fff;
-font-size: 14px;
-`;
