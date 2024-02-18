@@ -134,9 +134,6 @@ def get_stats_by_position(team_id, season):
         # Get the stats for each player
         player_stats = get_stats_by_player(player_id, season)
 
-        if (player_info[1] == 'PK'):
-            print(player_stats)
-
         # If the player has stats and the position isn't in the dictionary, add them
         if player_stats != None and player_info[1] not in stats:
 
