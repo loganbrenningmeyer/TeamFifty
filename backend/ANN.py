@@ -73,22 +73,22 @@ class ANN(nn.Module):
         # Predict the output
         return self(x)
 
-def main():
-    # Take user input on configuration
-    input_size = int(input("Input size: "))
-    output_size = int(input("Output size: "))
-    hidden_layers = int(input("Number of hidden layers: "))
-    hidden_size = []
-    hidden_type = []
-    for i in range(hidden_layers):
-        hidden_type.append(int(input("Type of hidden layer {}: ".format(i+1))))
-        hidden_size.append(int(input("Size of hidden layer {}: ".format(i+1))))
+# def main():
+#     # Take user input on configuration
+#     input_size = int(input("Input size: "))
+#     output_size = int(input("Output size: "))
+#     hidden_layers = int(input("Number of hidden layers: "))
+#     hidden_size = []
+#     hidden_type = []
+#     for i in range(hidden_layers):
+#         hidden_type.append(int(input("Type of hidden layer {}: ".format(i+1))))
+#         hidden_size.append(int(input("Size of hidden layer {}: ".format(i+1))))
 
-    print(hidden_type)
-    print(hidden_size)
-    # Create the model
-    model = ANN(input_size, output_size, hidden_layers, hidden_size, hidden_type)
+#     print(hidden_type)
+#     print(hidden_size)
+#     # Create the model
+#     model = ANN(input_size, output_size, hidden_layers, hidden_size, hidden_type)
 
-    print(model.__repr__)
+#     print(model.__repr__)
 
-main()
+# main()

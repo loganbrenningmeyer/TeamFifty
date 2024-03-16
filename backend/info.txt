@@ -5,3 +5,6 @@
 Offense: QB, RB, FB, WR, TE, C, G, OT
 Defense: DE, DT, CB, LB, S
 Special: PK, P, LS
+
+# Team Stats
+dict_keys(['first_downs_total', 'first_downs_passing', 'first_downs_rushing', 'first_downs_from_penalties', 'first_downs_third_down_efficiency', 'first_downs_fourth_down_efficiency', 'plays_total', 'yards_total', 'yards_yards_per_play', 'yards_total_drives', 'passing_total', 'passing_comp_att', 'passing_yards_per_pass', 'passing_interceptions_thrown', 'passing_sacks_yards_lost', 'rushings_total', 'rushings_attempts', 'rushings_yards_per_rush', 'red_zone_made_att', 'penalties_total', 'turnovers_total', 'turnovers_lost_fumbles', 'turnovers_interceptions', 'posession_total', 'interceptions_total', 'fumbles_recovered_total', 'sacks_total', 'safeties_total', 'int_touchdowns_total', 'points_against_total'])
