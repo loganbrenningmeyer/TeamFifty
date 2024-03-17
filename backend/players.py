@@ -4,6 +4,8 @@ import numpy as np
 import copy
 import torch
 import time
+#from pymongo.mongo_client import MongoClient
+#from pymongo.server_api import ServerApi
 
 #connect to API-NFL
 conn = http.client.HTTPSConnection("v1.american-football.api-sports.io")
@@ -232,9 +234,72 @@ def get_stats_by_position(team_id, season):
                             pass
                         stats[player_info[1]].append(value)
     return stats
+#this function is being used to accumulate the stats for all players for all teams for a given season
+#the data will be stored in a database to reduce the number of API calls necessary for training the model
+def player_stats_per_team_per_year(leagueID,season):
+    teamList = get_teams_by_season(1,season)
+    playerListPerTeam = {}
+    statsList = {'RB': {'Rushing': {'rushing attempts': 0, 'yards': 0, 'yards per rush avg': 0, 'longest rush': 0, 'over 20 yards': 0, 'rushing touchdowns': 0, 'yards per game': 0, 'fumbles': 0, 'fumbles lost': 0, 'rushing first downs': 0}, 'Receiving': {'receptions': 0, 'receiving targets': 0, 'receiving yards': 0, 'yards per reception avg': 0, 'receiving touchdowns': 0, 'longest reception': 0, 'over 20 yards': 0, 'yards per game': 0, 'fumbles': 0, 'fumbles lost': 0, 'yards after catch': 0, 'receiving first downs': 0}, 'Defense': {'unassisted tackles': 0, 'assisted tackles': 0, 'total tackles': 0, 'sacks': 0, 'yards lost on sack': 0, 'tackles for loss': 0, 'passes defended': 0, 'interceptions': 0, 'intercepted returned yards': 0, 'longest interception return': 0, 'interceptions returned for touchdowns': 0, 'forced fumbles': 0, 'fumbles recovered': 0, 'fumbles returned for touchdowns': 0, 'blocked kicks': 0}, 'Scoring': {'rushing touchdowns': 0, 'receiving touchdowns': 0, 'return touchdowns': 0, 'total touchdowns': 0, 'field goals': 0, 'extra points': 0, 'two point conversions': 0, 'total points': 0, 'total points per game': 0}, 'Returning': {'kickoff returned attempts': 0, 'kickoff return yards': 0, 'yards per kickoff avg': 0, 'longes kickoff return': 0, 'kickoff return touchdows': 0, 'punts returned': 0, 'yards returned on punts': 0, 'yards per punt avg': 0, 'longest punt return': 0, 'punt return touchdowns': 0, 'fair catches': 0}}, 'FB': {'Receiving': {'receptions': 0, 'receiving targets': 0, 'receiving yards': 0, 'yards per reception avg': 0, 'receiving touchdowns': 0, 'longest reception': 0, 'over 20 yards': 0, 'yards per game': 0, 'fumbles': 0, 'fumbles lost': 0, 'yards after catch': 0, 'receiving first downs': 0}, 'Defense': {'unassisted tackles': 0, 'assisted tackles': 0, 'total tackles': 0, 'sacks': 0, 'yards lost on sack': 0, 'tackles for loss': 0, 'passes defended': 0, 'interceptions': 0, 'intercepted returned yards': 0, 'longest interception return': 0, 'interceptions returned for touchdowns': 0, 'forced fumbles': 0, 'fumbles recovered': 0, 'fumbles returned for touchdowns': 0, 'blocked kicks': 0}, 'Returning': {'kickoff returned attempts': 0, 'kickoff return yards': 0, 'yards per kickoff avg': 0, 'longes kickoff return': 0, 'kickoff return touchdows': 0, 'punts returned': 0, 'yards returned on punts': 0, 'yards per punt avg': 0, 'longest punt return': 0, 'punt return touchdowns': 0, 'fair catches': 0}}, 'WR': {'Receiving': {'receptions': 0, 'receiving targets': 0, 'receiving yards': 0, 'yards per reception avg': 0, 'receiving touchdowns': 0, 'longest reception': 0, 'over 20 yards': 0, 'yards per game': 0, 'fumbles': 0, 'fumbles lost': 0, 'yards after catch': 0, 'receiving first downs': 0},'Defense': {'unassisted tackles': 0, 'assisted tackles': 0, 'total tackles': 0, 'sacks': 0, 'yards lost on sack': 0, 'tackles for loss': 0, 'passes defended': 0, 'interceptions': 0, 'intercepted returned yards': 0, 'longest interception return': 0, 'interceptions returned for touchdowns': 0, 'forced fumbles': 0, 'fumbles recovered': 0, 'fumbles returned for touchdowns': 0, 'blocked kicks': 0}, 'Scoring': {'rushing touchdowns': 0, 'receiving touchdowns': 0, 'return touchdowns': 0, 'total touchdowns': 0, 'field goals': 0, 'extra points': 0, 'two point conversions': 0, 'total points': 0, 'total points per game': 0}, 'Rushing': {'rushing attempts': 0, 'yards': 0, 'yards per rush avg': 0, 'longest rush': 0, 'over 20 yards': 0, 'rushing touchdowns': 0, 'yards per game': 0, 'fumbles': 0, 'fumbles lost': 0, 'rushing first downs': 0}}, 'TE': {'Receiving': {'receptions': 0, 'receiving targets': 0, 'receiving yards': 0, 'yards per reception avg': 0, 'receiving touchdowns': 0, 'longest reception': 0, 'over 20 yards': 0, 'yards per game': 0, 'fumbles': 0, 'fumbles lost': 0, 'yards after catch': 0, 'receiving first downs': 0}, 'Defense': {'unassisted tackles': 0, 'assisted tackles': 0, 'total tackles': 0, 'sacks': 0, 'yards lost on sack': 0, 'tackles for loss': 0, 'passes defended': 0, 'interceptions': 0, 'intercepted returned yards': 0, 'longest interception return': 0, 'interceptions returned for touchdowns': 0, 'forced fumbles': 0, 'fumbles recovered': 0, 'fumbles returned for touchdowns': 0, 'blocked kicks': 0}}, 'C': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 0, 'total tackles': 0, 'sacks': 0, 'yards lost on sack': 0, 'tackles for loss': 0, 'passes defended': 0, 'interceptions': 0, 'intercepted returned yards': 0, 'longest interception return': 0, 'interceptions returned for touchdowns': 0, 'forced fumbles': 0, 'fumbles recovered': 0, 'fumbles returned for touchdowns': 0, 'blocked kicks': 0}}, 'G': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 0, 'total tackles': 0, 'sacks': 0, 'yards lost on sack': 0, 'tackles for loss': 0, 'passes defended': 0, 'interceptions': 0, 'intercepted returned yards': 0, 'longest interception return': 0, 'interceptions returned for touchdowns': 0, 'forced fumbles': 0, 'fumbles recovered': 0, 'fumbles returned for touchdowns': 0, 'blocked kicks': 0}}, 'OT': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 0, 'total tackles': 0, 'sacks': 0, 'yards lost on sack': 0, 'tackles for loss': 0, 'passes defended': 0, 'interceptions': 0, 'intercepted returned yards': 0, 'longest interception return': 0, 'interceptions returned for touchdowns': 0, 'forced fumbles': 0, 'fumbles recovered': 0, 'fumbles returned for touchdowns': 0, 'blocked kicks': 0}}, 'DE': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 0, 'total tackles': 0, 'sacks': 0, 'yards lost on sack': 0, 'tackles for loss': 0, 'passes defended': 0, 'interceptions': 0, 'intercepted returned yards': 0, 'longest interception return': 0, 'interceptions returned for touchdowns': 0, 'forced fumbles': 0, 'fumbles recovered': 0, 'fumbles returned for touchdowns': 0, 'blocked kicks': 0}}, 'DT': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 0, 'total tackles': 0, 'sacks': 0, 'yards lost on sack': 0, 'tackles for loss': 0, 'passes defended': 0, 'interceptions': 0, 'intercepted returned yards': 0, 'longest interception return': 0, 'interceptions returned for touchdowns': 0, 'forced fumbles': 0, 'fumbles recovered': 0, 'fumbles returned for touchdowns': 0, 'blocked kicks': 0}}, 'LB': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 0, 'total tackles': 0, 'sacks': 0, 'yards lost on sack': 0, 'tackles for loss': 0, 'passes defended': 0, 'interceptions': 0, 'intercepted returned yards': 0, 'longest interception return': 0, 'interceptions returned for touchdowns': 0, 'forced fumbles': 0, 'fumbles recovered': 0, 'fumbles returned for touchdowns': 0, 'blocked kicks': 0}}, 'CB': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 0, 'total tackles': 0, 'sacks': 0, 'yards lost on sack': 0, 'tackles for loss': 0, 'passes defended': 0, 'interceptions': 0, 'intercepted returned yards': 0, 'longest interception return': 0, 'interceptions returned for touchdowns': 0, 'forced fumbles': 0, 'fumbles recovered': 0, 'fumbles returned for touchdowns': 0, 'blocked kicks': 0}}, 'S': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 0, 'total tackles': 0, 'sacks': 0, 'yards lost on sack': 0, 'tackles for loss': 0, 'passes defended': 0, 'interceptions': 0, 'intercepted returned yards': 0, 'longest interception return': 0, 'interceptions returned for touchdowns': 0, 'forced fumbles': 0, 'fumbles recovered': 0, 'fumbles returned for touchdowns': 0, 'blocked kicks': 0}}, 'PK': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 0, 'total tackles': 0, 'sacks': 0, 'yards lost on sack': 0, 'tackles for loss': 0, 'passes defended': 0, 'interceptions': 0, 'intercepted returned yards': 0, 'longest interception return': 0, 'interceptions returned for touchdowns': 0, 'forced fumbles': 0, 'fumbles recovered': 0, 'fumbles returned for touchdowns': 0, 'blocked kicks': 0}, 'Scoring': {'rushing touchdowns': 0, 'receiving touchdowns': 0, 'return touchdowns': 0, 'total touchdowns': 0, 'field goals': 0, 'extra points': 0, 'two point conversions': 0, 'total points': 0, 'total points per game': 0}, 'Kicking': {'field goals made': 0, 'field goals attempts': 0, 'field goals made pct': 0, 'longest goal made': 0, 'field goals from 1 19 yards': 0, 'field goals from 20 29 yards': 0, 'field goals from 30 39 yards': 0, 'field goals from 40 49 yards': 0, 'field goals from 50 yards': 0, 'extra points made': 0, 'extra points attempts': 0, 'extra points made pct': 0}}, 'P': {'Punting': {'punts': 0, 'gross punt yards': 0, 'longest punt': 0, 'gross punting avg': 0, 'net punting avg': 0, 'blocked punts': 0, 'inside 20 yards punt': 0, 'touchbacks': 0, 'fair catches': 0, 'punts returned': 0, 'yards returned on punts': 0, 'yards returned on punts avg': 0}}, 'QB': {'Passing': {'passing attempts': 0, 'completions': 0, 'completion pct': 0, 'yards': 0, 'yards per pass avg': 0, 'yards per game': 0, 'longest pass': 0, 'passing touchdowns': 0, 'passing touchdowns pct': 0, 'interceptions': 0, 'interceptions pct': 0, 'sacks': 0, 'sacked yards lost': 0, 'quaterback rating': 0}, 'Rushing': {'rushing attempts': 0, 'yards': 0, 'yards per rush avg': 0, 'longest rush': 0, 'over 20 yards': 0, 'rushing touchdowns': 0, 'yards per game': 0, 'fumbles': 0, 'fumbles lost': 0, 'rushing first downs': 0}}, 'LS': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 0, 'total tackles': 0, 'sacks': 0, 'yards lost on sack': 0, 'tackles for loss': 0, 'passes defended': 0, 'interceptions': 0, 'intercepted returned yards': 0, 'longest interception return': 0, 'interceptions returned for touchdowns': 0, 'forced fumbles': 0, 'fumbles recovered': 0, 'fumbles returned for touchdowns': 0, 'blocked kicks': 0}}}
+    for teams in teamList:
+        playerList = []
+        print(teams)
+        players = get_players_by_team(teams,season)
+        print(players)
+        for player_id, player_info in players.items():
+
+            player_stats = get_stats_by_player(player_id, season)
+            #if stats for the player doesnt exist
+            if player_stats is not None:
+                #print(s,teamList[teamId],player_info[0])
+                # Fix PK values (28-32) (turn from string to float)
+                # These values are written as 'x-y' (x made, y attempted)
+                if player_info[1] == 'PK':
+                    if 'Kicking' in player_stats and player_stats['Kicking'] is not None:
+                        for stat in player_stats['Kicking']:
+                            if "-" in player_stats['Kicking'][stat]:
+                                    x,y = player_stats['Kicking'][stat].split('-')
+                                    x = float(x)
+                                    y = float(y)
+                                    if y == 0:
+                                        player_stats['Kicking'][stat] = 0
+                                    else:
+                                        player_stats['Kicking'][stat] = round(x / y,5)
+                #for each stats group
+                for group in statsList[player_info[1]]:
+                    #fills in stats as zero if a player doesn't have a certain stat group
+                    if group not in player_stats:
+                        player_stats.update({group:{}})
+                        for stat in statsList[player_info[1]][group]:
+                                player_stats[group][stat] = 0
+                        continue
+                    else:
+                        #goes through each stat and adds it to total
+                        for stat in statsList[player_info[1]][group]:
+                            if stat not in player_stats[group]:
+                                continue
+                            else:
+                                value = player_stats[group][stat]
+                                # If the value is a string, turn it into a float
+                                try:
+                                    value = float(value.replace(',', ''))
+                                except:
+                                    pass
+                                if value is not None:
+                                    player_stats[group][stat] = value
+            print(player_stats)
+            playerName = players[player_id][0]
+            print(playerName)
+            player_stats = {playerName:{player_id:player_stats}}
+            playerList.append(player_stats)
+        playerListPerTeam = {teamList[teams]:{teams:playerList}}
+        break
+    print(playerListPerTeam)
+    
+
 
 #this function will find the average stats for every position in the league for the entire season
 def get_average_stats_per_season():
+    
     #holds the average stats per position for each year
     averagesPerYear = {}
 
@@ -646,11 +711,12 @@ def get_pytorch_data(league, season):
 # for games in gameList:
 #     print(gameList[games])
 #     print()
-stats = get_average_stats_per_season()
-print(stats[2022])
+# stats = get_average_stats_per_season()
+# print(stats[2022])
 #compiled_stats = compile_stats(get_stats_by_position(3, 2023))
 #print(compiled_stats)
 #print(len(compiled_stats))
+#player_stats_per_team_per_year(1,2023)
     
 
 #season [2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013, 2012, 2011, 2010]
