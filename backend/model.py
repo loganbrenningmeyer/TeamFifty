@@ -5,6 +5,10 @@ import ANN
 
 torch.set_printoptions(threshold=torch.inf)
 
+#players.get_player_stats(1, 2023)
+
+#print(players.get_stats_by_player(140, 2023))
+
 league = 1
 season = 2023
 

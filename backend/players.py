@@ -14,7 +14,7 @@ headers = {
     }
 #Logan's Key 7d2dc831201816acd7bfce6f275ded21
 #christian's key c70572c71dea5b9097425435a60d972e
-# Given a season and league, pull the teams and store into a dictionary {team_id : team_name}
+# Given a season and league, pull the teams and store into a dictionary {teamID : team_name}
 def get_teams_by_season(league, season):
     while (True):
         conn.request("GET", f"/teams?league={league}&season={season}", headers=headers)
@@ -44,9 +44,9 @@ def get_teams_by_season(league, season):
     teams = {}
 
     for result in range(data['results']):
-        team_id = data['response'][result]['id']
+        teamID = data['response'][result]['id']
         team_name = data['response'][result]['name']
-        teams[team_id] = team_name
+        teams[teamID] = team_name
     try:
         del teams[33]
         del teams[34]
@@ -55,10 +55,10 @@ def get_teams_by_season(league, season):
     return teams
 
 # Given a team's ID, pull the players and store into a dictionary {player_id : player_name}
-def get_players_by_team(team_id, season):
+def get_players_by_team(teamID, season):
 
     while (True):
-        conn.request("GET", f"/players?team={team_id}&season={season}", headers=headers)
+        conn.request("GET", f"/players?team={teamID}&season={season}", headers=headers)
 
         res = conn.getresponse()
         data = res.read()
@@ -182,10 +182,140 @@ Choosing which players to include in the model:
 - Select a set number of players based on the position
 - For each position, select the top players based on the stats
     - Average the stats for each player and select the top players based on the average stats
-'''
 
-def get_stats_by_position(team_id, season):
-    players = get_players_by_team(team_id, season)
+- NUMBER OF PLAYERS TO SELECT FOR EACH POSITION (38 total)
+    - QB: 1
+    - RB: 3
+    - FB: 1
+    - WR: 5
+    - TE: 3
+    - OT: 1
+    - C: 1
+    - G: 1
+    - DE: 2
+    - DT: 3
+    - CB: 5
+    - S: 3
+    - LB: 6
+    - PK: 1
+    - P: 1
+    - LS: 1
+
+New function to get the top players for each position
+- Get the stats for each player (by position)
+- Average the stats for each player
+- Sort the players by the average stats
+- Select the top players based on the number of players to select for each position
+    - If there are less players than the number to select, fill in the remaining spots with league averages
+
+'''
+def get_player_stats(teamID, season):
+    # --- STEP 1. Get all stats for each player on the team (fill blanks w/ averages) ---
+    players = get_players_by_team(teamID, season)
+
+    # Dictionary containing stats by position
+    stats_by_position = {'RB': {'Rushing': {'rushing attempts': 0, 'yards': 1, 'yards per rush avg': 2, 'longest rush': 3, 'over 20 yards': 4, 'rushing touchdowns': 5, 'yards per game': 6, 'fumbles': 7, 'fumbles lost': 8, 'rushing first downs': 9}, 'Receiving': {'receptions': 10, 'receiving targets': 11, 'receiving yards': 12, 'yards per reception avg': 13, 'receiving touchdowns': 14, 'longest reception': 15, 'over 20 yards': 16, 'yards per game': 17, 'fumbles': 18, 'fumbles lost': 19, 'yards after catch': 20, 'receiving first downs': 21}, 'Defense': {'unassisted tackles': 22, 'assisted tackles': 23, 'total tackles': 24, 'sacks': 25, 'yards lost on sack': 26, 'tackles for loss': 27, 'passes defended': 28, 'interceptions': 29, 'intercepted returned yards': 30, 'longest interception return': 31, 'interceptions returned for touchdowns': 32, 'forced fumbles': 33, 'fumbles recovered': 34, 'fumbles returned for touchdowns': 35, 'blocked kicks': 36}, 'Scoring': {'rushing touchdowns': 37, 'receiving touchdowns': 38, 'return touchdowns': 39, 'total touchdowns': 40, 'field goals': 41, 'extra points': 42, 'two point conversions': 43, 'total points': 44, 'total points per game': 45}, 'Returning': {'kickoff returned attempts': 46, 'kickoff return yards': 47, 'yards per kickoff avg': 48, 'longes kickoff return': 49, 'kickoff return touchdows': 50, 'punts returned': 51, 'yards returned on punts': 52, 'yards per punt avg': 53, 'longest punt return': 54, 'punt return touchdowns': 55, 'fair catches': 56}}, 'FB': {'Receiving': {'receptions': 0, 'receiving targets': 1, 'receiving yards': 2, 'yards per reception avg': 3, 'receiving touchdowns': 4, 'longest reception': 5, 'over 20 yards': 6, 'yards per game': 7, 'fumbles': 8, 'fumbles lost': 9, 'yards after catch': 10, 'receiving first downs': 11}, 'Defense': {'unassisted tackles': 12, 'assisted tackles': 13, 'total tackles': 14, 'sacks': 15, 'yards lost on sack': 16, 'tackles for loss': 17, 'passes defended': 18, 'interceptions': 19, 'intercepted returned yards': 20, 'longest interception return': 21, 'interceptions returned for touchdowns': 22, 'forced fumbles': 23, 'fumbles recovered': 24, 'fumbles returned for touchdowns': 25, 'blocked kicks': 26}, 'Returning': {'kickoff returned attempts': 27, 'kickoff return yards': 28, 'yards per kickoff avg': 29, 'longes kickoff return': 30, 'kickoff return touchdows': 31, 'punts returned': 32, 'yards returned on punts': 33, 'yards per punt avg': 34, 'longest punt return': 35, 'punt return touchdowns': 36, 'fair catches': 37}}, 'WR': {'Receiving': {'receptions': 0, 'receiving targets': 1, 'receiving yards': 2, 'yards per reception avg': 3, 'receiving touchdowns': 4, 'longest reception': 5, 'over 20 yards': 6, 'yards per game': 7, 'fumbles': 8, 'fumbles lost': 9, 'yards after catch': 10, 'receiving first downs': 11}, 'Defense': {'unassisted tackles': 12, 'assisted tackles': 13, 'total tackles': 14, 'sacks': 15, 'yards lost on sack': 16, 'tackles for loss': 17, 'passes defended': 18, 'interceptions': 19, 'intercepted returned yards': 20, 'longest interception return': 21, 'interceptions returned for touchdowns': 22, 'forced fumbles': 23, 'fumbles recovered': 24, 'fumbles returned for touchdowns': 25, 'blocked kicks': 26}, 'Scoring': {'rushing touchdowns': 27, 'receiving touchdowns': 28, 'return touchdowns': 29, 'total touchdowns': 30, 'field goals': 31, 'extra points': 32, 'two point conversions': 33, 'total points': 34, 'total points per game': 35}, 'Rushing': {'rushing attempts': 36, 'yards': 37, 'yards per rush avg': 38, 'longest rush': 39, 'over 20 yards': 40, 'rushing touchdowns': 41, 'yards per game': 42, 'fumbles': 43, 'fumbles lost': 44, 'rushing first downs': 45}}, 'TE': {'Receiving': {'receptions': 0, 'receiving targets': 1, 'receiving yards': 2, 'yards per reception avg': 3, 'receiving touchdowns': 4, 'longest reception': 5, 'over 20 yards': 6, 'yards per game': 7, 'fumbles': 8, 'fumbles lost': 9, 'yards after catch': 10, 'receiving first downs': 11}, 'Defense': {'unassisted tackles': 12, 'assisted tackles': 13, 'total tackles': 14, 'sacks': 15, 'yards lost on sack': 16, 'tackles for loss': 17, 'passes defended': 18, 'interceptions': 19, 'intercepted returned yards': 20, 'longest interception return': 21, 'interceptions returned for touchdowns': 22, 'forced fumbles': 23, 'fumbles recovered': 24, 'fumbles returned for touchdowns': 25, 'blocked kicks': 26}}, 'C': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 1, 'total tackles': 2, 'sacks': 3, 'yards lost on sack': 4, 'tackles for loss': 5, 'passes defended': 6, 'interceptions': 7, 'intercepted returned yards': 8, 'longest interception return': 9, 'interceptions returned for touchdowns': 10, 'forced fumbles': 11, 'fumbles recovered': 12, 'fumbles returned for touchdowns': 13, 'blocked kicks': 14}}, 'G': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 1, 'total tackles': 2, 'sacks': 3, 'yards lost on sack': 4, 'tackles for loss': 5, 'passes defended': 6, 'interceptions': 7, 'intercepted returned yards': 8, 'longest interception return': 9, 'interceptions returned for touchdowns': 10, 'forced fumbles': 11, 'fumbles recovered': 12, 'fumbles returned for touchdowns': 13, 'blocked kicks': 14}}, 'OT': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 1, 'total tackles': 2, 'sacks': 3, 'yards lost on sack': 4, 'tackles for loss': 5, 'passes defended': 6, 'interceptions': 7, 'intercepted returned yards': 8, 'longest interception return': 9, 'interceptions returned for touchdowns': 10, 'forced fumbles': 11, 'fumbles recovered': 12, 'fumbles returned for touchdowns': 13, 'blocked kicks': 14}}, 'DE': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 1, 'total tackles': 2, 'sacks': 3, 'yards lost on sack': 4, 'tackles for loss': 5, 'passes defended': 6, 'interceptions': 7, 'intercepted returned yards': 8, 'longest interception return': 9, 'interceptions returned for touchdowns': 10, 'forced fumbles': 11, 'fumbles recovered': 12, 'fumbles returned for touchdowns': 13, 'blocked kicks': 14}}, 'DT': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 1, 'total tackles': 2, 'sacks': 3, 'yards lost on sack': 4, 'tackles for loss': 5, 'passes defended': 6, 'interceptions': 7, 'intercepted returned yards': 8, 'longest interception return': 9, 'interceptions returned for touchdowns': 10, 'forced fumbles': 11, 'fumbles recovered': 12, 'fumbles returned for touchdowns': 13, 'blocked kicks': 14}}, 'LB': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 1, 'total tackles': 2, 'sacks': 3, 'yards lost on sack': 4, 'tackles for loss': 5, 'passes defended': 6, 'interceptions': 7, 'intercepted returned yards': 8, 'longest interception return': 9, 'interceptions returned for touchdowns': 10, 'forced fumbles': 11, 'fumbles recovered': 12, 'fumbles returned for touchdowns': 13, 'blocked kicks': 14}}, 'CB': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 1, 'total tackles': 2, 'sacks': 3, 'yards lost on sack': 4, 'tackles for loss': 5, 'passes defended': 6, 'interceptions': 7, 'intercepted returned yards': 8, 'longest interception return': 9, 'interceptions returned for touchdowns': 10, 'forced fumbles': 11, 'fumbles recovered': 12, 'fumbles returned for touchdowns': 13, 'blocked kicks': 14}}, 'S': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 1, 'total tackles': 2, 'sacks': 3, 'yards lost on sack': 4, 'tackles for loss': 5, 'passes defended': 6, 'interceptions': 7, 'intercepted returned yards': 8, 'longest interception return': 9, 'interceptions returned for touchdowns': 10, 'forced fumbles': 11, 'fumbles recovered': 12, 'fumbles returned for touchdowns': 13, 'blocked kicks': 14}}, 'PK': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 1, 'total tackles': 2, 'sacks': 3, 'yards lost on sack': 4, 'tackles for loss': 5, 'passes defended': 6, 'interceptions': 7, 'intercepted returned yards': 8, 'longest interception return': 9, 'interceptions returned for touchdowns': 10, 'forced fumbles': 11, 'fumbles recovered': 12, 'fumbles returned for touchdowns': 13, 'blocked kicks': 14}, 'Scoring': {'rushing touchdowns': 15, 'receiving touchdowns': 16, 'return touchdowns': 17, 'total touchdowns': 18, 'field goals': 19, 'extra points': 20, 'two point conversions': 21, 'total points': 22, 'total points per game': 23}, 'Kicking': {'field goals made': 24, 'field goals attempts': 25, 'field goals made pct': 26, 'longest goal made': 27, 'field goals from 1 19 yards': 28, 'field goals from 20 29 yards': 29, 'field goals from 30 39 yards': 30, 'field goals from 40 49 yards': 31, 'field goals from 50 yards': 32, 'extra points made': 33, 'extra points attempts': 34, 'extra points made pct': 35}}, 'P': {'Punting': {'punts': 0, 'gross punt yards': 1, 'longest punt': 2, 'gross punting avg': 3, 'net punting avg': 4, 'blocked punts': 5, 'inside 20 yards punt': 6, 'touchbacks': 7, 'fair catches': 8, 'punts returned': 9, 'yards returned on punts': 10, 'yards returned on punts avg': 11}}, 'QB': {'Passing': {'passing attempts': 0, 'completions': 1, 'completion pct': 2, 'yards': 3, 'yards per pass avg': 4, 'yards per game': 5, 'longest pass': 6, 'passing touchdowns': 7, 'passing touchdowns pct': 8, 'interceptions': 9, 'interceptions pct': 10, 'sacks': 11, 'sacked yards lost': 12, 'quaterback rating': 13}, 'Rushing': {'rushing attempts': 14, 'yards': 15, 'yards per rush avg': 16, 'longest rush': 17, 'over 20 yards': 18, 'rushing touchdowns': 19, 'yards per game': 20, 'fumbles': 21, 'fumbles lost': 22, 'rushing first downs': 23}}, 'LS': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 1, 'total tackles': 2, 'sacks': 3, 'yards lost on sack': 4, 'tackles for loss': 5, 'passes defended': 6, 'interceptions': 7, 'intercepted returned yards': 8, 'longest interception return': 9, 'interceptions returned for touchdowns': 10, 'forced fumbles': 11, 'fumbles recovered': 12, 'fumbles returned for touchdowns': 13, 'blocked kicks': 14}}}
+
+    # Dictionary containing average stats by position
+    avg_stats_by_position = {'RB': {'Rushing': {'rushing attempts': 76.4375, 'yards': 319.38125, 'yards per rush avg': 3.59813, 'longest rush': 22.94375, 'over 20 yards': 1.65, 'rushing touchdowns': 2.15625, 'yards per game': 24.54375, 'fumbles': 0.525, 'fumbles lost': 0.29375, 'rushing first downs': 16.775}, 'Receiving': {'receptions': 15.83125, 'receiving targets': 20.34375, 'receiving yards': 113.25625, 'yards per reception avg': 6.1775, 'receiving touchdowns': 0.58125, 'longest reception': 20.74375, 'over 20 yards': 0.975, 'yards per game': 8.84563, 'fumbles': 0.19375, 'fumbles lost': 0.10625, 'yards after catch': 125.85, 'receiving first downs': 4.9}, 'Defense': {'unassisted tackles': 0.675, 'assisted tackles': 0.39375, 'total tackles': 1.06875, 'sacks': 0.0, 'yards lost on sack': 0.0, 'tackles for loss': 0.0, 'passes defended': 0.0, 'interceptions': 0.0, 'intercepted returned yards': 0.0, 'longest interception return': 0.0, 'interceptions returned for touchdowns': 0.0, 'forced fumbles': 0.01875, 'fumbles recovered': 0.0, 'fumbles returned for touchdowns': 0.0, 'blocked kicks': 0.0}, 'Scoring': {'rushing touchdowns': 2.1625, 'receiving touchdowns': 0.58125, 'return touchdowns': 0.00625, 'total touchdowns': 2.75, 'field goals': 0.00625, 'extra points': 0.0, 'two point conversions': 0.1375, 'total points': 16.79375, 'total points per game': 1.31}, 'Returning': {'kickoff returned attempts': 1.56875, 'kickoff return yards': 36.4625, 'yards per kickoff avg': 5.84937, 'longes kickoff return': 8.30625, 'kickoff return touchdows': 0.00625, 'punts returned': 0.25, 'yards returned on punts': 2.13125, 'yards per punt avg': 0.215, 'longest punt return': 0.475, 'punt return touchdowns': 0.0, 'fair catches': 0.16875}}, 'FB': {'Receiving': {'receptions': 5.38462, 'receiving targets': 6.69231, 'receiving yards': 35.30769, 'yards per reception avg': 5.31538, 'receiving touchdowns': 0.38462, 'longest reception': 12.69231, 'over 20 yards': 0.38462, 'yards per game': 2.18462, 'fumbles': 0.07692, 'fumbles lost': 0.07692, 'yards after catch': 23.53846, 'receiving first downs': 1.92308}, 'Defense': {'unassisted tackles': 1.92308, 'assisted tackles': 1.0, 'total tackles': 2.92308, 'sacks': 0.0, 'yards lost on sack': 0.0, 'tackles for loss': 0.0, 'passes defended': 0.0, 'interceptions': 0.0, 'intercepted returned yards': 0.0, 'longest interception return': 0.0, 'interceptions returned for touchdowns': 0.0, 'forced fumbles': 0.23077, 'fumbles recovered': 0.0, 'fumbles returned for touchdowns': 0.0, 'blocked kicks': 0.0}, 'Returning': {'kickoff returned attempts': 0.38462, 'kickoff return yards': 10.53846, 'yards per kickoff avg': 6.92308, 'longes kickoff return': 9.84615, 'kickoff return touchdows': 0.07692, 'punts returned': 0.0, 'yards returned on punts': 0.0, 'yards per punt avg': 0.0, 'longest punt return': 0.0, 'punt return touchdowns': 0.0, 'fair catches': 0.0}}, 'WR': {'Receiving': {'receptions': 27.83333, 'receiving targets': 44.25417, 'receiving yards': 352.89583, 'yards per reception avg': 10.775, 'receiving touchdowns': 2.08333, 'longest reception': 34.27083, 'over 20 yards': 5.07083, 'yards per game': 24.6625, 'fumbles': 0.3375, 'fumbles lost': 0.175, 'yards after catch': 121.625, 'receiving first downs': 16.44583}, 'Defense': {'unassisted tackles': 1.07917, 'assisted tackles': 0.22083, 'total tackles': 1.3, 'sacks': 0.0, 'yards lost on sack': 0.0, 'tackles for loss': 0.0, 'passes defended': 0.0, 'interceptions': 0.0, 'intercepted returned yards': 0.0, 'longest interception return': 0.0, 'interceptions returned for touchdowns': 0.0, 'forced fumbles': 0.01667, 'fumbles recovered': 0.00833, 'fumbles returned for touchdowns': 0.0, 'blocked kicks': 0.0}, 'Scoring': {'rushing touchdowns': 0.1, 'receiving touchdowns': 2.10417, 'return touchdowns': 0.05417, 'total touchdowns': 2.25833, 'field goals': 0.0, 'extra points': 0.0, 'two point conversions': 0.10417, 'total points': 13.75833, 'total points per game': 0.98333}, 'Rushing': {'rushing attempts': 2.0125, 'yards': 12.16667, 'yards per rush avg': 2.41708, 'longest rush': 5.72083, 'over 20 yards': 0.10833, 'rushing touchdowns': 0.09583, 'yards per game': 0.87917, 'fumbles': 0.02083, 'fumbles lost': 0.00417, 'rushing first downs': 0.6625}}, 'TE': {'Receiving': {'receptions': 21.03175, 'receiving targets': 29.59524, 'receiving yards': 218.06349, 'yards per reception avg': 9.22619, 'receiving touchdowns': 1.42063, 'longest reception': 24.68254, 'over 20 yards': 2.54762, 'yards per game': 15.15397, 'fumbles': 0.23016, 'fumbles lost': 0.13492, 'yards after catch': 103.57143, 'receiving first downs': 10.97619}, 'Defense': {'unassisted tackles': 1.23016, 'assisted tackles': 0.54762, 'total tackles': 1.77778, 'sacks': 0.0, 'yards lost on sack': 0.0, 'tackles for loss': 0.00794, 'passes defended': 0.0, 'interceptions': 0.0, 'intercepted returned yards': 0.0, 'longest interception return': 0.0, 'interceptions returned for touchdowns': 0.0, 'forced fumbles': 0.02381, 'fumbles recovered': 0.0, 'fumbles returned for touchdowns': 0.0, 'blocked kicks': 0.01587}}, 'C': {'Defense': {'unassisted tackles': 0.72222, 'assisted tackles': 0.38889, 'total tackles': 1.11111, 'sacks': 0.0, 'yards lost on sack': 0.0, 'tackles for loss': 0.0, 'passes defended': 0.0, 'interceptions': 0.0, 'intercepted returned yards': 0.0, 'longest interception return': 0.0, 'interceptions returned for touchdowns': 0.0, 'forced fumbles': 0.05556, 'fumbles recovered': 0.0, 'fumbles returned for touchdowns': 0.0, 'blocked kicks': 0.0}}, 'G': {'Defense': {'unassisted tackles': 1.0, 'assisted tackles': 0.13158, 'total tackles': 1.13158, 'sacks': 0.0, 'yards lost on sack': 0.0, 'tackles for loss': 0.0, 'passes defended': 0.0, 'interceptions': 0.0, 'intercepted returned yards': 0.0, 'longest interception return': 0.0, 'interceptions returned for touchdowns': 0.0, 'forced fumbles': 0.0, 'fumbles recovered': 0.0, 'fumbles returned for touchdowns': 0.0, 'blocked kicks': 0.0}}, 'OT': {'Defense': {'unassisted tackles': 0.90625, 'assisted tackles': 0.28125, 'total tackles': 1.1875, 'sacks': 0.0, 'yards lost on sack': 0.0, 'tackles for loss': 0.0, 'passes defended': 0.0, 'interceptions': 0.0, 'intercepted returned yards': 0.0, 'longest interception return': 0.0, 'interceptions returned for touchdowns': 0.0, 'forced fumbles': 0.0, 'fumbles recovered': 0.0, 'fumbles returned for touchdowns': 0.0, 'blocked kicks': 0.0}}, 'DE': {'Defense': {'unassisted tackles': 12.17123, 'assisted tackles': 9.20548, 'total tackles': 21.37671, 'sacks': 2.65068, 'yards lost on sack': 18.23288, 'tackles for loss': 3.47945, 'passes defended': 1.06164, 'interceptions': 0.03425, 'intercepted returned yards': 0.33562, 'longest interception return': 0.29452, 'interceptions returned for touchdowns': 0.00685, 'forced fumbles': 0.39726, 'fumbles recovered': 0.26027, 'fumbles returned for touchdowns': 0.0, 'blocked kicks': 0.11644}}, 'DT': {'Defense': {'unassisted tackles': 12.46961, 'assisted tackles': 11.51381, 'total tackles': 23.98343, 'sacks': 1.71547, 'yards lost on sack': 11.43646, 'tackles for loss': 2.87845, 'passes defended': 0.86188, 'interceptions': 0.03867, 'intercepted returned yards': 0.07735, 'longest interception return': 0.07735, 'interceptions returned for touchdowns': 0.00552, 'forced fumbles': 0.24862, 'fumbles recovered': 0.24862, 'fumbles returned for touchdowns': 0.0221, 'blocked kicks': 0.02762}}, 'LB': {'Defense': {'unassisted tackles': 23.31902, 'assisted tackles': 15.02454, 'total tackles': 38.34356, 'sacks': 1.76687, 'yards lost on sack': 11.93558, 'tackles for loss': 3.26687, 'passes defended': 1.40798, 'interceptions': 0.24847, 'intercepted returned yards': 3.51534, 'longest interception return': 2.80982, 'interceptions returned for touchdowns': 0.03067, 'forced fumbles': 0.46933, 'fumbles recovered': 0.30982, 'fumbles returned for touchdowns': 0.02147, 'blocked kicks': 0.00307}}, 'CB': {'Defense': {'unassisted tackles': 21.67054, 'assisted tackles': 6.55814, 'total tackles': 28.22868, 'sacks': 0.1376, 'yards lost on sack': 0.94961, 'tackles for loss': 1.02713, 'passes defended': 4.21705, 'interceptions': 0.64341, 'intercepted returned yards': 7.70155, 'longest interception return': 5.9186, 'interceptions returned for touchdowns': 0.09302, 'forced fumbles': 0.3062, 'fumbles recovered': 0.18992, 'fumbles returned for touchdowns': 0.00775, 'blocked kicks': 0.00775}}, 'S': {'Defense': {'unassisted tackles': 29.30851, 'assisted tackles': 13.64894, 'total tackles': 42.95745, 'sacks': 0.38298, 'yards lost on sack': 2.90426, 'tackles for loss': 1.38298, 'passes defended': 2.98936, 'interceptions': 0.89362, 'intercepted returned yards': 13.3883, 'longest interception return': 10.31383, 'interceptions returned for touchdowns': 0.07447, 'forced fumbles': 0.45745, 'fumbles recovered': 0.30851, 'fumbles returned for touchdowns': 0.02128, 'blocked kicks': 0.03191}}, 'PK': {'Defense': {'unassisted tackles': 0.34783, 'assisted tackles': 0.0, 'total tackles': 0.34783, 'sacks': 0.0, 'yards lost on sack': 0.0, 'tackles for loss': 0.0, 'passes defended': 0.0, 'interceptions': 0.0, 'intercepted returned yards': 0.0, 'longest interception return': 0.0, 'interceptions returned for touchdowns': 0.0, 'forced fumbles': 0.0, 'fumbles recovered': 0.0, 'fumbles returned for touchdowns': 0.0, 'blocked kicks': 0.0}, 'Scoring': {'rushing touchdowns': 0.0, 'receiving touchdowns': 0.0, 'return touchdowns': 0.0, 'total touchdowns': 0.0, 'field goals': 22.95652, 'extra points': 27.58696, 'two point conversions': 0.0, 'total points': 96.45652, 'total points per game': 7.01739}, 'Kicking': {'field goals made': 22.95652, 'field goals attempts': 26.5, 'field goals made pct': 86.56304, 'longest goal made': 53.63043, 'field goals from 1 19 yards': 0.02174, 'field goals from 20 29 yards': 0.87319, 'field goals from 30 39 yards': 0.96027, 'field goals from 40 49 yards': 0.76699, 'field goals from 50 yards': 0.62671, 'extra points made': 27.58696, 'extra points attempts': 28.95652, 'extra points made pct': 94.21957}}, 'P': {'Punting': {'punts': 56.11905, 'gross punt yards': 2668.57143, 'longest punt': 67.2381, 'gross punting avg': 47.66905, 'net punting avg': 41.66905, 'blocked punts': 0.11905, 'inside 20 yards punt': 20.30952, 'touchbacks': 4.07143, 'fair catches': 15.69048, 'punts returned': 24.42857, 'yards returned on punts': 238.90476, 'yards returned on punts avg': 10.1}}, 'QB': {'Passing': {'passing attempts': 217.44828, 'completions': 139.34483, 'completion pct': 59.45977, 'yards': 1515.97701, 'yards per pass avg': 6.66897, 'yards per game': 145.70575, 'longest pass': 49.93103, 'passing touchdowns': 8.78161, 'passing touchdowns pct': 0, 'interceptions': 5.18391, 'interceptions pct': 0, 'sacks': 16.51724, 'sacked yards lost': 111.34483, 'quaterback rating': 78.84713}, 'Rushing': {'rushing attempts': 28.08046, 'yards': 119.7931, 'yards per rush avg': 3.37241, 'longest rush': 15.51724, 'over 20 yards': 0.8046, 'rushing touchdowns': 1.34483, 'yards per game': 12.1908, 'fumbles': 1.54023, 'fumbles lost': 0.56322, 'rushing first downs': 9.71264}}, 'LS': {'Defense': {'unassisted tackles': 1.57143, 'assisted tackles': 1.21429, 'total tackles': 2.78571, 'sacks': 0.0, 'yards lost on sack': 0.0, 'tackles for loss': 0.0, 'passes defended': 0.0, 'interceptions': 0.0, 'intercepted returned yards': 0.0, 'longest interception return': 0.0, 'interceptions returned for touchdowns': 0.0, 'forced fumbles': 0.10714, 'fumbles recovered': 0.03571, 'fumbles returned for touchdowns': 0.0, 'blocked kicks': 0.0}}}
+
+    # --- STEP 2. Group player stats by position ---
+    # Make a dictionary of players by position (including their playerID)
+
+    # Order of stats by position:
+    # Offense: QB, RB, FB, WR, TE, C, G, OT
+    # Defense: DE, DT, CB, LB, S
+    # Special: PK, P, LS
+    players_by_position = {'QB': {}, 'RB': {}, 'FB': {}, 'WR': {}, 'TE': {}, 'C': {}, 'G': {}, 'OT': {}, 'DE': {}, 'DT': {}, 'CB': {}, 'LB': {}, 'S': {}, 'PK': {}, 'P': {}, 'LS': {}}
+
+    # Iterate through players and add them to the dictionary
+    for playerID, player_info in players.items():
+        # Position
+        position = player_info[1]
+        # Stats
+        player_stats = get_stats_by_player(playerID, season)
+
+        # Check if the player's stats are available
+        # If not, fill with average values
+        if (player_stats == None):
+            player_stats = avg_stats_by_position[position]
+
+        # Fill stats with average values
+        # Check if the player's stats are missing any groups
+        for group in avg_stats_by_position[position]:
+            if group not in player_stats:
+                player_stats[group] = avg_stats_by_position[position][group]
+        
+        # Flatten the stats dictionary into an array in the proper order
+        stats = []
+        for group in stats_by_position[position]:
+            for stat in stats_by_position[position][group]:
+                # Attempt conversion to float, otherwise convert to ratio
+                # If the stat is a ratio (not a negative number), convert to a float
+                if ('-' in str(player_stats[group][stat]) and str(player_stats[group][stat][0]).isdigit()):
+                    num, den = player_stats[group][stat].split('-')
+                    if (den == '0'):
+                        stats.append(0)
+                    else:
+                        stats.append(float(num) / float(den))
+                # If the stat is >= 1,000 and written with a comma, remove the comma and convert to a float
+                elif (',' in str(player_stats[group][stat])):
+                    stats.append(float(player_stats[group][stat].replace(',', '')))
+                # If the stat is None, fill with 0
+                elif (player_stats[group][stat] == None):
+                    stats.append(0)
+                else:
+                    stats.append(float(player_stats[group][stat]))
+
+        # Add the player to the dictionary
+        players_by_position[position][playerID] = stats
+
+    # --- STEP 3. Average stats for each player in each position and sort positions by the average ---
+    avg_stats_by_player = {position: {} for position in players_by_position.keys()}
+    # Average each player's stats
+    for position, players in players_by_position.items():
+        for playerID, stats in players.items():
+            avg_stats_by_player[position][playerID] = np.mean(stats, axis=0)
+
+    # Sort the dictionary by player's averages
+    avg_stats_by_player = {
+        position: dict(sorted(player_stats.items(), key=lambda x: x[1], reverse=True))
+        for position, player_stats in avg_stats_by_player.items()
+    }
+
+    # --- STEP 4. Take the top n players per position ---
+    # - NUMBER OF PLAYERS TO SELECT FOR EACH POSITION (38 total)
+    # - QB: 1
+    # - RB: 3
+    # - FB: 1
+    # - WR: 5
+    # - TE: 3
+    # - OT: 1
+    # - C: 1
+    # - G: 1
+    # - DE: 2
+    # - DT: 3
+    # - CB: 5
+    # - S: 3
+    # - LB: 6
+    # - PK: 1
+    # - P: 1
+    # - LS: 1
+
+    # Dictionary containing the top n players per position
+    players_per_position = {'QB': 1, 'RB': 3, 'FB': 1, 'WR': 5, 'TE': 3, 'OT': 1, 'C': 1, 'G': 1, 'DE': 2, 'DT': 3, 'CB': 5, 'S': 3, 'LB': 6, 'PK': 1, 'P': 1, 'LS': 1}
+
+    # Select the top n players per position
+    for position in players_per_position:
+        players_by_position[position] = {k: v for k, v in players_by_position[position].items() if k in list(avg_stats_by_player[position].keys())[:players_per_position[position]]}
+    
+    # Condense all player stats into one 1D array
+    condensed_stats = [stat for position in players_by_position for player in players_by_position[position] for stat in players_by_position[position][player]]
+
+    return condensed_stats
+
+def get_stats_by_position(teamID, season):
+    players = get_players_by_team(teamID, season)
 
     # Dictionary containing stats by position
     stats_by_position = {'RB': {'Rushing': {'rushing attempts': 0, 'yards': 1, 'yards per rush avg': 2, 'longest rush': 3, 'over 20 yards': 4, 'rushing touchdowns': 5, 'yards per game': 6, 'fumbles': 7, 'fumbles lost': 8, 'rushing first downs': 9}, 'Receiving': {'receptions': 10, 'receiving targets': 11, 'receiving yards': 12, 'yards per reception avg': 13, 'receiving touchdowns': 14, 'longest reception': 15, 'over 20 yards': 16, 'yards per game': 17, 'fumbles': 18, 'fumbles lost': 19, 'yards after catch': 20, 'receiving first downs': 21}, 'Defense': {'unassisted tackles': 22, 'assisted tackles': 23, 'total tackles': 24, 'sacks': 25, 'yards lost on sack': 26, 'tackles for loss': 27, 'passes defended': 28, 'interceptions': 29, 'intercepted returned yards': 30, 'longest interception return': 31, 'interceptions returned for touchdowns': 32, 'forced fumbles': 33, 'fumbles recovered': 34, 'fumbles returned for touchdowns': 35, 'blocked kicks': 36}, 'Scoring': {'rushing touchdowns': 37, 'receiving touchdowns': 38, 'return touchdowns': 39, 'total touchdowns': 40, 'field goals': 41, 'extra points': 42, 'two point conversions': 43, 'total points': 44, 'total points per game': 45}, 'Returning': {'kickoff returned attempts': 46, 'kickoff return yards': 47, 'yards per kickoff avg': 48, 'longes kickoff return': 49, 'kickoff return touchdows': 50, 'punts returned': 51, 'yards returned on punts': 52, 'yards per punt avg': 53, 'longest punt return': 54, 'punt return touchdowns': 55, 'fair catches': 56}}, 'FB': {'Receiving': {'receptions': 0, 'receiving targets': 1, 'receiving yards': 2, 'yards per reception avg': 3, 'receiving touchdowns': 4, 'longest reception': 5, 'over 20 yards': 6, 'yards per game': 7, 'fumbles': 8, 'fumbles lost': 9, 'yards after catch': 10, 'receiving first downs': 11}, 'Defense': {'unassisted tackles': 12, 'assisted tackles': 13, 'total tackles': 14, 'sacks': 15, 'yards lost on sack': 16, 'tackles for loss': 17, 'passes defended': 18, 'interceptions': 19, 'intercepted returned yards': 20, 'longest interception return': 21, 'interceptions returned for touchdowns': 22, 'forced fumbles': 23, 'fumbles recovered': 24, 'fumbles returned for touchdowns': 25, 'blocked kicks': 26}, 'Returning': {'kickoff returned attempts': 27, 'kickoff return yards': 28, 'yards per kickoff avg': 29, 'longes kickoff return': 30, 'kickoff return touchdows': 31, 'punts returned': 32, 'yards returned on punts': 33, 'yards per punt avg': 34, 'longest punt return': 35, 'punt return touchdowns': 36, 'fair catches': 37}}, 'WR': {'Receiving': {'receptions': 0, 'receiving targets': 1, 'receiving yards': 2, 'yards per reception avg': 3, 'receiving touchdowns': 4, 'longest reception': 5, 'over 20 yards': 6, 'yards per game': 7, 'fumbles': 8, 'fumbles lost': 9, 'yards after catch': 10, 'receiving first downs': 11}, 'Defense': {'unassisted tackles': 12, 'assisted tackles': 13, 'total tackles': 14, 'sacks': 15, 'yards lost on sack': 16, 'tackles for loss': 17, 'passes defended': 18, 'interceptions': 19, 'intercepted returned yards': 20, 'longest interception return': 21, 'interceptions returned for touchdowns': 22, 'forced fumbles': 23, 'fumbles recovered': 24, 'fumbles returned for touchdowns': 25, 'blocked kicks': 26}, 'Scoring': {'rushing touchdowns': 27, 'receiving touchdowns': 28, 'return touchdowns': 29, 'total touchdowns': 30, 'field goals': 31, 'extra points': 32, 'two point conversions': 33, 'total points': 34, 'total points per game': 35}, 'Rushing': {'rushing attempts': 36, 'yards': 37, 'yards per rush avg': 38, 'longest rush': 39, 'over 20 yards': 40, 'rushing touchdowns': 41, 'yards per game': 42, 'fumbles': 43, 'fumbles lost': 44, 'rushing first downs': 45}}, 'TE': {'Receiving': {'receptions': 0, 'receiving targets': 1, 'receiving yards': 2, 'yards per reception avg': 3, 'receiving touchdowns': 4, 'longest reception': 5, 'over 20 yards': 6, 'yards per game': 7, 'fumbles': 8, 'fumbles lost': 9, 'yards after catch': 10, 'receiving first downs': 11}, 'Defense': {'unassisted tackles': 12, 'assisted tackles': 13, 'total tackles': 14, 'sacks': 15, 'yards lost on sack': 16, 'tackles for loss': 17, 'passes defended': 18, 'interceptions': 19, 'intercepted returned yards': 20, 'longest interception return': 21, 'interceptions returned for touchdowns': 22, 'forced fumbles': 23, 'fumbles recovered': 24, 'fumbles returned for touchdowns': 25, 'blocked kicks': 26}}, 'C': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 1, 'total tackles': 2, 'sacks': 3, 'yards lost on sack': 4, 'tackles for loss': 5, 'passes defended': 6, 'interceptions': 7, 'intercepted returned yards': 8, 'longest interception return': 9, 'interceptions returned for touchdowns': 10, 'forced fumbles': 11, 'fumbles recovered': 12, 'fumbles returned for touchdowns': 13, 'blocked kicks': 14}}, 'G': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 1, 'total tackles': 2, 'sacks': 3, 'yards lost on sack': 4, 'tackles for loss': 5, 'passes defended': 6, 'interceptions': 7, 'intercepted returned yards': 8, 'longest interception return': 9, 'interceptions returned for touchdowns': 10, 'forced fumbles': 11, 'fumbles recovered': 12, 'fumbles returned for touchdowns': 13, 'blocked kicks': 14}}, 'OT': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 1, 'total tackles': 2, 'sacks': 3, 'yards lost on sack': 4, 'tackles for loss': 5, 'passes defended': 6, 'interceptions': 7, 'intercepted returned yards': 8, 'longest interception return': 9, 'interceptions returned for touchdowns': 10, 'forced fumbles': 11, 'fumbles recovered': 12, 'fumbles returned for touchdowns': 13, 'blocked kicks': 14}}, 'DE': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 1, 'total tackles': 2, 'sacks': 3, 'yards lost on sack': 4, 'tackles for loss': 5, 'passes defended': 6, 'interceptions': 7, 'intercepted returned yards': 8, 'longest interception return': 9, 'interceptions returned for touchdowns': 10, 'forced fumbles': 11, 'fumbles recovered': 12, 'fumbles returned for touchdowns': 13, 'blocked kicks': 14}}, 'DT': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 1, 'total tackles': 2, 'sacks': 3, 'yards lost on sack': 4, 'tackles for loss': 5, 'passes defended': 6, 'interceptions': 7, 'intercepted returned yards': 8, 'longest interception return': 9, 'interceptions returned for touchdowns': 10, 'forced fumbles': 11, 'fumbles recovered': 12, 'fumbles returned for touchdowns': 13, 'blocked kicks': 14}}, 'LB': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 1, 'total tackles': 2, 'sacks': 3, 'yards lost on sack': 4, 'tackles for loss': 5, 'passes defended': 6, 'interceptions': 7, 'intercepted returned yards': 8, 'longest interception return': 9, 'interceptions returned for touchdowns': 10, 'forced fumbles': 11, 'fumbles recovered': 12, 'fumbles returned for touchdowns': 13, 'blocked kicks': 14}}, 'CB': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 1, 'total tackles': 2, 'sacks': 3, 'yards lost on sack': 4, 'tackles for loss': 5, 'passes defended': 6, 'interceptions': 7, 'intercepted returned yards': 8, 'longest interception return': 9, 'interceptions returned for touchdowns': 10, 'forced fumbles': 11, 'fumbles recovered': 12, 'fumbles returned for touchdowns': 13, 'blocked kicks': 14}}, 'S': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 1, 'total tackles': 2, 'sacks': 3, 'yards lost on sack': 4, 'tackles for loss': 5, 'passes defended': 6, 'interceptions': 7, 'intercepted returned yards': 8, 'longest interception return': 9, 'interceptions returned for touchdowns': 10, 'forced fumbles': 11, 'fumbles recovered': 12, 'fumbles returned for touchdowns': 13, 'blocked kicks': 14}}, 'PK': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 1, 'total tackles': 2, 'sacks': 3, 'yards lost on sack': 4, 'tackles for loss': 5, 'passes defended': 6, 'interceptions': 7, 'intercepted returned yards': 8, 'longest interception return': 9, 'interceptions returned for touchdowns': 10, 'forced fumbles': 11, 'fumbles recovered': 12, 'fumbles returned for touchdowns': 13, 'blocked kicks': 14}, 'Scoring': {'rushing touchdowns': 15, 'receiving touchdowns': 16, 'return touchdowns': 17, 'total touchdowns': 18, 'field goals': 19, 'extra points': 20, 'two point conversions': 21, 'total points': 22, 'total points per game': 23}, 'Kicking': {'field goals made': 24, 'field goals attempts': 25, 'field goals made pct': 26, 'longest goal made': 27, 'field goals from 1 19 yards': 28, 'field goals from 20 29 yards': 29, 'field goals from 30 39 yards': 30, 'field goals from 40 49 yards': 31, 'field goals from 50 yards': 32, 'extra points made': 33, 'extra points attempts': 34, 'extra points made pct': 35}}, 'P': {'Punting': {'punts': 0, 'gross punt yards': 1, 'longest punt': 2, 'gross punting avg': 3, 'net punting avg': 4, 'blocked punts': 5, 'inside 20 yards punt': 6, 'touchbacks': 7, 'fair catches': 8, 'punts returned': 9, 'yards returned on punts': 10, 'yards returned on punts avg': 11}}, 'QB': {'Passing': {'passing attempts': 0, 'completions': 1, 'completion pct': 2, 'yards': 3, 'yards per pass avg': 4, 'yards per game': 5, 'longest pass': 6, 'passing touchdowns': 7, 'passing touchdowns pct': 8, 'interceptions': 9, 'interceptions pct': 10, 'sacks': 11, 'sacked yards lost': 12, 'quaterback rating': 13}, 'Rushing': {'rushing attempts': 14, 'yards': 15, 'yards per rush avg': 16, 'longest rush': 17, 'over 20 yards': 18, 'rushing touchdowns': 19, 'yards per game': 20, 'fumbles': 21, 'fumbles lost': 22, 'rushing first downs': 23}}, 'LS': {'Defense': {'unassisted tackles': 0, 'assisted tackles': 1, 'total tackles': 2, 'sacks': 3, 'yards lost on sack': 4, 'tackles for loss': 5, 'passes defended': 6, 'interceptions': 7, 'intercepted returned yards': 8, 'longest interception return': 9, 'interceptions returned for touchdowns': 10, 'forced fumbles': 11, 'fumbles recovered': 12, 'fumbles returned for touchdowns': 13, 'blocked kicks': 14}}}
@@ -342,10 +472,10 @@ def getSeasons():
     return seasonList
 
 #this function takes two team IDs and the season and returns the games played between the two teams
-def get_head_to_head_games(team_id_1,team_id_2,season):
+def get_head_to_head_games(teamID_1,teamID_2,season):
     
     while (True):
-        conn.request("GET", f"/games?season={season}&h2h={team_id_1}-{team_id_2}", headers=headers)
+        conn.request("GET", f"/games?season={season}&h2h={teamID_1}-{teamID_2}", headers=headers)
 
         # Gets the head to head games for the given season
         res = conn.getresponse()
@@ -541,9 +671,9 @@ def get_pytorch_data(league, season):
 
     # Get all games for each team
     games = {}
-    for team_name, team_id in teams.items():
-        # Get games for team_id
-        team_games = get_games_for_team_for_season(season, team_id)
+    for team_name, teamID in teams.items():
+        # Get games for teamID
+        team_games = get_games_for_team_for_season(season, teamID)
         # Add each game to the games dictionary
         for game_name, game_info in team_games.items():
             # Determine if home (0) or away (1) won
@@ -558,7 +688,7 @@ def get_pytorch_data(league, season):
     count = 0
     for game in games:
 
-        # # Get the team_id for the home and away teams
+        # # Get the teamID for the home and away teams
         home_name, away_name = game.split(' vs ')
 
         home_id = teams[home_name]
@@ -588,8 +718,10 @@ def get_pytorch_data(league, season):
 
         # PLAYER STATS
         # Get the player stats for the home and away teams
-        home_player_stats = compile_stats(get_stats_by_position(home_id, season))
-        away_player_stats = compile_stats(get_stats_by_position(away_id, season))
+        # home_player_stats = compile_stats(get_stats_by_position(home_id, season))
+        # away_player_stats = compile_stats(get_stats_by_position(away_id, season))
+        home_player_stats = get_player_stats(home_id, season)
+        away_player_stats = get_player_stats(away_id, season)
 
         # TEAM STATS
         # Get the team stats for the home and away teams
