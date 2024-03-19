@@ -28,10 +28,10 @@ def get_teams_by_season(league, season):
         data = json.loads(data.decode("utf-8"))
         # If data is pulled correctly, break out of the loop
         if (data['results'] != 0):
-            print('Teams found')
+            # print('Teams found')
             break
         else:
-            print('Teams not found')
+            # print('Teams not found')
             # If there is an error, print the error and wait 60 seconds
             if (len(data['errors']) != 0):
                 print('Error:', data['errors'])
@@ -69,10 +69,10 @@ def get_players_by_team(teamID, season):
         data = json.loads(data.decode("utf-8"))
 
         if (data['results'] != 0):
-            print('Players found')
+            # print('Players found')
             break
         else:
-            print('Players not found, waiting...')
+            # print('Players not found, waiting...')
             # If there is an error, print the error and wait 60 seconds
             if (len(data['errors']) != 0):
                 print('Error:', data['errors'])
@@ -101,10 +101,10 @@ def get_stats_by_player(player_id, season):
         data = json.loads(data.decode("utf-8"))
 
         if (data['results'] != 0):
-            print('Player stats found')
+            # print('Player stats found')
             break
         else:
-            print('Player stats not found')
+            # print('Player stats not found')
             # If there is an error, print the error and wait 60 seconds
             if (len(data['errors']) != 0):
                 print('Error:', data['errors'])
@@ -212,6 +212,7 @@ New function to get the top players for each position
 
 '''
 def get_player_stats(teamID, season):
+
     # --- STEP 1. Get all stats for each player on the team (fill blanks w/ averages) ---
     players = get_players_by_team(teamID, season)
 
@@ -220,6 +221,9 @@ def get_player_stats(teamID, season):
 
     # Dictionary containing average stats by position
     avg_stats_by_position = {'RB': {'Rushing': {'rushing attempts': 76.4375, 'yards': 319.38125, 'yards per rush avg': 3.59813, 'longest rush': 22.94375, 'over 20 yards': 1.65, 'rushing touchdowns': 2.15625, 'yards per game': 24.54375, 'fumbles': 0.525, 'fumbles lost': 0.29375, 'rushing first downs': 16.775}, 'Receiving': {'receptions': 15.83125, 'receiving targets': 20.34375, 'receiving yards': 113.25625, 'yards per reception avg': 6.1775, 'receiving touchdowns': 0.58125, 'longest reception': 20.74375, 'over 20 yards': 0.975, 'yards per game': 8.84563, 'fumbles': 0.19375, 'fumbles lost': 0.10625, 'yards after catch': 125.85, 'receiving first downs': 4.9}, 'Defense': {'unassisted tackles': 0.675, 'assisted tackles': 0.39375, 'total tackles': 1.06875, 'sacks': 0.0, 'yards lost on sack': 0.0, 'tackles for loss': 0.0, 'passes defended': 0.0, 'interceptions': 0.0, 'intercepted returned yards': 0.0, 'longest interception return': 0.0, 'interceptions returned for touchdowns': 0.0, 'forced fumbles': 0.01875, 'fumbles recovered': 0.0, 'fumbles returned for touchdowns': 0.0, 'blocked kicks': 0.0}, 'Scoring': {'rushing touchdowns': 2.1625, 'receiving touchdowns': 0.58125, 'return touchdowns': 0.00625, 'total touchdowns': 2.75, 'field goals': 0.00625, 'extra points': 0.0, 'two point conversions': 0.1375, 'total points': 16.79375, 'total points per game': 1.31}, 'Returning': {'kickoff returned attempts': 1.56875, 'kickoff return yards': 36.4625, 'yards per kickoff avg': 5.84937, 'longes kickoff return': 8.30625, 'kickoff return touchdows': 0.00625, 'punts returned': 0.25, 'yards returned on punts': 2.13125, 'yards per punt avg': 0.215, 'longest punt return': 0.475, 'punt return touchdowns': 0.0, 'fair catches': 0.16875}}, 'FB': {'Receiving': {'receptions': 5.38462, 'receiving targets': 6.69231, 'receiving yards': 35.30769, 'yards per reception avg': 5.31538, 'receiving touchdowns': 0.38462, 'longest reception': 12.69231, 'over 20 yards': 0.38462, 'yards per game': 2.18462, 'fumbles': 0.07692, 'fumbles lost': 0.07692, 'yards after catch': 23.53846, 'receiving first downs': 1.92308}, 'Defense': {'unassisted tackles': 1.92308, 'assisted tackles': 1.0, 'total tackles': 2.92308, 'sacks': 0.0, 'yards lost on sack': 0.0, 'tackles for loss': 0.0, 'passes defended': 0.0, 'interceptions': 0.0, 'intercepted returned yards': 0.0, 'longest interception return': 0.0, 'interceptions returned for touchdowns': 0.0, 'forced fumbles': 0.23077, 'fumbles recovered': 0.0, 'fumbles returned for touchdowns': 0.0, 'blocked kicks': 0.0}, 'Returning': {'kickoff returned attempts': 0.38462, 'kickoff return yards': 10.53846, 'yards per kickoff avg': 6.92308, 'longes kickoff return': 9.84615, 'kickoff return touchdows': 0.07692, 'punts returned': 0.0, 'yards returned on punts': 0.0, 'yards per punt avg': 0.0, 'longest punt return': 0.0, 'punt return touchdowns': 0.0, 'fair catches': 0.0}}, 'WR': {'Receiving': {'receptions': 27.83333, 'receiving targets': 44.25417, 'receiving yards': 352.89583, 'yards per reception avg': 10.775, 'receiving touchdowns': 2.08333, 'longest reception': 34.27083, 'over 20 yards': 5.07083, 'yards per game': 24.6625, 'fumbles': 0.3375, 'fumbles lost': 0.175, 'yards after catch': 121.625, 'receiving first downs': 16.44583}, 'Defense': {'unassisted tackles': 1.07917, 'assisted tackles': 0.22083, 'total tackles': 1.3, 'sacks': 0.0, 'yards lost on sack': 0.0, 'tackles for loss': 0.0, 'passes defended': 0.0, 'interceptions': 0.0, 'intercepted returned yards': 0.0, 'longest interception return': 0.0, 'interceptions returned for touchdowns': 0.0, 'forced fumbles': 0.01667, 'fumbles recovered': 0.00833, 'fumbles returned for touchdowns': 0.0, 'blocked kicks': 0.0}, 'Scoring': {'rushing touchdowns': 0.1, 'receiving touchdowns': 2.10417, 'return touchdowns': 0.05417, 'total touchdowns': 2.25833, 'field goals': 0.0, 'extra points': 0.0, 'two point conversions': 0.10417, 'total points': 13.75833, 'total points per game': 0.98333}, 'Rushing': {'rushing attempts': 2.0125, 'yards': 12.16667, 'yards per rush avg': 2.41708, 'longest rush': 5.72083, 'over 20 yards': 0.10833, 'rushing touchdowns': 0.09583, 'yards per game': 0.87917, 'fumbles': 0.02083, 'fumbles lost': 0.00417, 'rushing first downs': 0.6625}}, 'TE': {'Receiving': {'receptions': 21.03175, 'receiving targets': 29.59524, 'receiving yards': 218.06349, 'yards per reception avg': 9.22619, 'receiving touchdowns': 1.42063, 'longest reception': 24.68254, 'over 20 yards': 2.54762, 'yards per game': 15.15397, 'fumbles': 0.23016, 'fumbles lost': 0.13492, 'yards after catch': 103.57143, 'receiving first downs': 10.97619}, 'Defense': {'unassisted tackles': 1.23016, 'assisted tackles': 0.54762, 'total tackles': 1.77778, 'sacks': 0.0, 'yards lost on sack': 0.0, 'tackles for loss': 0.00794, 'passes defended': 0.0, 'interceptions': 0.0, 'intercepted returned yards': 0.0, 'longest interception return': 0.0, 'interceptions returned for touchdowns': 0.0, 'forced fumbles': 0.02381, 'fumbles recovered': 0.0, 'fumbles returned for touchdowns': 0.0, 'blocked kicks': 0.01587}}, 'C': {'Defense': {'unassisted tackles': 0.72222, 'assisted tackles': 0.38889, 'total tackles': 1.11111, 'sacks': 0.0, 'yards lost on sack': 0.0, 'tackles for loss': 0.0, 'passes defended': 0.0, 'interceptions': 0.0, 'intercepted returned yards': 0.0, 'longest interception return': 0.0, 'interceptions returned for touchdowns': 0.0, 'forced fumbles': 0.05556, 'fumbles recovered': 0.0, 'fumbles returned for touchdowns': 0.0, 'blocked kicks': 0.0}}, 'G': {'Defense': {'unassisted tackles': 1.0, 'assisted tackles': 0.13158, 'total tackles': 1.13158, 'sacks': 0.0, 'yards lost on sack': 0.0, 'tackles for loss': 0.0, 'passes defended': 0.0, 'interceptions': 0.0, 'intercepted returned yards': 0.0, 'longest interception return': 0.0, 'interceptions returned for touchdowns': 0.0, 'forced fumbles': 0.0, 'fumbles recovered': 0.0, 'fumbles returned for touchdowns': 0.0, 'blocked kicks': 0.0}}, 'OT': {'Defense': {'unassisted tackles': 0.90625, 'assisted tackles': 0.28125, 'total tackles': 1.1875, 'sacks': 0.0, 'yards lost on sack': 0.0, 'tackles for loss': 0.0, 'passes defended': 0.0, 'interceptions': 0.0, 'intercepted returned yards': 0.0, 'longest interception return': 0.0, 'interceptions returned for touchdowns': 0.0, 'forced fumbles': 0.0, 'fumbles recovered': 0.0, 'fumbles returned for touchdowns': 0.0, 'blocked kicks': 0.0}}, 'DE': {'Defense': {'unassisted tackles': 12.17123, 'assisted tackles': 9.20548, 'total tackles': 21.37671, 'sacks': 2.65068, 'yards lost on sack': 18.23288, 'tackles for loss': 3.47945, 'passes defended': 1.06164, 'interceptions': 0.03425, 'intercepted returned yards': 0.33562, 'longest interception return': 0.29452, 'interceptions returned for touchdowns': 0.00685, 'forced fumbles': 0.39726, 'fumbles recovered': 0.26027, 'fumbles returned for touchdowns': 0.0, 'blocked kicks': 0.11644}}, 'DT': {'Defense': {'unassisted tackles': 12.46961, 'assisted tackles': 11.51381, 'total tackles': 23.98343, 'sacks': 1.71547, 'yards lost on sack': 11.43646, 'tackles for loss': 2.87845, 'passes defended': 0.86188, 'interceptions': 0.03867, 'intercepted returned yards': 0.07735, 'longest interception return': 0.07735, 'interceptions returned for touchdowns': 0.00552, 'forced fumbles': 0.24862, 'fumbles recovered': 0.24862, 'fumbles returned for touchdowns': 0.0221, 'blocked kicks': 0.02762}}, 'LB': {'Defense': {'unassisted tackles': 23.31902, 'assisted tackles': 15.02454, 'total tackles': 38.34356, 'sacks': 1.76687, 'yards lost on sack': 11.93558, 'tackles for loss': 3.26687, 'passes defended': 1.40798, 'interceptions': 0.24847, 'intercepted returned yards': 3.51534, 'longest interception return': 2.80982, 'interceptions returned for touchdowns': 0.03067, 'forced fumbles': 0.46933, 'fumbles recovered': 0.30982, 'fumbles returned for touchdowns': 0.02147, 'blocked kicks': 0.00307}}, 'CB': {'Defense': {'unassisted tackles': 21.67054, 'assisted tackles': 6.55814, 'total tackles': 28.22868, 'sacks': 0.1376, 'yards lost on sack': 0.94961, 'tackles for loss': 1.02713, 'passes defended': 4.21705, 'interceptions': 0.64341, 'intercepted returned yards': 7.70155, 'longest interception return': 5.9186, 'interceptions returned for touchdowns': 0.09302, 'forced fumbles': 0.3062, 'fumbles recovered': 0.18992, 'fumbles returned for touchdowns': 0.00775, 'blocked kicks': 0.00775}}, 'S': {'Defense': {'unassisted tackles': 29.30851, 'assisted tackles': 13.64894, 'total tackles': 42.95745, 'sacks': 0.38298, 'yards lost on sack': 2.90426, 'tackles for loss': 1.38298, 'passes defended': 2.98936, 'interceptions': 0.89362, 'intercepted returned yards': 13.3883, 'longest interception return': 10.31383, 'interceptions returned for touchdowns': 0.07447, 'forced fumbles': 0.45745, 'fumbles recovered': 0.30851, 'fumbles returned for touchdowns': 0.02128, 'blocked kicks': 0.03191}}, 'PK': {'Defense': {'unassisted tackles': 0.34783, 'assisted tackles': 0.0, 'total tackles': 0.34783, 'sacks': 0.0, 'yards lost on sack': 0.0, 'tackles for loss': 0.0, 'passes defended': 0.0, 'interceptions': 0.0, 'intercepted returned yards': 0.0, 'longest interception return': 0.0, 'interceptions returned for touchdowns': 0.0, 'forced fumbles': 0.0, 'fumbles recovered': 0.0, 'fumbles returned for touchdowns': 0.0, 'blocked kicks': 0.0}, 'Scoring': {'rushing touchdowns': 0.0, 'receiving touchdowns': 0.0, 'return touchdowns': 0.0, 'total touchdowns': 0.0, 'field goals': 22.95652, 'extra points': 27.58696, 'two point conversions': 0.0, 'total points': 96.45652, 'total points per game': 7.01739}, 'Kicking': {'field goals made': 22.95652, 'field goals attempts': 26.5, 'field goals made pct': 86.56304, 'longest goal made': 53.63043, 'field goals from 1 19 yards': 0.02174, 'field goals from 20 29 yards': 0.87319, 'field goals from 30 39 yards': 0.96027, 'field goals from 40 49 yards': 0.76699, 'field goals from 50 yards': 0.62671, 'extra points made': 27.58696, 'extra points attempts': 28.95652, 'extra points made pct': 94.21957}}, 'P': {'Punting': {'punts': 56.11905, 'gross punt yards': 2668.57143, 'longest punt': 67.2381, 'gross punting avg': 47.66905, 'net punting avg': 41.66905, 'blocked punts': 0.11905, 'inside 20 yards punt': 20.30952, 'touchbacks': 4.07143, 'fair catches': 15.69048, 'punts returned': 24.42857, 'yards returned on punts': 238.90476, 'yards returned on punts avg': 10.1}}, 'QB': {'Passing': {'passing attempts': 217.44828, 'completions': 139.34483, 'completion pct': 59.45977, 'yards': 1515.97701, 'yards per pass avg': 6.66897, 'yards per game': 145.70575, 'longest pass': 49.93103, 'passing touchdowns': 8.78161, 'passing touchdowns pct': 0, 'interceptions': 5.18391, 'interceptions pct': 0, 'sacks': 16.51724, 'sacked yards lost': 111.34483, 'quaterback rating': 78.84713}, 'Rushing': {'rushing attempts': 28.08046, 'yards': 119.7931, 'yards per rush avg': 3.37241, 'longest rush': 15.51724, 'over 20 yards': 0.8046, 'rushing touchdowns': 1.34483, 'yards per game': 12.1908, 'fumbles': 1.54023, 'fumbles lost': 0.56322, 'rushing first downs': 9.71264}}, 'LS': {'Defense': {'unassisted tackles': 1.57143, 'assisted tackles': 1.21429, 'total tackles': 2.78571, 'sacks': 0.0, 'yards lost on sack': 0.0, 'tackles for loss': 0.0, 'passes defended': 0.0, 'interceptions': 0.0, 'intercepted returned yards': 0.0, 'longest interception return': 0.0, 'interceptions returned for touchdowns': 0.0, 'forced fumbles': 0.10714, 'fumbles recovered': 0.03571, 'fumbles returned for touchdowns': 0.0, 'blocked kicks': 0.0}}}
+
+    # Dictionary containing the top n players per position
+    players_per_position = {'QB': 1, 'RB': 3, 'FB': 1, 'WR': 5, 'TE': 3, 'OT': 1, 'C': 1, 'G': 1, 'DE': 2, 'DT': 3, 'CB': 5, 'S': 3, 'LB': 6, 'PK': 1, 'P': 1, 'LS': 1}
 
     # --- STEP 2. Group player stats by position ---
     # Make a dictionary of players by position (including their playerID)
@@ -234,6 +238,11 @@ def get_player_stats(teamID, season):
     for playerID, player_info in players.items():
         # Position
         position = player_info[1]
+
+        # Check that the player's position is valid
+        if (position not in players_by_position.keys()):
+            continue
+
         # Stats
         player_stats = get_stats_by_player(playerID, season)
 
@@ -272,6 +281,26 @@ def get_player_stats(teamID, season):
         # Add the player to the dictionary
         players_by_position[position][playerID] = stats
 
+    # print(f"---- PLAYERS BY POSITION {teamID} ----")
+    # for position in players_by_position:
+    #     print(f"---- {position} ({len(players_by_position[position])}): {players_by_position[position]}")
+
+    # Check if any positions are missing players
+    # If so, fill with average values until the position has the required number of players
+    for position in players_by_position:
+        # Missing players (0 players for the position)
+        if (len(players_by_position[position]) == 0):
+            print(f"--- NO PLAYER STATS FOR POSITION {position}---")
+            # Fill with average values (playerID = 0 and decreasing to avoid using real IDs)
+            for i in range(0, players_per_position[position]):
+                players_by_position[position][i] = [avg_stats_by_position[position][group][stat] for group in avg_stats_by_position[position] for stat in avg_stats_by_position[position][group]]
+        # Check if any positions don't have enough players
+        elif (len(players_by_position[position]) < players_per_position[position]):
+            print(f"--- NOT ENOUGH PLAYER STATS FOR POSITION {position}---")
+            # Fill with average values (playerID = 0 and decreasing to avoid using real IDs)
+            for i in range(0, players_per_position[position] - len(players_by_position[position])):
+                players_by_position[position][i] = [avg_stats_by_position[position][group][stat] for group in avg_stats_by_position[position] for stat in avg_stats_by_position[position][group]]
+
     # --- STEP 3. Average stats for each player in each position and sort positions by the average ---
     avg_stats_by_player = {position: {} for position in players_by_position.keys()}
     # Average each player's stats
@@ -292,9 +321,9 @@ def get_player_stats(teamID, season):
     # - FB: 1
     # - WR: 5
     # - TE: 3
-    # - OT: 1
     # - C: 1
     # - G: 1
+    # - OT: 1
     # - DE: 2
     # - DT: 3
     # - CB: 5
@@ -304,13 +333,15 @@ def get_player_stats(teamID, season):
     # - P: 1
     # - LS: 1
 
-    # Dictionary containing the top n players per position
-    players_per_position = {'QB': 1, 'RB': 3, 'FB': 1, 'WR': 5, 'TE': 3, 'OT': 1, 'C': 1, 'G': 1, 'DE': 2, 'DT': 3, 'CB': 5, 'S': 3, 'LB': 6, 'PK': 1, 'P': 1, 'LS': 1}
-
     # Select the top n players per position
     for position in players_per_position:
         players_by_position[position] = {k: v for k, v in players_by_position[position].items() if k in list(avg_stats_by_player[position].keys())[:players_per_position[position]]}
-    
+
+    # print(f"Players by position: {players_by_position}")
+
+    # # ADD PARAMETERS
+    # parameters[position][playerID] = [stat_name for group in player_stats for stat_name in player_stats[group]]
+
     # Condense all player stats into one 1D array
     condensed_stats = [stat for position in players_by_position for player in players_by_position[position] for stat in players_by_position[position][player]]
 
@@ -517,10 +548,10 @@ def getSeasons():
         data = json.loads(data)
 
         if (data['results'] != 0):
-            print("Seasons stats found")
+            # print("Seasons stats found")
             break
         else:
-            print("Seasons stats not found, waiting...")
+            # print("Seasons stats not found, waiting...")
             # If there is an error, print the error and wait 60 seconds
             if (len(data['errors']) != 0):
                 print('Error:', data['errors'])
@@ -548,10 +579,10 @@ def get_head_to_head_games(teamID_1,teamID_2,season):
         data = json.loads(data.decode("utf-8"))
 
         if (data['results'] != 0):
-            print("Head to head games found")
+            # print("Head to head games found")
             break
         else:
-            print("Head to head games not found")
+            # print("Head to head games not found")
             # If there is an error, print the error and wait 60 seconds
             if (len(data['errors']) != 0):
                 print('Error:', data['errors'])
@@ -580,10 +611,10 @@ def get_games_for_team_for_season(season,teamID):
         data = json.loads(data.decode("utf-8"))
 
         if (data['results'] != 0):
-            print("Games found")
+            # print("Games found")
             break
         else:
-            print("Games not found, waiting...")
+            # print("Games not found, waiting...")
             # If there is an error, print the error and wait 60 seconds
             if (len(data['errors']) != 0):
                 print('Error:', data['errors'])
@@ -619,10 +650,10 @@ def get_team_stats_for_game(gameIDs):
             data = json.loads(data.decode("utf-8"))
 
             if (data['results'] != 0):
-                print('Team stats found')
+                # print('Team stats found')
                 break
             else:
-                print('Team stats not found, waiting...')
+                # print('Team stats not found, waiting...')
                 # If there is an error, print the error and wait 60 seconds
                 if (len(data['errors']) != 0):
                     print('Error:', data['errors'])
@@ -655,10 +686,10 @@ def get_average_team_stats(season, teamID):
             data = json.loads(data.decode("utf-8"))
 
             if (data['results'] != 0):
-                print('Game stats found')
+                # print('Game stats found')
                 break
             else:
-                print('Game stats not found, waiting...')
+                # print('Game stats not found, waiting...')
                 # If there is an error, print the error and wait 60 seconds
                 if (len(data['errors']) != 0):
                     print('Error:', data['errors'])
@@ -712,14 +743,13 @@ def get_average_team_stats(season, teamID):
 # 3. Pull the winner of the game [0, 1] as target data
 # 4. Compile the input/target data into a list of tuples for PyTorch
 
+# Game 1) Input: [h2h_winner, home_id, home_player_stats, home_team_stats, away_id, away_player_stats, away_team_stats]
+#         Target: [0 or 1]
+
 # INPUT DATA FORMAT
 # [h2h_winner, 
 #  home_id, home_player_stats, home_team_stats, 
 #  away_id, away_player_stats, away_team_stats]
-
-# h2h_winner: 1
-# home_id: 2
-# home_player_stats: 
 
 # TARGET DATA FORMAT
 # [winner] (0 - home or 1 - away)
@@ -737,6 +767,7 @@ def get_pytorch_data(league, season):
     # Get all games for each team
     games = {}
     for team_name, teamID in teams.items():
+        print(f"--------- Getting games for {team_name} ({teamID}) ---------")
         # Get games for teamID
         team_games = get_games_for_team_for_season(season, teamID)
         # Add each game to the games dictionary
@@ -751,6 +782,9 @@ def get_pytorch_data(league, season):
 
     #--- 2. For each game, pull player stats/team stats as input data ---#
     count = 0
+
+    print(f"Total Games: {len(games)}")
+
     for game in games:
 
         # # Get the teamID for the home and away teams
@@ -758,6 +792,10 @@ def get_pytorch_data(league, season):
 
         home_id = teams[home_name]
         away_id = teams[away_name]
+
+        print(f"---- GAME {count + 1} ----")
+
+        print(f"--------- Getting stats for {home_name} ({home_id}) vs {away_name} ({away_id}) ---------")
 
         # HEAD2HEAD STATS
         # Get the head-to-head stats for the home and away teams for the previous season
@@ -801,6 +839,14 @@ def get_pytorch_data(league, season):
         games_stats[game]['input'] = [h2h_winner,
                                     home_id, home_player_stats, avg_home_team_stats,
                                     away_id, away_player_stats, avg_away_team_stats]
+        
+        print(f"---- NUM PARAMETERS ----")
+        for i in games_stats[game]['input']:
+            try:
+                print(len(i))
+            except:
+                print(1)
+
         games_stats[game]['target'] = np.array([games[game]['winner']], dtype=np.float32)
         
         # Flatten the input list of lists into a single list
@@ -817,7 +863,7 @@ def get_pytorch_data(league, season):
         # print(games_stats[game])
 
         count += 1
-        if count == 1:
+        if count == 50:
             break
 
     #--- 4. Compile the input/target data into a list of tuples for PyTorch ---#
