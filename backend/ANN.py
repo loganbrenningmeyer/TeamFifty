@@ -7,7 +7,7 @@ import torch
 import torch.nn as nn
 
 class ANN(nn.Module):
-    def __init__(self, input_size, output_size, hidden_sizes, activation_functions):
+    def __init__(self, input_size, output_size, hidden_sizes, activation_functions, dropout, dropout_rate=0.5):
         super(ANN, self).__init__()
         self.layers = nn.ModuleList()
 
@@ -29,6 +29,10 @@ class ANN(nn.Module):
                 self.layers.append(nn.Sigmoid())
             elif (activation_functions[i] == 'tanh'):
                 self.layers.append(nn.Tanh())
+
+            # Add the dropout layer to the list of layers
+            if (dropout):
+                self.layers.append(nn.Dropout(p=0.5))
 
         # Output layer
         self.output = nn.Linear(prev_size, output_size)
@@ -84,8 +88,8 @@ class ANN(nn.Module):
             # Print the loss and accuracy for every epoch
             epoch_loss = running_loss / len(dataloader)
             epoch_accuracy = correct / total
-            if (epoch_accuracy > 0.9): # Stop early if accuracy is high enough
-                break
+            # if (epoch_accuracy > 0.9): # Stop early if accuracy is high enough
+            #     break
             print(f"Epoch {epoch+1}/{epochs}, Loss: {epoch_loss:.4f}, Accuracy: {epoch_accuracy:.4f}")
 
     def predict(self, x):
