@@ -18,3 +18,23 @@ dict_keys(['first_downs_total', 'first_downs_passing', 'first_downs_rushing', 'f
 6. Use data from 2022/2023 (larger dataset)
 7. Remove irrelevant features/develop new ones 
 8. Batch normalization 
+
+---- MODEL PERFORMANCE (10 trials avg) ----
+
+-- Tanh/ReLU w/ Dropout (p=0.5) --
+
+1. model = ANN.ANN(input_size, output_size, [128, 64, 32], ['relu', 'relu', 'relu'], dropout=True, dropout_rate=0.5)
+    a. batch_size = 8, lr = 0.001, epochs = 100
+    b. 53.74%
+2. model = ANN.ANN(input_size, output_size, [128, 64, 32], ['tanh', 'tanh', 'tanh'], dropout=True, dropout_rate=0.5)
+    a. batch_size = 8, lr = 0.001, epochs = 100
+    b. 54.20%
+
+-- Tanh/ReLU w/o Dropout --
+
+1. model = ANN.ANN(input_size, output_size, [128, 64, 32], ['tanh', 'tanh', 'tanh'], dropout=False, dropout_rate=0.5)
+    a. batch_size = 8, lr = 0.001, epochs = 100
+    b. 54.20%
+2. model = ANN.ANN(input_size, output_size, [128, 64, 32], ['relu', 'relu', 'relu'], dropout=False, dropout_rate=0.5)
+    a. batch_size = 8, lr = 0.001, epochs = 100
+    b. 54.12%
