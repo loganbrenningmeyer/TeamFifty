@@ -84,6 +84,8 @@ class ANN(nn.Module):
             # Print the loss and accuracy for every epoch
             epoch_loss = running_loss / len(dataloader)
             epoch_accuracy = correct / total
+            if (epoch_accuracy > 0.9): # Stop early if accuracy is high enough
+                break
             print(f"Epoch {epoch+1}/{epochs}, Loss: {epoch_loss:.4f}, Accuracy: {epoch_accuracy:.4f}")
 
     def predict(self, x):

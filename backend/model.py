@@ -8,7 +8,7 @@ import ANN
 # torch.set_printoptions(threshold=torch.inf)
 
 league = 1
-season = 2023
+season = 2022
 
 normalize = 1
 
@@ -34,6 +34,8 @@ if normalize:
 
 # Calculate training size
 train_size = int(0.8 * len(input_data))
+print(f"Train size: {train_size}")
+print(f"Validation size: {len(input_data) - train_size}")
 
 # Create Datasets
 training_set = TensorDataset(input_data[:train_size], target_data[:train_size])
@@ -50,10 +52,10 @@ validation_loader = DataLoader(validation_set, batch_size=batch_size, shuffle=Fa
 input_size = input_data.shape[1]
 output_size = 1
 
-model = ANN.ANN(input_size, output_size, [128, 64, 32], ['tanh', 'tanh', 'tanh'])
+model = ANN.ANN(input_size, output_size, [128, 64, 32], ['tanh', 'relu', 'tanh'])
 
 # Train the model
-model.train(training_loader, 500, 0.001)
+model.train(training_loader, 100, 0.001)
 
 # Predict the output on testing data and print the percent correct
 correct = 0
