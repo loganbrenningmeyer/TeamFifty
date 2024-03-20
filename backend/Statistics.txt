@@ -11,6 +11,7 @@ STATISTICS
 --------- PLAYER STATS [toggle] ---------
 
 Position: RB
+-- Rushing --
 1: rushing attempts
 2: yards
 3: yards per rush avg
@@ -21,6 +22,7 @@ Position: RB
 8: fumbles
 9: fumbles lost
 10: rushing first downs
+-- Receiving --
 11: receptions
 12: receiving targets
 13: receiving yards
@@ -33,6 +35,7 @@ Position: RB
 20: fumbles lost
 21: yards after catch
 22: receiving first downs
+-- Defense --
 23: unassisted tackles
 24: assisted tackles
 25: total tackles
@@ -48,6 +51,7 @@ Position: RB
 35: fumbles recovered
 36: fumbles returned for touchdowns
 37: blocked kicks
+-- Scoring --
 38: rushing touchdowns
 39: receiving touchdowns
 40: return touchdowns
@@ -57,6 +61,7 @@ Position: RB
 44: two point conversions
 45: total points
 46: total points per game
+-- Returning --
 47: kickoff returned attempts
 48: kickoff return yards
 49: yards per kickoff avg
@@ -70,6 +75,7 @@ Position: RB
 57: fair catches
 
 Position: FB
+-- Receiving --
 1: receptions
 2: receiving targets
 3: receiving yards
@@ -82,6 +88,7 @@ Position: FB
 10: fumbles lost
 11: yards after catch
 12: receiving first downs
+-- Defense --
 13: unassisted tackles
 14: assisted tackles
 15: total tackles
@@ -97,6 +104,7 @@ Position: FB
 25: fumbles recovered
 26: fumbles returned for touchdowns
 27: blocked kicks
+-- Returning --
 28: kickoff returned attempts
 29: kickoff return yards
 30: yards per kickoff avg
@@ -110,6 +118,7 @@ Position: FB
 38: fair catches
 
 Position: WR
+-- Receiving --
 1: receptions
 2: receiving targets
 3: receiving yards
@@ -122,6 +131,7 @@ Position: WR
 10: fumbles lost
 11: yards after catch
 12: receiving first downs
+-- Defense --
 13: unassisted tackles
 14: assisted tackles
 15: total tackles
@@ -137,6 +147,7 @@ Position: WR
 25: fumbles recovered
 26: fumbles returned for touchdowns
 27: blocked kicks
+-- Scoring --
 28: rushing touchdowns
 29: receiving touchdowns
 30: return touchdowns
@@ -146,6 +157,7 @@ Position: WR
 34: two point conversions
 35: total points
 36: total points per game
+-- Rushing --
 37: rushing attempts
 38: yards
 39: yards per rush avg
@@ -158,6 +170,7 @@ Position: WR
 46: rushing first downs
 
 Position: TE
+-- Receiving --
 1: receptions
 2: receiving targets
 3: receiving yards
@@ -170,6 +183,7 @@ Position: TE
 10: fumbles lost
 11: yards after catch
 12: receiving first downs
+-- Defense --
 13: unassisted tackles
 14: assisted tackles
 15: total tackles
@@ -187,6 +201,7 @@ Position: TE
 27: blocked kicks
 
 Position: C
+-- Defense --
 1: unassisted tackles
 2: assisted tackles
 3: total tackles
@@ -204,6 +219,7 @@ Position: C
 15: blocked kicks
 
 Position: G
+-- Defense --
 1: unassisted tackles
 2: assisted tackles
 3: total tackles
@@ -221,6 +237,7 @@ Position: G
 15: blocked kicks
 
 Position: OT
+-- Defense --
 1: unassisted tackles
 2: assisted tackles
 3: total tackles
@@ -238,6 +255,7 @@ Position: OT
 15: blocked kicks
 
 Position: DE
+-- Defense --
 1: unassisted tackles
 2: assisted tackles
 3: total tackles
@@ -255,6 +273,7 @@ Position: DE
 15: blocked kicks
 
 Position: DT
+-- Defense --
 1: unassisted tackles
 2: assisted tackles
 3: total tackles
@@ -272,6 +291,7 @@ Position: DT
 15: blocked kicks
 
 Position: LB
+-- Defense --
 1: unassisted tackles
 2: assisted tackles
 3: total tackles
@@ -289,6 +309,7 @@ Position: LB
 15: blocked kicks
 
 Position: CB
+-- Defense --
 1: unassisted tackles
 2: assisted tackles
 3: total tackles
@@ -306,6 +327,7 @@ Position: CB
 15: blocked kicks
 
 Position: S
+-- Defense --
 1: unassisted tackles
 2: assisted tackles
 3: total tackles
@@ -323,6 +345,7 @@ Position: S
 15: blocked kicks
 
 Position: PK
+-- Defense --
 1: unassisted tackles
 2: assisted tackles
 3: total tackles
@@ -338,6 +361,7 @@ Position: PK
 13: fumbles recovered
 14: fumbles returned for touchdowns
 15: blocked kicks
+-- Scoring --
 16: rushing touchdowns
 17: receiving touchdowns
 18: return touchdowns
@@ -347,6 +371,7 @@ Position: PK
 22: two point conversions
 23: total points
 24: total points per game
+-- Kicking --
 25: field goals made
 26: field goals attempts
 27: field goals made pct
@@ -361,6 +386,7 @@ Position: PK
 36: extra points made pct
 
 Position: P
+-- Punting --
 1: punts
 2: gross punt yards
 3: longest punt
@@ -375,6 +401,7 @@ Position: P
 12: yards returned on punts avg
 
 Position: QB
+-- Passing --
 1: passing attempts
 2: completions
 3: completion pct
@@ -389,6 +416,7 @@ Position: QB
 12: sacks
 13: sacked yards lost
 14: quaterback rating
+-- Rushing --
 15: rushing attempts
 16: yards
 17: yards per rush avg
@@ -401,6 +429,7 @@ Position: QB
 24: rushing first downs
 
 Position: LS
+-- Defense --
 1: unassisted tackles
 2: assisted tackles
 3: total tackles
@@ -416,36 +445,3 @@ Position: LS
 13: fumbles recovered
 14: fumbles returned for touchdowns
 15: blocked kicks
-
---------- TEAM STATS [toggle] ---------
-
-1: first_downs_total
-2: first_downs_passing
-3: first_downs_rushing
-4: first_downs_from_penalties
-5: first_downs_third_down_efficiency
-6: first_downs_fourth_down_efficiency
-7: plays_total
-8: yards_total
-9: yards_yards_per_play
-10: yards_total_drives
-11: passing_total
-12: passing_comp_att
-13: passing_yards_per_pass
-14: passing_interceptions_thrown
-15: passing_sacks_yards_lost
-16: rushings_total
-17: rushings_attempts
-18: rushings_yards_per_rush
-19: red_zone_made_att
-20: penalties_total
-21: turnovers_total
-22: turnovers_lost_fumbles
-23: turnovers_interceptions
-24: posession_total
-25: interceptions_total
-26: fumbles_recovered_total
-27: sacks_total
-28: safeties_total
-29: int_touchdowns_total
-30: points_against_total

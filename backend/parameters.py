@@ -6,6 +6,7 @@ for position in player_stats:
     stat_count = 1
     print(f"\nPosition: {position}")
     for group in player_stats[position]:
+        print(f"-- {group} --")
         for stat in player_stats[position][group]:
             print(f"{stat_count}: {stat}")
             stat_count += 1
