@@ -1,0 +1,451 @@
+STATISTICS
+
+--------- GENERAL STATS [toggle] ---------
+
+1. Head to Head Wins
+
+2. HomeID
+
+3. AwayID
+
+--------- PLAYER STATS [toggle] ---------
+
+Position: RB
+1: rushing attempts
+2: yards
+3: yards per rush avg
+4: longest rush
+5: over 20 yards
+6: rushing touchdowns
+7: yards per game
+8: fumbles
+9: fumbles lost
+10: rushing first downs
+11: receptions
+12: receiving targets
+13: receiving yards
+14: yards per reception avg
+15: receiving touchdowns
+16: longest reception
+17: over 20 yards
+18: yards per game
+19: fumbles
+20: fumbles lost
+21: yards after catch
+22: receiving first downs
+23: unassisted tackles
+24: assisted tackles
+25: total tackles
+26: sacks
+27: yards lost on sack
+28: tackles for loss
+29: passes defended
+30: interceptions
+31: intercepted returned yards
+32: longest interception return
+33: interceptions returned for touchdowns
+34: forced fumbles
+35: fumbles recovered
+36: fumbles returned for touchdowns
+37: blocked kicks
+38: rushing touchdowns
+39: receiving touchdowns
+40: return touchdowns
+41: total touchdowns
+42: field goals
+43: extra points
+44: two point conversions
+45: total points
+46: total points per game
+47: kickoff returned attempts
+48: kickoff return yards
+49: yards per kickoff avg
+50: longes kickoff return
+51: kickoff return touchdows
+52: punts returned
+53: yards returned on punts
+54: yards per punt avg
+55: longest punt return
+56: punt return touchdowns
+57: fair catches
+
+Position: FB
+1: receptions
+2: receiving targets
+3: receiving yards
+4: yards per reception avg
+5: receiving touchdowns
+6: longest reception
+7: over 20 yards
+8: yards per game
+9: fumbles
+10: fumbles lost
+11: yards after catch
+12: receiving first downs
+13: unassisted tackles
+14: assisted tackles
+15: total tackles
+16: sacks
+17: yards lost on sack
+18: tackles for loss
+19: passes defended
+20: interceptions
+21: intercepted returned yards
+22: longest interception return
+23: interceptions returned for touchdowns
+24: forced fumbles
+25: fumbles recovered
+26: fumbles returned for touchdowns
+27: blocked kicks
+28: kickoff returned attempts
+29: kickoff return yards
+30: yards per kickoff avg
+31: longes kickoff return
+32: kickoff return touchdows
+33: punts returned
+34: yards returned on punts
+35: yards per punt avg
+36: longest punt return
+37: punt return touchdowns
+38: fair catches
+
+Position: WR
+1: receptions
+2: receiving targets
+3: receiving yards
+4: yards per reception avg
+5: receiving touchdowns
+6: longest reception
+7: over 20 yards
+8: yards per game
+9: fumbles
+10: fumbles lost
+11: yards after catch
+12: receiving first downs
+13: unassisted tackles
+14: assisted tackles
+15: total tackles
+16: sacks
+17: yards lost on sack
+18: tackles for loss
+19: passes defended
+20: interceptions
+21: intercepted returned yards
+22: longest interception return
+23: interceptions returned for touchdowns
+24: forced fumbles
+25: fumbles recovered
+26: fumbles returned for touchdowns
+27: blocked kicks
+28: rushing touchdowns
+29: receiving touchdowns
+30: return touchdowns
+31: total touchdowns
+32: field goals
+33: extra points
+34: two point conversions
+35: total points
+36: total points per game
+37: rushing attempts
+38: yards
+39: yards per rush avg
+40: longest rush
+41: over 20 yards
+42: rushing touchdowns
+43: yards per game
+44: fumbles
+45: fumbles lost
+46: rushing first downs
+
+Position: TE
+1: receptions
+2: receiving targets
+3: receiving yards
+4: yards per reception avg
+5: receiving touchdowns
+6: longest reception
+7: over 20 yards
+8: yards per game
+9: fumbles
+10: fumbles lost
+11: yards after catch
+12: receiving first downs
+13: unassisted tackles
+14: assisted tackles
+15: total tackles
+16: sacks
+17: yards lost on sack
+18: tackles for loss
+19: passes defended
+20: interceptions
+21: intercepted returned yards
+22: longest interception return
+23: interceptions returned for touchdowns
+24: forced fumbles
+25: fumbles recovered
+26: fumbles returned for touchdowns
+27: blocked kicks
+
+Position: C
+1: unassisted tackles
+2: assisted tackles
+3: total tackles
+4: sacks
+5: yards lost on sack
+6: tackles for loss
+7: passes defended
+8: interceptions
+9: intercepted returned yards
+10: longest interception return
+11: interceptions returned for touchdowns
+12: forced fumbles
+13: fumbles recovered
+14: fumbles returned for touchdowns
+15: blocked kicks
+
+Position: G
+1: unassisted tackles
+2: assisted tackles
+3: total tackles
+4: sacks
+5: yards lost on sack
+6: tackles for loss
+7: passes defended
+8: interceptions
+9: intercepted returned yards
+10: longest interception return
+11: interceptions returned for touchdowns
+12: forced fumbles
+13: fumbles recovered
+14: fumbles returned for touchdowns
+15: blocked kicks
+
+Position: OT
+1: unassisted tackles
+2: assisted tackles
+3: total tackles
+4: sacks
+5: yards lost on sack
+6: tackles for loss
+7: passes defended
+8: interceptions
+9: intercepted returned yards
+10: longest interception return
+11: interceptions returned for touchdowns
+12: forced fumbles
+13: fumbles recovered
+14: fumbles returned for touchdowns
+15: blocked kicks
+
+Position: DE
+1: unassisted tackles
+2: assisted tackles
+3: total tackles
+4: sacks
+5: yards lost on sack
+6: tackles for loss
+7: passes defended
+8: interceptions
+9: intercepted returned yards
+10: longest interception return
+11: interceptions returned for touchdowns
+12: forced fumbles
+13: fumbles recovered
+14: fumbles returned for touchdowns
+15: blocked kicks
+
+Position: DT
+1: unassisted tackles
+2: assisted tackles
+3: total tackles
+4: sacks
+5: yards lost on sack
+6: tackles for loss
+7: passes defended
+8: interceptions
+9: intercepted returned yards
+10: longest interception return
+11: interceptions returned for touchdowns
+12: forced fumbles
+13: fumbles recovered
+14: fumbles returned for touchdowns
+15: blocked kicks
+
+Position: LB
+1: unassisted tackles
+2: assisted tackles
+3: total tackles
+4: sacks
+5: yards lost on sack
+6: tackles for loss
+7: passes defended
+8: interceptions
+9: intercepted returned yards
+10: longest interception return
+11: interceptions returned for touchdowns
+12: forced fumbles
+13: fumbles recovered
+14: fumbles returned for touchdowns
+15: blocked kicks
+
+Position: CB
+1: unassisted tackles
+2: assisted tackles
+3: total tackles
+4: sacks
+5: yards lost on sack
+6: tackles for loss
+7: passes defended
+8: interceptions
+9: intercepted returned yards
+10: longest interception return
+11: interceptions returned for touchdowns
+12: forced fumbles
+13: fumbles recovered
+14: fumbles returned for touchdowns
+15: blocked kicks
+
+Position: S
+1: unassisted tackles
+2: assisted tackles
+3: total tackles
+4: sacks
+5: yards lost on sack
+6: tackles for loss
+7: passes defended
+8: interceptions
+9: intercepted returned yards
+10: longest interception return
+11: interceptions returned for touchdowns
+12: forced fumbles
+13: fumbles recovered
+14: fumbles returned for touchdowns
+15: blocked kicks
+
+Position: PK
+1: unassisted tackles
+2: assisted tackles
+3: total tackles
+4: sacks
+5: yards lost on sack
+6: tackles for loss
+7: passes defended
+8: interceptions
+9: intercepted returned yards
+10: longest interception return
+11: interceptions returned for touchdowns
+12: forced fumbles
+13: fumbles recovered
+14: fumbles returned for touchdowns
+15: blocked kicks
+16: rushing touchdowns
+17: receiving touchdowns
+18: return touchdowns
+19: total touchdowns
+20: field goals
+21: extra points
+22: two point conversions
+23: total points
+24: total points per game
+25: field goals made
+26: field goals attempts
+27: field goals made pct
+28: longest goal made
+29: field goals from 1 19 yards
+30: field goals from 20 29 yards
+31: field goals from 30 39 yards
+32: field goals from 40 49 yards
+33: field goals from 50 yards
+34: extra points made
+35: extra points attempts
+36: extra points made pct
+
+Position: P
+1: punts
+2: gross punt yards
+3: longest punt
+4: gross punting avg
+5: net punting avg
+6: blocked punts
+7: inside 20 yards punt
+8: touchbacks
+9: fair catches
+10: punts returned
+11: yards returned on punts
+12: yards returned on punts avg
+
+Position: QB
+1: passing attempts
+2: completions
+3: completion pct
+4: yards
+5: yards per pass avg
+6: yards per game
+7: longest pass
+8: passing touchdowns
+9: passing touchdowns pct
+10: interceptions
+11: interceptions pct
+12: sacks
+13: sacked yards lost
+14: quaterback rating
+15: rushing attempts
+16: yards
+17: yards per rush avg
+18: longest rush
+19: over 20 yards
+20: rushing touchdowns
+21: yards per game
+22: fumbles
+23: fumbles lost
+24: rushing first downs
+
+Position: LS
+1: unassisted tackles
+2: assisted tackles
+3: total tackles
+4: sacks
+5: yards lost on sack
+6: tackles for loss
+7: passes defended
+8: interceptions
+9: intercepted returned yards
+10: longest interception return
+11: interceptions returned for touchdowns
+12: forced fumbles
+13: fumbles recovered
+14: fumbles returned for touchdowns
+15: blocked kicks
+
+--------- TEAM STATS [toggle] ---------
+
+1: first_downs_total
+2: first_downs_passing
+3: first_downs_rushing
+4: first_downs_from_penalties
+5: first_downs_third_down_efficiency
+6: first_downs_fourth_down_efficiency
+7: plays_total
+8: yards_total
+9: yards_yards_per_play
+10: yards_total_drives
+11: passing_total
+12: passing_comp_att
+13: passing_yards_per_pass
+14: passing_interceptions_thrown
+15: passing_sacks_yards_lost
+16: rushings_total
+17: rushings_attempts
+18: rushings_yards_per_rush
+19: red_zone_made_att
+20: penalties_total
+21: turnovers_total
+22: turnovers_lost_fumbles
+23: turnovers_interceptions
+24: posession_total
+25: interceptions_total
+26: fumbles_recovered_total
+27: sacks_total
+28: safeties_total
+29: int_touchdowns_total
+30: points_against_total

@@ -1,0 +1,21 @@
+PARAMETERS
+
+--------- ARCHITECTURE ---------
+
+1. # of hidden layers [+/- button with number]
+2. # of neurons in each hidden layer [notched slider in powers of 2 (2, 4, 8, 16, 32...2048)]
+3. Type of layers (FCL, Convolutional, Recurrent) [add later]
+4. Activation function (ReLU, Tanh, Sigmoid, etc.) [Drop-down]
+5. Skip connections [add later]
+6. Dropout rate [slider]
+
+--------- GENERAL ---------
+
+1. Learning rate [slider]
+2. Stop condition (loss threshold, # of epochs) [Drop-down/slider]
+3. Loss function (MSELoss, BCELoss) [Drop-down]
+4. Optimizer (SGD, Adam, etc.) [Drop-down]
+5. Batch size [Slider]
+6. Normalization [toggle]
+7. Regularization (L1, L2, etc.) [Drop-down]
+8. Batch normalization [toggle]

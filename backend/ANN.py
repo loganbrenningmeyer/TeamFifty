@@ -54,6 +54,10 @@ class ANN(nn.Module):
 
         # Training loop
         for epoch in range(epochs):
+            running_loss = 0.0
+            correct = 0
+            total = 0
+
             for i, data in enumerate(dataloader):
                 # Get the inputs and labels
                 inputs, labels = data
@@ -71,8 +75,16 @@ class ANN(nn.Module):
                 # Update the parameters
                 optimizer.step()
 
-            # Print the loss for every epoch
-            print(f"Epoch {epoch}, Loss: {loss.item()}")
+                # Update loss and accuracy metrics
+                running_loss += loss.item()
+                predicted = (outputs > 0.5).float()
+                total += labels.size(0)
+                correct += (predicted == labels).sum().item()
+
+            # Print the loss and accuracy for every epoch
+            epoch_loss = running_loss / len(dataloader)
+            epoch_accuracy = correct / total
+            print(f"Epoch {epoch+1}/{epochs}, Loss: {epoch_loss:.4f}, Accuracy: {epoch_accuracy:.4f}")
 
     def predict(self, x):
         # Predict the output

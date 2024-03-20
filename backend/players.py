@@ -863,8 +863,8 @@ def get_pytorch_data(league, season):
         # print(games_stats[game])
 
         count += 1
-        if count == 50:
-            break
+        # if count == 2:
+        #     break
 
     #--- 4. Compile the input/target data into a list of tuples for PyTorch ---#
         
