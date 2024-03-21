@@ -1,21 +1,14 @@
-import React from 'react';
+// import logo from './logo.svg';
 import './App.css';
-import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
-import Home from './pages';
-import SigninPage from './pages/signin';
-import SignupPage from './pages/signup';
-import RecoveryPage from './pages/recovery';
-import DashboardPage from './pages/dashboard';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import About from './components/About';
 
 function App() {
   return (
     <Router>
       <Routes>
-          <Route exact path="/" element={<Home/>}  />
-          <Route exact path="/signin" element={<SigninPage/>}  />
-          <Route exact path="/signup" element={<SignupPage/>}  />
-          <Route exact path="/account-recovery" element={<RecoveryPage/>}  />
-          <Route exact path='/dashboard' element={<DashboardPage/>} />
+        <Route exact path="/" element={<About/>} />
       </Routes>
     </Router>
   );
