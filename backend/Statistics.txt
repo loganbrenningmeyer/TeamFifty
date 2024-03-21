@@ -445,3 +445,49 @@ Position: LS
 13: fumbles recovered
 14: fumbles returned for touchdowns
 15: blocked kicks
+
+-- first_downs --
+first_downs_total
+first_downs_passing
+first_downs_rushing
+first_downs_from_penalties
+first_downs_third_down_efficiency
+first_downs_fourth_down_efficiency
+-- plays --
+plays_total
+-- yards --
+yards_total
+yards_yards_per_play
+yards_total_drives
+-- passing --
+passing_total
+passing_comp_att
+passing_yards_per_pass
+passing_interceptions_thrown
+passing_sacks_yards_lost
+-- rushings --
+rushings_total
+rushings_attempts
+rushings_yards_per_rush
+-- red_zone --
+red_zone_made_att
+-- penalties --
+penalties_total
+-- turnovers --
+turnovers_total
+turnovers_lost_fumbles
+turnovers_interceptions
+-- posession --
+posession_total
+-- interceptions --
+interceptions_total
+-- fumbles_recovered --
+fumbles_recovered_total
+-- sacks --
+sacks_total
+-- safeties --
+safeties_total
+-- int_touchdowns --
+int_touchdowns_total
+-- points_against --
+points_against_total

@@ -19,7 +19,7 @@ function Home() {
         <button className='create-model' onClick={handleButtonClick}>Create Model</button>
       </div>
     </div>
-  )
+  );
 }
 
 export default Home;

@@ -700,10 +700,13 @@ def get_average_team_stats(season, teamID):
                     break
 
         for group_name, group_stats in data['response'][0]['statistics'].items():
+            print(f"-- {group_name} --")
             for stat_name, stat in group_stats.items():
 
                 # Add group name to stat name
                 stat_name = group_name + '_' + stat_name
+
+                print(stat_name)
 
                 # Check for non-castable stats
                 if stat_name in ['first_downs_third_down_efficiency', 'first_downs_fourth_down_efficiency', 
