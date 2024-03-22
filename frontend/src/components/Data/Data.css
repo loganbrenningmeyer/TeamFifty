@@ -5,7 +5,8 @@
         "general-grid-container"
         "player"
         "player-grid-container"
-        "team";
+        "team"
+        "team-grid-container";
     grid-gap: 10px;
 }
 

@@ -27,9 +27,9 @@
     grid-template-areas: 
         "activation_fx relu tanh"
         "loss_function MSELoss BCELoss"
-        "optimizer SGD adam"
+        "optimizer SGD Adam"
         "regularization L1 L2"
-        "batch_normalization batch_norm_toggle batch_norm_toggle";
+        "batch_normalization batch_norm_toggle .";
     grid-gap: 10px;
 }
 
@@ -38,6 +38,7 @@
     text-align: center;
     height: 40px;
     border-radius: 10px;
+    transition: background-color 0.5s, border 0.5s;
 }
 
 .col2-container > button.clicked {
@@ -53,7 +54,7 @@
 .BCELoss { grid-area: BCELoss; }
 .optimizer { grid-area: optimizer; }
 .SGD { grid-area: SGD; }
-.adam { grid-area: adam; }
+.Adam { grid-area: Adam; }
 .regularization { grid-area: regularization; }
 .L1 { grid-area: L1; }
 .L2 { grid-area: L2; }

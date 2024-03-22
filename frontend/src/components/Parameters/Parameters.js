@@ -4,6 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import './Parameters.css';
 
 function Parameters() {
+
+  const [clickedButtons, setClickedButtons] = useState({});
+
+  const handleButtonClick = (group, buttonName) => {
+    // Toggle clicked state
+    setClickedButtons({ ...clickedButtons, [group]: buttonName });
+  };
+
   return (
     <div style={{textAlign: 'center', padding: '20px'}}>
       <h1>What parameters would you like for your model?</h1>
@@ -22,26 +30,74 @@ function Parameters() {
 
 
             <div class='col2-container'>
-
+                
                 <h2 class='activation_fx'>Activation Fx</h2>
-                <button class='sigmoid'>Sigmoid</button>
-                <button class='relu'>Relu</button>
-                <button class='tanh'>Tanh</button>
+                <button 
+                    class={clickedButtons.activation === 'relu' ? 'clicked' : 'relu'}
+                    onClick={() => handleButtonClick('activation', 'relu')}
+                >
+                    Relu
+                </button>
+
+                <button 
+                    class={clickedButtons.activation === 'tanh' ? 'clicked' : 'tanh'}
+                    onClick={() => handleButtonClick('activation', 'tanh')}
+                >
+                    Tanh
+                </button>
             
                 <h2 class='loss_function'>Loss Function</h2>
-                <button class='MSELoss'>MSELoss</button>
-                <button class='BCELoss'>BCELoss</button>
+                <button 
+                    class={clickedButtons.loss === 'MSELoss' ? 'clicked' : 'MSELoss'}
+                    onClick={() => handleButtonClick('loss', 'MSELoss')}
+                >
+                    MSELoss
+                </button>
+
+                <button 
+                    class={clickedButtons.loss === 'BCELoss' ? 'clicked' : 'BCELoss'}
+                    onClick={() => handleButtonClick('loss', 'BCELoss')}
+                >
+                    BCELoss
+                </button>
 
                 <h2 class='optimizer'>Optimizer</h2>
-                <button class='SGD'>SGD</button>
-                <button class='adam'>Adam</button>
+                <button 
+                    class={clickedButtons.optimizer === 'SGD' ? 'clicked' : 'SGD'}
+                    onClick={() => handleButtonClick('optimizer', 'SGD')}
+                >
+                    SGD
+                </button>
+                
+                <button 
+                    class={clickedButtons.optimizer === 'Adam' ? 'clicked' : 'Adam'}
+                    onClick={() => handleButtonClick('optimizer', 'Adam')}  
+                >
+                    Adam
+                </button>
 
                 <h2 class='regularization'>Regularization</h2>
-                <button class='L1'>L1</button>
-                <button class='L2'>L2</button>
+                <button 
+                    class={clickedButtons.regularization === 'L1' ? 'clicked' : 'L1'}
+                    onClick={() => handleButtonClick('regularization', 'L1')}
+                >
+                    L1
+                </button>
+                
+                <button 
+                    class={clickedButtons.regularization === 'L2' ? 'clicked' : 'L2'}
+                    onClick={() => handleButtonClick('regularization', 'L2')}
+                >
+                    L2
+                </button>
 
                 <h2 class='batch_normalization'>Batch Normalization</h2>
-                <button class='batch_norm_toggle'>On/Off</button>
+                <button 
+                    class={clickedButtons.batch === 'on' ? 'clicked' : 'batch_norm_toggle'}
+                    onClick={() => handleButtonClick('batch', clickedButtons.batch === 'on' ? 'off' : 'on')}
+                >
+                    On/Off
+                </button>
 
             </div>
 
