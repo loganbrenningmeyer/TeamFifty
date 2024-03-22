@@ -6,7 +6,7 @@
         "layer3-container optimizer-container"
         "dropout-container regularization-container"
         "learning-rate-container batch-container"
-        "batch-size-container .";
+        "batch-size-container train-button";
     grid-gap: 10px;
     grid-template-columns: 1fr 1fr;
 }
@@ -162,19 +162,15 @@
 .batch_norm_toggle { grid-area: batch_norm_toggle; }
 
 .train-button {
-    position: fixed;
-    bottom: 10px;
-    right: 10px;
+    grid-area: train-button;
     background-color: #4CAF50;
     border: none;
     color: white;
-    padding: 10px 20px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin: 4px 2px;
     cursor: pointer;
-    border-radius: 20px;
+    border-radius: 10px;
 }
 

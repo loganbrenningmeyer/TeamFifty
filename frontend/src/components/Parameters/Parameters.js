@@ -140,9 +140,11 @@ function Parameters() {
                 </button>
             </div>
 
+            <button className='train-button' onClick={handleTrain}>Train Model</button>
+
         </div>
 
-        <button className='train-button' onClick={handleTrain}>Train Model</button>
+        
 
     </div>
   );
