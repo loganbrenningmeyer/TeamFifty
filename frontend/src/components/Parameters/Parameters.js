@@ -29,7 +29,12 @@ function Parameters() {
 
 
             <div class='col1-container'>
-              
+                <h2 class='layer1'>Layer 1</h2>
+                <h2 class='layer2'>Layer 2</h2>
+                <h2 class='layer3'>Layer 3</h2>
+                <h2 class='dropout'>Dropout</h2>
+                <h2 class='learning_rate'>Learning Rate</h2>
+                <h2 class='batch_size'>Batch Size</h2>
             </div>
 
 

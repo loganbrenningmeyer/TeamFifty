@@ -20,6 +20,32 @@
     grid-gap: 10px;
 }
 
+
+.col1-container {
+    display: grid;
+    grid-area: col2-container;
+    grid-template-areas: 
+        "layer1 layer_txt"
+        "layer2 layer_txt"
+        "layer3 layer_txt"
+        "dropout dropout_txt"
+        "learning_rate learning_rate_txt"
+        "batch_size batch_size_txt";
+    grid-gap: 10px;
+}
+
+.layer1 { grid-area: layer1; }
+.layer_txt { grid-area: layer_txt; }
+.layer2 { grid-area: layer2; }
+.layer3 { grid-area: layer3; }
+.dropout { grid-area: dropout; }
+.dropout_txt { grid-area: dropout_txt; }
+.learning_rate { grid-area: learning_rate; }
+.learning_rate_txt { grid-area: learning_rate_txt; }
+.batch_size { grid-area: batch_size; }
+.batch_size_txt { grid-area: batch_size_txt; }
+
+
 .col2-container {
     display: grid;
     grid-area: col2-container;
