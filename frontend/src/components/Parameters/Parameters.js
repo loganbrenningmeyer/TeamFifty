@@ -12,6 +12,10 @@ function Parameters() {
     setClickedButtons({ ...clickedButtons, [group]: buttonName });
   };
 
+  const handleTrain = () => {
+    axios.post('http://localhost:5000/train', clickedButtons);
+  };
+
   return (
     <div style={{textAlign: 'center', padding: '20px'}}>
       <h1>What parameters would you like for your model?</h1>
@@ -103,7 +107,7 @@ function Parameters() {
 
         </div>
 
-        <button className='continue-button'>Continue</button>
+        <button className='train-button' onClick={handleTrain}>Train Model</button>
 
     </div>
   );
