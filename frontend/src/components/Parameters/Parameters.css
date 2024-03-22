@@ -1,8 +1,105 @@
 .param-grid-container {
     display: grid;
     grid-template-areas:
-        "hidden-layers hidden-layers"
-        "col1-container col2-container";
+        "layer1-container activation-container"
+        "layer2-container loss-container"
+        "layer3-container optimizer-container"
+        "dropout-container regularization-container"
+        "learning-rate-container batch-container"
+        "batch-size-container .";
+    grid-gap: 10px;
+    grid-template-columns: 1fr 1fr;
+}
+
+.activation-container {
+    display: grid;
+    grid-area: activation-container;
+    grid-template-areas: 
+        "activation_fx activation_fx" 
+        "relu tanh";
+    grid-gap: 10px;
+}
+
+.loss-container {
+    display: grid;
+    grid-area: loss-container;
+    grid-template-areas: 
+        "loss_function loss_function"
+        "MSELoss BCELoss";
+    grid-gap: 10px;
+}
+
+.optimizer-container {
+    display: grid;
+    grid-area: optimizer-container;
+    grid-template-areas: 
+        "optimizer optimizer"
+        "SGD Adam";
+    grid-gap: 10px;
+}
+
+.regularization-container {
+    display: grid;
+    grid-area: regularization-container;
+    grid-template-areas: 
+        "regularization regularization"
+        "L1 L2";
+    grid-gap: 10px;
+}
+
+.learning-rate-container {
+    display: grid;
+    grid-area: learning-rate-container;
+    grid-template-areas: 
+        "learning_rate learning_rate_txt";
+    grid-gap: 10px;
+}
+
+.batch-container {
+    display: grid;
+    grid-area: batch-container;
+    grid-template-areas: 
+        "batch_normalization batch_norm_toggle";
+    grid-gap: 10px;
+}
+
+.layer1-container {
+    display: grid;
+    grid-area: layer1-container;
+    grid-template-areas: 
+        "layer1 layer1_txt";
+    grid-gap: 10px;
+}
+
+.layer2-container {
+    display: grid;
+    grid-area: layer2-container;
+    grid-template-areas: 
+        "layer2 layer2_txt";
+    grid-gap: 10px;
+}
+
+.layer3-container {
+    display: grid;
+    grid-area: layer3-container;
+    grid-template-areas: 
+        "layer3 layer3_txt";
+    grid-gap: 10px;
+}
+
+.dropout-container {
+    display: grid;
+    grid-area: dropout-container;
+    grid-template-areas: 
+        "dropout dropout_txt";
+    grid-gap: 10px;
+}
+
+.batch-size-container {
+    display: grid;
+    grid-area: batch-size-container;
+    grid-template-areas: 
+        "batch_size batch_size_txt";
     grid-gap: 10px;
 }
 
@@ -20,22 +117,8 @@
     grid-gap: 10px;
 }
 
-
-.col1-container {
-    display: grid;
-    grid-area: col2-container;
-    grid-template-areas: 
-        "layer1 layer_txt"
-        "layer2 layer_txt"
-        "layer3 layer_txt"
-        "dropout dropout_txt"
-        "learning_rate learning_rate_txt"
-        "batch_size batch_size_txt";
-    grid-gap: 10px;
-}
-
 .layer1 { grid-area: layer1; }
-.layer_txt { grid-area: layer_txt; }
+.layer1_txt { grid-area: layer1_txt; }
 .layer2 { grid-area: layer2; }
 .layer3 { grid-area: layer3; }
 .dropout { grid-area: dropout; }
@@ -45,28 +128,20 @@
 .batch_size { grid-area: batch_size; }
 .batch_size_txt { grid-area: batch_size_txt; }
 
-
-.col2-container {
-    display: grid;
-    grid-area: col2-container;
-    grid-template-areas: 
-        "activation_fx relu tanh"
-        "loss_function MSELoss BCELoss"
-        "optimizer SGD Adam"
-        "regularization L1 L2"
-        "batch_normalization batch_norm_toggle .";
-    grid-gap: 10px;
+.param-grid-container > div > h2 {
+    margin: 0;
 }
 
-.col2-container > button {
+.param-grid-container > div > button {
     background-color: cornflowerblue;
     text-align: center;
-    height: 40px;
+    height: 50px;
     border-radius: 10px;
+    font-size: 16px;
     transition: background-color 0.5s, border 0.5s;
 }
 
-.col2-container > button.clicked {
+.param-grid-container > div > button.clicked {
     background-color: #45a049;
     border: 2px solid #3e623f;
 }

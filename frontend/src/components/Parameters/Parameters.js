@@ -23,29 +23,50 @@ function Parameters() {
     
         <div class='param-grid-container'>
 
-            <div class='hidden-layers'>
+            {/* <div class='hidden-layers'>
 
-            </div>
+            </div> */}
 
 
-            <div class='col1-container'>
+            <div class='layer1-container'>
                 <h2 class='layer1'>Layer 1</h2>
+                <text class='layer1_txt'></text>
+            </div>
+
+            <div class='layer2-container'>
                 <h2 class='layer2'>Layer 2</h2>
+                <text class='layer2_txt'></text>
+            </div>
+
+            <div class='layer3-container'>
                 <h2 class='layer3'>Layer 3</h2>
+                <text class='layer3_txt'></text>
+            </div>
+
+            <div class='dropout-container'>
                 <h2 class='dropout'>Dropout</h2>
+                <text class='dropout_txt'></text>
+            </div>
+
+            <div class='learning-rate-container'>
                 <h2 class='learning_rate'>Learning Rate</h2>
+                <text class='learning_rate_txt'></text>
+            </div>
+
+            <div class='batch-size-container'>
                 <h2 class='batch_size'>Batch Size</h2>
+                <text class='batch_size_txt'></text>
             </div>
 
 
-            <div class='col2-container'>
+            <div class='activation-container'>
                 
-                <h2 class='activation_fx'>Activation Fx</h2>
+                <h2 class='activation_fx'>Activation Function</h2>
                 <button 
                     class={clickedButtons.activation === 'relu' ? 'clicked' : 'relu'}
                     onClick={() => handleButtonClick('activation', 'relu')}
                 >
-                    Relu
+                    ReLU
                 </button>
 
                 <button 
@@ -54,7 +75,9 @@ function Parameters() {
                 >
                     Tanh
                 </button>
-            
+            </div>
+
+            <div class='loss-container'>
                 <h2 class='loss_function'>Loss Function</h2>
                 <button 
                     class={clickedButtons.loss === 'MSELoss' ? 'clicked' : 'MSELoss'}
@@ -69,7 +92,9 @@ function Parameters() {
                 >
                     BCELoss
                 </button>
+            </div>
 
+            <div class='optimizer-container'>
                 <h2 class='optimizer'>Optimizer</h2>
                 <button 
                     class={clickedButtons.optimizer === 'SGD' ? 'clicked' : 'SGD'}
@@ -84,7 +109,10 @@ function Parameters() {
                 >
                     Adam
                 </button>
+            </div>
 
+
+            <div class='regularization-container'>
                 <h2 class='regularization'>Regularization</h2>
                 <button 
                     class={clickedButtons.regularization === 'L1' ? 'clicked' : 'L1'}
@@ -99,7 +127,10 @@ function Parameters() {
                 >
                     L2
                 </button>
+            </div>
 
+
+            <div class='batch-container'>
                 <h2 class='batch_normalization'>Batch Normalization</h2>
                 <button 
                     class={clickedButtons.batch === 'on' ? 'clicked' : 'batch_norm_toggle'}
@@ -107,7 +138,6 @@ function Parameters() {
                 >
                     On/Off
                 </button>
-
             </div>
 
         </div>
