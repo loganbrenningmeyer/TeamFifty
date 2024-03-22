@@ -41,6 +41,12 @@
     text-align: center;
     height: 40px;
     border-radius: 10px;
+    transition: background-color 0.5s, border 0.5s;
+}
+
+.general-grid-container > button.clicked {
+    background-color: #45a049;
+    border: 2px solid #3e623f;
 }
 
 .h2h {
@@ -79,6 +85,12 @@
     text-align: center;
     height: 40px;
     border-radius: 10px;
+    transition: background-color 0.5s, border 0.5s;
+}
+
+.player-grid-container > button.clicked {
+    background-color: #45a049;
+    border: 2px solid #3e623f;
 }
 
 .QB {
@@ -167,6 +179,12 @@
     text-align: center;
     height: 40px;
     border-radius: 10px;
+    transition: background-color 0.5s, border 0.5s;
+}
+
+.team-grid-container > button.clicked {
+    background-color: #45a049;
+    border: 2px solid #3e623f;
 }
 
 .first_downs_total {

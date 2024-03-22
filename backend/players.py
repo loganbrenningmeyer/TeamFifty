@@ -3,6 +3,7 @@ import http.client
 import numpy as np
 import copy
 import torch
+import csv
 import time
 #from pymongo.mongo_client import MongoClient
 #from pymongo.server_api import ServerApi
@@ -700,13 +701,11 @@ def get_average_team_stats(season, teamID):
                     break
 
         for group_name, group_stats in data['response'][0]['statistics'].items():
-            print(f"-- {group_name} --")
+
             for stat_name, stat in group_stats.items():
 
                 # Add group name to stat name
                 stat_name = group_name + '_' + stat_name
-
-                print(stat_name)
 
                 # Check for non-castable stats
                 if stat_name in ['first_downs_third_down_efficiency', 'first_downs_fourth_down_efficiency', 
@@ -727,9 +726,6 @@ def get_average_team_stats(season, teamID):
                     game_stats[stat_name] = float(stat)
                 else:
                     game_stats[stat_name] += float(stat)
-
-        # Save API calls
-        break
 
     for stat_name, stat in game_stats.items():
         game_stats[stat_name] = stat / num_games
@@ -832,6 +828,7 @@ def get_pytorch_data(league, season):
         # TEAM STATS
         # Get the team stats for the home and away teams
         # (Average the team stats for the season)
+        
         avg_home_team_stats = list(get_average_team_stats(season, home_id).values())
         print(f"Avg Home Team Stats Length: {len(avg_home_team_stats)}")
         avg_away_team_stats = list(get_average_team_stats(season, away_id).values())
@@ -882,6 +879,45 @@ def get_pytorch_data(league, season):
     target_data = torch.stack(target_data)
 
     return input_data, target_data
+
+def filter_stats(tensor_samples, selected_stats):
+
+    csv_file = 'Stat_Indices.csv'
+
+    # Read the CSV file
+    with open(csv_file, 'r') as file:
+        csv_reader = csv.DictReader(file)
+        stat_indices = list(csv_reader)
+
+    # Create a list to store the indices to keep
+    indices_to_keep = []
+
+    # Iterate over the selected stats
+    for stat in selected_stats:
+        # Find all the corresponding rows in the stat_indices list
+        stat_rows = [row for row in stat_indices if row['Stat name'] == stat]
+
+        for stat_row in stat_rows:
+            beg_index = int(stat_row['Beg Index']) if stat_row['Beg Index'] else None
+            end_index = int(stat_row['End Index']) if stat_row['End Index'] else None
+
+            if beg_index is not None and end_index is not None:
+                # Add the range of indices to keep
+                indices_to_keep.extend(range(beg_index, end_index + 1))
+            elif beg_index is not None:
+                # Add the single index to keep
+                indices_to_keep.append(beg_index)
+
+    # Keep stats in the original order
+    indices_to_keep.sort()
+
+    # Convert the indices_to_keep list to a tensor
+    indices_tensor = torch.tensor(indices_to_keep)
+
+    # Use the indices_tensor to select the desired elements from each sample in the tensor_samples
+    filtered_tensor_samples = tensor_samples[:, indices_tensor]
+
+    return filtered_tensor_samples
 
 # games =get_games_for_team_for_season(2022,1)
 # for game in games:
