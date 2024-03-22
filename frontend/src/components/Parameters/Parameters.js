@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import './Parameters.css';
 
 function Parameters() {
@@ -160,7 +159,7 @@ function Parameters() {
                     class={clickedButtons.batch === 'on' ? 'clicked' : 'batch_norm_toggle'}
                     onClick={() => handleButtonClick('batch', clickedButtons.batch === 'on' ? 'off' : 'on')}
                 >
-                    On/Off
+                    
                 </button>
             </div>
 
