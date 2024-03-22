@@ -7,9 +7,19 @@ import torch
 import torch.nn as nn
 
 class ANN(nn.Module):
-    def __init__(self, input_size, output_size, hidden_sizes, activation_functions, dropout, dropout_rate=0.5):
+    def __init__(self, input_size, output_size, 
+                hidden_sizes, activation_function, 
+                dropout, dropout_rate=0.5, 
+                loss_function='BCELoss',
+                optimizer='Adam'):
         super(ANN, self).__init__()
         self.layers = nn.ModuleList()
+
+        # Set loss function
+        self.loss_function = loss_function
+
+        # Set optimizer
+        self.optimizer = optimizer
 
         # Assuming input_size is for the first layer and hidden_sizes[i] for subsequent layers
         prev_size = input_size
@@ -23,16 +33,16 @@ class ANN(nn.Module):
             self.layers.append(layer)
             
             # Add the activation function to the list of layers
-            if (activation_functions[i] == 'relu'):
+            if (activation_function == 'relu'):
                 self.layers.append(nn.ReLU())
-            elif (activation_functions[i] == 'sigmoid'):
+            elif (activation_function == 'sigmoid'):
                 self.layers.append(nn.Sigmoid())
-            elif (activation_functions[i] == 'tanh'):
+            elif (activation_function == 'tanh'):
                 self.layers.append(nn.Tanh())
 
             # Add the dropout layer to the list of layers
             if (dropout):
-                self.layers.append(nn.Dropout(p=0.5))
+                self.layers.append(nn.Dropout(p=dropout_rate))
 
         # Output layer
         self.output = nn.Linear(prev_size, output_size)
@@ -46,15 +56,23 @@ class ANN(nn.Module):
             # Handle activations, dimensionality changes, etc., here
         # Output layer
         x = self.output(x)
-        x = self.sigmoid(x)
+        if (self.loss_function == 'BCELoss'):
+            x = self.sigmoid(x)
         return x
     
     def train(self, dataloader, epochs, lr):
-        # Define the loss function
-        criterion = nn.BCELoss()
 
-        # Define the optimizer
-        optimizer = torch.optim.Adam(self.parameters(), lr=lr)
+        # Set loss function
+        if (self.loss_function == 'MSELoss'):
+            loss_function = nn.MSELoss()
+        else:
+            loss_function = nn.BCELoss()
+
+        # Set optimizer
+        if (self.optimizer == 'SGD'):
+            optimizer = torch.optim.SGD(self.parameters(), lr=lr)
+        else:
+            optimizer = torch.optim.Adam(self.parameters(), lr=lr)
 
         # Training loop
         for epoch in range(epochs):
@@ -73,7 +91,7 @@ class ANN(nn.Module):
                 outputs = self(inputs)
 
                 # Compute the loss and gradients
-                loss = criterion(outputs, labels)
+                loss = loss_function(outputs, labels)
                 loss.backward()
 
                 # Update the parameters
