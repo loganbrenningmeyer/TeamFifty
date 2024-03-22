@@ -7,6 +7,10 @@ function Parameters() {
   const [clickedButtons, setClickedButtons] = useState({});
   const [inputValues, setInputValues] = useState({});
 
+  // Output
+  const [trainOutput, setTrainOutput] = useState('');
+  const [testOutput, setTestOutput] = useState('');
+
   const handleButtonClick = (group, buttonName) => {
     // Toggle clicked state
     setClickedButtons({ ...clickedButtons, [group]: buttonName });
@@ -17,8 +21,12 @@ function Parameters() {
     setInputValues({ ...inputValues, [name]: value });
   };
 
-  const handleTrain = () => {
-    axios.post('http://localhost:5000/train', {...clickedButtons, ...inputValues});
+  const handleTrain = async () => {
+    setTrainOutput('Training model...')
+    const response = await axios.post('http://localhost:5000/train', {...clickedButtons, ...inputValues});
+    const { loss, accuracy, validation_accuracy } = response.data;
+    setTrainOutput(`Training Loss: ${loss}, Training Accuracy: ${accuracy}`);
+    setTestOutput(`Validation Accuracy: ${validation_accuracy}`);
   };
 
   return (
@@ -164,6 +172,16 @@ function Parameters() {
             </div>
 
             <button className='train-button' onClick={handleTrain}>Train Model</button>
+
+            <div class='train-container'>
+                <h2 class='train'>Training Statistics</h2>
+                <p>{trainOutput}</p>
+            </div>
+
+            <div class='test-container'>
+                <h2 class='test'>Validation Statistics</h2>
+                <p>{testOutput}</p>
+            </div>
 
         </div>
 

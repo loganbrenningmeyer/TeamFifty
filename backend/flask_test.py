@@ -113,9 +113,11 @@ def train():
     training_loader = DataLoader(training_set, batch_size=batch_size, shuffle=True)
     validation_loader = DataLoader(validation_set, batch_size=batch_size, shuffle=False)
     
-    model.train(training_loader, 100, learning_rate)
+    loss, accuracy = model.train(training_loader, 100, learning_rate)
 
-    return jsonify({'parameters': parameters})
+    validation_accuracy = model.test(validation_loader)
+
+    return jsonify({'loss': "{:.3f}".format(loss), 'accuracy': "{:.2f}%".format(accuracy*100), 'validation_accuracy': "{:.2f}%".format(validation_accuracy*100)})
 
 if __name__ == '__main__':
     app.run(debug=True)

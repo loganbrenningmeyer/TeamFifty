@@ -1,144 +1,147 @@
 .param-grid-container {
     display: grid;
     grid-template-areas:
-        "activation-container loss-container"
-        "layers-container optimizer-container"
-        "dropout-container regularization-container"
-        "learning-rate-container batch-container"
-        "batch-size-container train-button";
+      "activation-container loss-container"
+      "layers-container optimizer-container"
+      "dropout-container regularization-container"
+      "learning-rate-container batch-container"
+      "batch-size-container train-button"
+      "train-container test-container";
     grid-gap: 10px;
     grid-template-columns: 1fr 1fr;
-}
-
-.activation-container {
+  }
+  
+  .activation-container {
     display: grid;
     grid-area: activation-container;
-    grid-template-areas: 
-        "activation_fx activation_fx" 
-        "relu tanh";
+    grid-template-areas:
+      "activation_fx activation_fx"
+      "relu tanh";
     grid-gap: 10px;
-}
-
-.loss-container {
+  }
+  
+  .loss-container {
     display: grid;
     grid-area: loss-container;
-    grid-template-areas: 
-        "loss_function loss_function"
-        "MSELoss BCELoss";
+    grid-template-areas:
+      "loss_function loss_function"
+      "MSELoss BCELoss";
     grid-gap: 10px;
-}
-
-.optimizer-container {
+  }
+  
+  .optimizer-container {
     display: grid;
     grid-area: optimizer-container;
-    grid-template-areas: 
-        "optimizer optimizer"
-        "SGD Adam";
+    grid-template-areas:
+      "optimizer optimizer"
+      "SGD Adam";
     grid-gap: 10px;
-}
-
-.regularization-container {
+  }
+  
+  .regularization-container {
     display: grid;
     grid-area: regularization-container;
-    grid-template-areas: 
-        "regularization regularization"
-        "L1 L2";
+    grid-template-areas:
+      "regularization regularization"
+      "L1 L2";
     grid-gap: 10px;
-}
-
-.learning-rate-container {
+  }
+  
+  .learning-rate-container {
     display: grid;
     grid-area: learning-rate-container;
-    grid-template-areas: 
-        "learning_rate learning_rate_txt";
+    grid-template-areas: "learning_rate learning_rate_txt";
+    grid-template-columns: 2fr 1fr;
     grid-gap: 10px;
-}
-
-.batch-container {
+    align-items: center;
+  }
+  
+  .batch-container {
     display: grid;
     grid-area: batch-container;
-    grid-template-areas: 
-        "batch_normalization batch_norm_toggle";
+    grid-template-areas: "batch_normalization batch_norm_toggle";
     grid-gap: 10px;
-}
-
-.layers-container {
+    align-items: center;
+  }
+  
+  .layers-container {
     display: grid;
     grid-area: layers-container;
-    grid-template-areas: 
-        "layers layers_txt";
+    grid-template-areas: "layers layers_txt";
+    grid-template-columns: 2fr 1fr;
     grid-gap: 10px;
-}
-
-.dropout-container {
+    align-items: center;
+  }
+  
+  .dropout-container {
     display: grid;
     grid-area: dropout-container;
-    grid-template-areas: 
-        "dropout dropout_txt";
+    grid-template-areas: "dropout dropout_txt";
+    grid-template-columns: 2fr 1fr;
     grid-gap: 10px;
-}
-
-.batch-size-container {
+    align-items: center;
+  }
+  
+  .batch-size-container {
     display: grid;
     grid-area: batch-size-container;
-    grid-template-areas: 
-        "batch_size batch_size_txt";
+    grid-template-areas: "batch_size batch_size_txt";
+    grid-template-columns: 2fr 1fr;
     grid-gap: 10px;
-}
-
-.param-grid-container > div {
+    align-items: center;
+  }
+  
+  .param-grid-container > div {
     background-color: #f1f1f1;
     text-align: left;
     font-size: 16px;
     padding: 10px;
     border-radius: 10px;
-}
-
-.layers { grid-area: layers; }
-.layers_txt { grid-area: layers_txt; }
-/* .layer2 { grid-area: layer2; }
-.layer3 { grid-area: layer3; } */
-.dropout { grid-area: dropout; }
-.dropout_txt { grid-area: dropout_txt; }
-.learning_rate { grid-area: learning_rate; }
-.learning_rate_txt { grid-area: learning_rate_txt; }
-.batch_size { grid-area: batch_size; }
-.batch_size_txt { grid-area: batch_size_txt; }
-
-.param-grid-container > div > h2 {
+  }
+  
+  .layers { grid-area: layers; }
+  .layers_txt { grid-area: layers_txt; }
+  .dropout { grid-area: dropout; }
+  .dropout_txt { grid-area: dropout_txt; }
+  .learning_rate { grid-area: learning_rate; }
+  .learning_rate_txt { grid-area: learning_rate_txt; }
+  .batch_size { grid-area: batch_size; }
+  .batch_size_txt { grid-area: batch_size_txt; }
+  
+  .param-grid-container > div > h2 {
     margin: 0;
-}
-
-.param-grid-container > div > button {
+  }
+  
+  .param-grid-container > div > button {
     background-color: cornflowerblue;
     text-align: center;
     height: 50px;
     border-radius: 10px;
     font-size: 16px;
     transition: background-color 0.5s, border 0.5s;
-}
-
-.param-grid-container > div > button.clicked {
+  }
+  
+  .param-grid-container > div > button.clicked {
     background-color: #45a049;
     border: 2px solid #3e623f;
-}
-
-.activation_fx { grid-area: activation_fx; }
-.relu { grid-area: relu; }
-.tanh { grid-area: tanh; }
-.loss_function { grid-area: loss_function; }
-.MSELoss { grid-area: MSELoss; }
-.BCELoss { grid-area: BCELoss; }
-.optimizer { grid-area: optimizer; }
-.SGD { grid-area: SGD; }
-.Adam { grid-area: Adam; }
-.regularization { grid-area: regularization; }
-.L1 { grid-area: L1; }
-.L2 { grid-area: L2; }
-.batch_normalization { grid-area: batch_normalization; }
-.batch_norm_toggle { grid-area: batch_norm_toggle; }
-
-.train-button {
+  }
+  
+  .activation_fx { grid-area: activation_fx; }
+  .relu { grid-area: relu; }
+  .tanh { grid-area: tanh; }
+  .loss_function { grid-area: loss_function; }
+  .MSELoss { grid-area: MSELoss; }
+  .BCELoss { grid-area: BCELoss; }
+  .optimizer { grid-area: optimizer; }
+  .SGD { grid-area: SGD; }
+  .Adam { grid-area: Adam; }
+  .regularization { grid-area: regularization; }
+  .L1 { grid-area: L1; }
+  .L2 { grid-area: L2; }
+  .batch_normalization { grid-area: batch_normalization; }
+  .batch_norm_toggle { grid-area: batch_norm_toggle; }
+  
+  .train-button {
     grid-area: train-button;
     background-color: #4CAF50;
     border: none;
@@ -149,5 +152,14 @@
     font-size: 16px;
     cursor: pointer;
     border-radius: 10px;
-}
-
+  }
+  
+  .param-grid-container input[type="text"],
+  .param-grid-container input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+  }

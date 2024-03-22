@@ -111,6 +111,27 @@ class ANN(nn.Module):
             #     break
             print(f"Epoch {epoch+1}/{epochs}, Loss: {epoch_loss:.4f}, Accuracy: {epoch_accuracy:.4f}")
 
+        # Return final loss/accuracy
+        return epoch_loss, epoch_accuracy
+    
+    def test(self, validation_loader):
+        # Predict the output on testing data and print the percent correct
+        correct = 0
+        total = 0
+        for inputs, targets in validation_loader:
+            preds = self.predict(inputs)
+            rounded_preds = torch.round(preds)
+            
+            correct += (rounded_preds == targets).sum().item()
+            total += targets.size(0)
+            
+            for pred, target in zip(preds, targets):
+                print(f"Prediction: {pred.item():.4f}, Actual: {target.item()}")
+
+        accuracy = correct / total
+
+        return accuracy
+
     def predict(self, x):
         # Predict the output
         return self(x)
