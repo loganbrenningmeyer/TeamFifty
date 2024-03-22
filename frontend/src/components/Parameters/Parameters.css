@@ -1,0 +1,62 @@
+.grid-container {
+    display: grid;
+    grid-template-areas:
+        "hidden-layers hidden-layers"
+        "col1-container col2-container";
+    grid-gap: 10px;
+}
+
+.grid-container > div {
+    background-color: #f1f1f1;
+    text-align: left;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.hidden-layers {
+    display: grid;
+    grid-template-areas: "";
+    grid-gap: 10px;
+}
+
+
+.col2-container {
+    display: grid;
+    grid-area: col2-container;
+    grid-template-areas: 
+        "activation_fx relu tanh"
+        "loss_function MSELoss BCELoss"
+        "optimizer SGD adam"
+        "regularization L1 L2"
+        "batch_normalization batch_norm_toggle batch_norm_toggle";
+    grid-gap: 10px;
+}
+
+.col2-container > button {
+    background-color: cornflowerblue;
+    text-align: center;
+    height: 40px;
+    border-radius: 10px;
+}
+
+.col2-container > button.clicked {
+    background-color: #45a049;
+    border: 2px solid #3e623f;
+}
+
+.activation_fx { grid-area: activation_fx; }
+.relu { grid-area: relu; }
+.tanh { grid-area: tanh; }
+.loss_function { grid-area: loss_function; }
+.MSELoss { grid-area: MSELoss; }
+.BCELoss { grid-area: BCELoss; }
+.optimizer { grid-area: optimizer; }
+.SGD { grid-area: SGD; }
+.adam { grid-area: adam; }
+.regularization { grid-area: regularization; }
+.L1 { grid-area: L1; }
+.L2 { grid-area: L2; }
+.batch_normalization { grid-area: batch_normalization; }
+.batch_norm_toggle { grid-area: batch_norm_toggle; }
+
