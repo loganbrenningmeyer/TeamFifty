@@ -1,9 +1,8 @@
 .param-grid-container {
     display: grid;
     grid-template-areas:
-        "layer1-container activation-container"
-        "layer2-container loss-container"
-        "layer3-container optimizer-container"
+        "activation-container loss-container"
+        "layers-container optimizer-container"
         "dropout-container regularization-container"
         "learning-rate-container batch-container"
         "batch-size-container train-button";
@@ -63,27 +62,11 @@
     grid-gap: 10px;
 }
 
-.layer1-container {
+.layers-container {
     display: grid;
-    grid-area: layer1-container;
+    grid-area: layers-container;
     grid-template-areas: 
-        "layer1 layer1_txt";
-    grid-gap: 10px;
-}
-
-.layer2-container {
-    display: grid;
-    grid-area: layer2-container;
-    grid-template-areas: 
-        "layer2 layer2_txt";
-    grid-gap: 10px;
-}
-
-.layer3-container {
-    display: grid;
-    grid-area: layer3-container;
-    grid-template-areas: 
-        "layer3 layer3_txt";
+        "layers layers_txt";
     grid-gap: 10px;
 }
 
@@ -111,16 +94,10 @@
     border-radius: 10px;
 }
 
-.hidden-layers {
-    display: grid;
-    grid-template-areas: "";
-    grid-gap: 10px;
-}
-
-.layer1 { grid-area: layer1; }
-.layer1_txt { grid-area: layer1_txt; }
-.layer2 { grid-area: layer2; }
-.layer3 { grid-area: layer3; }
+.layers { grid-area: layers; }
+.layers_txt { grid-area: layers_txt; }
+/* .layer2 { grid-area: layer2; }
+.layer3 { grid-area: layer3; } */
 .dropout { grid-area: dropout; }
 .dropout_txt { grid-area: dropout_txt; }
 .learning_rate { grid-area: learning_rate; }

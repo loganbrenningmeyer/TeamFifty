@@ -58,15 +58,41 @@ def data():
 def train():
     parameters = request.json
 
+    print(parameters)
+
+    # Get the hidden layer sizes
+    hidden_sizes = [int(size) for size in parameters['layers'].split(",")]
+
+    # Dropout rate
+    dropout_rate = float(parameters['dropout_rate'])
+
+    # Learning rate
+    learning_rate = float(parameters['learning_rate'])
+
+    # Batch size
+    batch_size = int(parameters['batch_size'])
+
+    # Loss function
+    loss_function = parameters['loss']
+
+    # Optimizer
+    optimizer = parameters['optimizer']
+
+    # Activation function
+    activation_function = parameters['activation']
+
     # Load the data
     input_data = torch.load("input_data.pt")
     target_data = torch.load("target_data.pt")
     
     model = ANN.ANN(input_data.shape[1], 1,
-                    [128, 64, 32], parameters['activation'],
-                    dropout=True, dropout_rate=0.5,
-                    loss_function=parameters['loss'],
-                    optimizer=parameters['optimizer'])
+                    hidden_sizes, 
+                    activation_function, 
+                    dropout_rate,
+                    loss_function,
+                    optimizer)
+    
+    print(model)
     
     # Normalize the data
     input_data = F.normalize(input_data, p=2, dim=0)
@@ -83,14 +109,11 @@ def train():
     training_set = TensorDataset(input_data[:train_size], target_data[:train_size])
     validation_set = TensorDataset(input_data[train_size:], target_data[train_size:])
 
-    # Define batch size
-    batch_size = 8
-
     # Create DataLoaders
     training_loader = DataLoader(training_set, batch_size=batch_size, shuffle=True)
     validation_loader = DataLoader(validation_set, batch_size=batch_size, shuffle=False)
     
-    model.train(training_loader, 100, 0.001)
+    model.train(training_loader, 100, learning_rate)
 
     return jsonify({'parameters': parameters})
 

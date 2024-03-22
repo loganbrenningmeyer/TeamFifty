@@ -8,8 +8,9 @@ import torch.nn as nn
 
 class ANN(nn.Module):
     def __init__(self, input_size, output_size, 
-                hidden_sizes, activation_function, 
-                dropout, dropout_rate=0.5, 
+                hidden_sizes, 
+                activation_function, 
+                dropout_rate=0.5, 
                 loss_function='BCELoss',
                 optimizer='Adam'):
         super(ANN, self).__init__()
@@ -41,7 +42,7 @@ class ANN(nn.Module):
                 self.layers.append(nn.Tanh())
 
             # Add the dropout layer to the list of layers
-            if (dropout):
+            if (dropout_rate > 0):
                 self.layers.append(nn.Dropout(p=dropout_rate))
 
         # Output layer

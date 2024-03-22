@@ -6,14 +6,20 @@ import './Parameters.css';
 function Parameters() {
 
   const [clickedButtons, setClickedButtons] = useState({});
+  const [inputValues, setInputValues] = useState({});
 
   const handleButtonClick = (group, buttonName) => {
     // Toggle clicked state
     setClickedButtons({ ...clickedButtons, [group]: buttonName });
   };
 
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setInputValues({ ...inputValues, [name]: value });
+  };
+
   const handleTrain = () => {
-    axios.post('http://localhost:5000/train', clickedButtons);
+    axios.post('http://localhost:5000/train', {...clickedButtons, ...inputValues});
   };
 
   return (
@@ -23,39 +29,57 @@ function Parameters() {
     
         <div class='param-grid-container'>
 
-            {/* <div class='hidden-layers'>
-
-            </div> */}
-
-
-            <div class='layer1-container'>
-                <h2 class='layer1'>Layer 1</h2>
-                <text class='layer1_txt'></text>
-            </div>
-
-            <div class='layer2-container'>
-                <h2 class='layer2'>Layer 2</h2>
-                <text class='layer2_txt'></text>
-            </div>
-
-            <div class='layer3-container'>
-                <h2 class='layer3'>Layer 3</h2>
-                <text class='layer3_txt'></text>
+            <div class='layers-container'>
+                <h2 class='layers'>Neurons Per Hidden Layer</h2>
+                <input
+                    class="layers_txt"
+                    type="text"
+                    name="layers"
+                    value={inputValues.layers || ''}
+                    onChange={handleInputChange}
+                />
             </div>
 
             <div class='dropout-container'>
-                <h2 class='dropout'>Dropout</h2>
-                <text class='dropout_txt'></text>
+                <h2 class='dropout'>Dropout Rate</h2>
+                <input
+                    class="dropout_txt"
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    max="1"
+                    name="dropout_rate"
+                    value={inputValues.dropout_rate || ''}
+                    onChange={handleInputChange}
+                />
             </div>
 
             <div class='learning-rate-container'>
                 <h2 class='learning_rate'>Learning Rate</h2>
-                <text class='learning_rate_txt'></text>
+                <input
+                    class="learning_rate_txt"
+                    type="number"
+                    step="0.0001"
+                    min="0.0001"
+                    max="1"
+                    name="learning_rate"
+                    value={inputValues.learning_rate || ''}
+                    onChange={handleInputChange}
+                />
             </div>
 
             <div class='batch-size-container'>
                 <h2 class='batch_size'>Batch Size</h2>
-                <text class='batch_size_txt'></text>
+                <input
+                    class="batch_size_txt"
+                    type="number"
+                    step="1"
+                    min="1"
+                    max="100"
+                    name="batch_size"
+                    value={inputValues.batch_size || ''}
+                    onChange={handleInputChange}
+                />
             </div>
 
 
