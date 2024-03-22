@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import './Data.css';
 
 function Data() {
+
+  const navigate = useNavigate();
   const [clickedButtons, setClickedButtons] = useState({});
 
   const handleButtonClick = (buttonName) => {
@@ -13,7 +16,8 @@ function Data() {
   };
 
   const handleContinue = () => {
-    axios.post('http://localhost:5000/data', clickedButtons)
+    axios.post('http://localhost:5000/data', clickedButtons);
+    navigate('/parameters');
   };
 
   return (

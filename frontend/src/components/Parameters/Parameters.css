@@ -1,4 +1,4 @@
-.grid-container {
+.param-grid-container {
     display: grid;
     grid-template-areas:
         "hidden-layers hidden-layers"
@@ -6,7 +6,7 @@
     grid-gap: 10px;
 }
 
-.grid-container > div {
+.param-grid-container > div {
     background-color: #f1f1f1;
     text-align: left;
     font-size: 16px;

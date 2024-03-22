@@ -9,7 +9,7 @@ function Parameters() {
       <h1>What parameters would you like for your model?</h1>
         <p>Select the parameters you would like to use to train your model</p>
     
-        <div class='grid-container'>
+        <div class='param-grid-container'>
 
             <div class='hidden-layers'>
 
@@ -28,27 +28,19 @@ function Parameters() {
                 <button class='relu'>Relu</button>
                 <button class='tanh'>Tanh</button>
             
-                <div class='loss_function'>
-                    <h2>Loss Function</h2>
-                </div>
+                <h2 class='loss_function'>Loss Function</h2>
                 <button class='MSELoss'>MSELoss</button>
                 <button class='BCELoss'>BCELoss</button>
 
-                <div class='optimizer'>
-                    <h2>Optimizer</h2>
-                </div>
+                <h2 class='optimizer'>Optimizer</h2>
                 <button class='SGD'>SGD</button>
                 <button class='adam'>Adam</button>
 
-                <div class='regularization'>
-                    <h2>Regularization</h2>
-                </div>
+                <h2 class='regularization'>Regularization</h2>
                 <button class='L1'>L1</button>
                 <button class='L2'>L2</button>
 
-                <div class='batch_normalization'>
-                    <h2>Batch Normalization</h2>
-                </div>
+                <h2 class='batch_normalization'>Batch Normalization</h2>
                 <button class='batch_norm_toggle'>On/Off</button>
 
             </div>
