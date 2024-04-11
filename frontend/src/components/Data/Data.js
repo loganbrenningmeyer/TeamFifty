@@ -344,7 +344,7 @@ function Data() {
         </div>
       </div>
 
-      <button className="continue-button" onClick={handleContinue}>Continue</button>
+      {/* <button className="continue-button" onClick={handleContinue}>Continue</button> */}
     </div>
   );
 }
