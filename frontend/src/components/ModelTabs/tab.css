@@ -1,0 +1,96 @@
+/* Container for all tabs */
+.bg{
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+.container {
+    width: 1280px;
+    height: 100%;
+    background-color: white;
+    padding: 30px;
+    border-radius: 20px;
+}
+
+.bloc-tabs {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    background: #f0f0f0;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+/* General styles for each tab */
+.tabs {
+    width: 100%;
+    padding: 10px 20px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s;
+    
+}
+
+/* Hover effect for tabs */
+.tabs:hover {
+    background-color: rgba(0,0,0,0.1);
+}
+
+/* Active tab style */
+.active-tabs {
+    background: white;
+    border-bottom: 1px solid transparent;
+    position: relative;
+}
+
+.active-tabs::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100%);
+    height: 5px;
+    background: rgb(88, 147, 241);
+}
+
+/* Content area */
+.content-tabs {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+/* General content box styles */
+.content {
+    background: white;
+    display: none;
+    width: 100%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* When content is active */
+.active-content {
+    display: block;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+/* Additional aesthetic details */
+
+
+.content hr {
+    width: 100px;
+    height: 2px;
+    background: #222;
+}
+
+.content p {
+    width: 100%;
+}

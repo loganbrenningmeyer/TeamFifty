@@ -2,6 +2,7 @@ import React, { useState} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
+import SavedModels from '../SavedModels/savedmodel';
 
 const ITEM_WIDTH = 1920;
  
@@ -47,7 +48,8 @@ function Dashboard(){
 
     return(
     <div className='container'>
-        <div className='header'>
+        <SavedModels />
+        {/* <div className='header'>
             <div className='logo'>
                 <img src={require('./football.jpg')} alt='Logo' width={45} height={38}/>
             </div>
@@ -57,8 +59,8 @@ function Dashboard(){
             <div className='account'> 
                 <img src={require('./account.jpg')} alt='accountImage' width={45} height={38}/>
             </div>
-        </div>
-        <div className='action-buttons'>
+        </div> */}
+        {/* /* <div className='action-buttons'>
             <button onClick={() =>handleScroll(-ITEM_WIDTH)}>Left</button>
             <button onClick={() => handleScroll(ITEM_WIDTH)}>Right</button>
         </div>
@@ -80,9 +82,9 @@ function Dashboard(){
                     
                 </div>
             </div>
-        </div>
-    </div>
+        </div>*/}
+    </div>  
     );
-}
+};
 
 export default Dashboard;

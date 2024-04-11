@@ -8,10 +8,12 @@ function Home() {
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
-    navigate('/model');
+    navigate('/createmodel');
   }
 
   return (
+    <h1>Hello World!</h1>
+    /*
     <div style={{textAlign: 'center', padding: '20px'}}>
       <h1>Ballgorithm</h1>
       <p>Create custom machine learning sports models</p>
@@ -19,6 +21,7 @@ function Home() {
         <button className='create-model' onClick={handleButtonClick}>Create Model</button>
       </div>
     </div>
+    */
   );
 }
 
