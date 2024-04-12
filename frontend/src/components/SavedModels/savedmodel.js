@@ -1,63 +1,73 @@
-import { useCallback, useState, useEffect } from "react";
-
+import React, { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "./styles.css";
+import "swiper/css/pagination";
+import { Navigation } from "swiper/modules";
+import { Pagination } from "swiper/modules";
+import 'swiper/css';
 
 
+
+const swagArray = ["card 1", "card 2", "card 3", "card 4"];
 
 const SavedModels = () => {
-  const [swiperRef, setSwiperRef] = useState();
-
-
-  const handleLeftClick = useCallback(() => {
-    if (!swiperRef) return;
-    swiperRef.slidePrev();
-  }, [swiperRef]);
-
-  const handleRightClick = useCallback(() => {
-    if (!swiperRef) return;
-    swiperRef.slideNext();
-  }, [swiperRef]);
+    const [isOpen, setIsOpen] = useState(false);
+        
+const pagination = {
+        clickable: true,
+        renderBullet: function (index, className) {
+          return '<span class="' + className + '">' + (index + 1) + '</span>';
+        },
+    };
 
   return (
+    <div>
     <Swiper
-              onSwiper={setSwiperRef}
-              slidesPerView={3}
-              centeredSlides={true}
-              spaceBetween={170}
-              loop={true}
-              className="w-[1492px] rounded-3xl select-none m-auto mt-16  text-white">
-              <SwiperSlide>
-                <div className="bg-slate-800 w-80 xl:w-96 rounded-3xl flex flex-col">
-                  <div className="flex-grow text-5xl rounded-t-3xl m-auto">
-                  </div>
-                  <div className="flex flex-wrap w-full text-5xl bg-400-800 rounded-b-3xl bg-slate-800 pt-6 p-8">
-                    <div className="text-[1.2rem] font-bold pb-4">FOMO Alerts</div>
-                    <div className="text-[1rem] h-16">FOMO alerts are extremely useful and will notify you based on different market conditions surrounding trending projects.</div>
-                  </div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="bg-slate-800 w-80 xl:w-96 rounded-3xl flex flex-col">
-                  <div className="flex-grow text-5xl rounded-t-3xl m-auto">
-                  </div>
-                  <div className="flex flex-wrap w-full text-5xl bg-400-800 rounded-b-3xl bg-slate-800 pt-6 p-8">
-                    <div className="text-[1.2rem] font-bold pb-4">Follow Alerts</div>
-                    <div className="text-[1rem] h-16">Follow alerts will show you who important figures are following and can be useful for finding new projects before they blow up.</div>
-                  </div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="bg-slate-800 w-80 xl:w-96 rounded-3xl flex flex-col">
-                  <div className="flex-grow text-5xl rounded-t-3xl m-auto">
-                  </div>
-                  <div className="flex flex-wrap w-full text-5xl bg-400-800 rounded-b-3xl bg-slate-800 pt-6 p-8">
-                    <div className="text-[1.2rem] font-bold pb-4">Contract Alerts</div>
-                    <div className="text-[1rem] h-16">Contract alerts makes sure you have access to any lowkey mints or stealth drops that fly under the radar since not every mint is announced.</div>
-                  </div>
-                </div>
-              </SwiperSlide>
-            </Swiper>
-  )
+      pagination={pagination}
+      navigation={true}
+      modules={[Pagination, Navigation]}
+      slidesPerView={3}
+      spaceBetween={30}
+      className="mySwiper"
+    >
+      {swagArray.map((data) => (
+        <SwiperSlide>Slide 1 {data}</SwiperSlide>
+      ))}
+    </Swiper>
+
+
+
+    <div className="fixed inset-x-0 bottom-0">
+      <button
+        className={`w-full bg-blue-500 text-white p-4 text-center flex justify-center items-center group`}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        Stats and Parameters
+        <span className={`ml-2 transform transition-transform duration-150 ${isOpen ? 'group-hover:translate-y-1' : 'group-hover:-translate-y-1'}`}>
+          <svg
+            className="w-4 h-4 fill-current"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+          >
+            <path d={`${isOpen ? "M5.293 7.293a1 1 0 0 1 1.414 0L10 10.586l3.293-3.293a1 1 0 0 1 1.414 0l.707.707a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414l-.707-.707z" : "M14.707 11.707a1 1 0 0 1-1.414 0L10 8.414l-3.293 3.293a1 1 0 0 1-1.414 0l-.707-.707a1 1 0 0 1 0-1.414l4-4a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1 0 1.414l.707.707z"}`}/>
+          </svg>
+        </span>
+      </button>
+      {isOpen && (
+        <div className="bg-white p-4 shadow-lg absolute bottom-full w-full transform translate-y-1">
+          <ul>
+            <li className="p-2 hover:bg-gray-100">Data 1</li>
+            <li className="p-2 hover:bg-gray-100">Data Item 2</li>
+            <li className="p-2 hover:bg-gray-100">Data Item 3</li>
+          </ul>
+        </div>
+      )}
+    </div>
+    </div> 
+  );
 };
+
 
 export default SavedModels;
