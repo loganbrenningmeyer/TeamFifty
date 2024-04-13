@@ -34,6 +34,10 @@ const Navbar = () => {
         <NavBtn>
           <NavBtnLink to='/signin'>Sign In</NavBtnLink>
         </NavBtn>
+        {/* Temporary double button to handle sing up and sign in page */}
+        <NavBtn>
+          <NavBtnLink to='/signup'>Sign Up</NavBtnLink>
+        </NavBtn>
         </NavbarContainer>
       </Nav>
     </>
