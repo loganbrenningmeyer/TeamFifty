@@ -1,47 +1,21 @@
-from flask import Flask, redirect, url_for,request,json,jsonify
+from flask import Flask, redirect, url_for,request,json,jsonify,session
+from flask_session import Session
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from flask_cors import CORS, cross_origin
 import http.client
 import bcrypt
+from redis import Redis
 
-teamDict = {
-    "Las Vegas Raiders": 1,
-    "Jacksonville Jaguars":2,
-    "New England Patriots":3,
-    "New York Giants":4,
-    "Baltimore Ravens":5,
-    "Tennessee Titans":6,
-    "Detroit Lions":7,
-    "Atlanta Falcons":8,
-    "Cleveland Browns":9,
-    "Cincinnati Bengals":10,
-    "Arizona Cardinals":11,
-    "Philadelphia Eagles":12,
-    "New York Jets":13,
-    "San Francisco 49ers":14,
-    "Green Bay Packers":15,
-    "Chicago Bears":16,
-    "Kansas City Chiefs":17,
-    "Washington Commanders":18,
-    "Carolina Panthers":19,
-    "Buffalo Bills":20,
-    "Indianapolis Colts":21,
-    "Pittsburgh Steelers":22,
-    "Seattle Seahawks":23,
-    "Tampa Bay Buccaneers":24,
-    "Miami Dolphins":25,
-    "Houston Texans":26,
-    "New Orleans Saints":27,
-    "Denver Broncos":28,
-    "Dallas Cowboys":29,
-    "Los Angeles Chargers":30,
-    "Los Angeles Rams":31,
-    "Minnesota Vikings":32
-}
 #sets up flask for routes
 app = Flask(__name__)
-cors = CORS(app)
+app.secret_key = 'secret'
+app.config['SESSION_TYPE'] = 'redis'
+app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_USE_SIGNER'] = True
+app.config['SESSION_REDIS'] = Redis(host='localhost',port=5000)
+server_session = Session(app)
+cors = CORS(app, supports_credentials=True)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 # Create a new client and connect to the database and collection
@@ -87,10 +61,23 @@ def signInUser():
     else:
         #now we check if the input password matches correct password
         if bcrypt.checkpw(password.encode('utf-8'),search['password']) == True:
+            session["user"] = userInfo
             return '',204
         else:
             return 'Invalid Password',406
 
+
+@app.route("/logout")
+def logout():
+    session.pop("user",None)
+    return '',204
+
+#this function checks whether or not the user is logged in
+def checkAuth():
+    user = session["user"]
+    if not user:
+        return None
+    return user
 
 # Send a ping to confirm a successful connection
 try:
