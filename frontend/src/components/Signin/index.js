@@ -23,9 +23,9 @@ const SignIn = () => {
             });
 
             if (response.ok) {
-                const result = await response.json();
+                const result = await response.body;
                 console.log('User found:', result);
-                navigate('/');
+                navigate('/createmodel');
             } else {
                 throw new Error('An error occurred while signing in.');
              }

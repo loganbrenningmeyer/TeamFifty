@@ -26,7 +26,6 @@ function App() {
         <Route exact path="/signin" element={<SignIn/>} />
         <Route exact path="/signup" element={<SignUp/>} />
         <Route exact path="/parameters" element={<Parameters/>} />
-        
         <Route exact path="/createmodel" element={<Tabs/>} />
       </Routes>
     </Router>

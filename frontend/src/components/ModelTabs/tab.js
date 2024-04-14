@@ -25,11 +25,11 @@ function Tabs() {
                 <div 
                 className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
                 onClick={() => toggleTab(2)}
-                >Parameters</div>
+                >Data</div>
                 <div 
                 className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
                 onClick={() => toggleTab(3)}
-                >Data</div>
+                >Parameters</div>
                 <div 
                 className={toggleState === 4 ? "tabs active-tabs" : "tabs"}
                 onClick={() => toggleTab(4)}

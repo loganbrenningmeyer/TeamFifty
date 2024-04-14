@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Nav,
   NavLink,
@@ -10,8 +10,37 @@ import {
   NavbarContainer
 } from './navbarElements';
 import logo from '../images/football.jpg';
+import axios from 'axios';
+import { useLocation } from 'react-router-dom';
+
 
 const Navbar = () => {
+  
+  const [loggedIn,setLoggedIn] = useState(false)
+  const [userInfo,setUserInfo] = useState()
+
+  let checkAuth = async () => {
+    let response = await axios.get('http://localhost:3000/auth');
+    console.log(response.status);
+    if(response.status === 206)
+    {
+      console.log("alskdjf;lasdf");
+      setLoggedIn(false);
+      return false;
+    }
+    else
+    {
+      setLoggedIn(true);
+      return true;
+      
+    }
+  };
+  
+    const url = useLocation()
+    useEffect(() => {
+      checkAuth();
+    },[url.pathname]);
+
   return (
     <>
       <Nav>
@@ -24,12 +53,14 @@ const Navbar = () => {
           <NavLink to='/about' activeStyle>
             Leaderboard
           </NavLink>
-          <NavLink to='/' activeStyle>
+          <NavLink to='/' activeStyle >
             Search Models
           </NavLink>
-          <NavLink to='/createmodel' activeStyle>
+          {loggedIn ? (<NavLink to='/createmodel' activeStyle>
             Create Model
-          </NavLink>
+          </NavLink>) : (<NavLink  activeStyle>
+            Create Model
+          </NavLink>)}
         </NavMenu>
         <NavBtn>
           <NavBtnLink to='/signin'>Sign In</NavBtnLink>

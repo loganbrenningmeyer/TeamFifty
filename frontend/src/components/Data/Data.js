@@ -17,7 +17,6 @@ function Data() {
 
   const handleContinue = () => {
     axios.post('http://localhost:5000/data', clickedButtons);
-    navigate('/parameters');
   };
 
   return (
@@ -344,7 +343,7 @@ function Data() {
         </div>
       </div>
 
-      {/* <button className="continue-button" onClick={handleContinue}>Continue</button> */}
+      { <button className="continue-button" onClick={handleContinue}>Confirm Selection</button> }
     </div>
   );
 }
