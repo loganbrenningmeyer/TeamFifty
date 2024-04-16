@@ -1,32 +1,41 @@
+import numpy as np
 import torch
-import torch.nn as nn
-import torch.optim as optim
+from sklearn import svm
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report, accuracy_score
 
-class LinearSVM(nn.Module):
-    def __init__(self, input_size):
-        super(LinearSVM, self).__init__()
-        self.fc = nn.Linear(input_size, 1)  # Binary classification
+# Load the data (assuming it's been preprocessed and saved as torch tensors)
+input_data_2022 = torch.load(f"input_data_1_2022.pt").numpy()
+target_data_2022 = torch.load(f"target_data_1_2022.pt").numpy().ravel()
 
-    def forward(self, x):
-        h = self.fc(x)
-        return h
+input_data_2023 = torch.load(f"input_data_1_2023.pt").numpy()
+target_data_2023 = torch.load(f"target_data_1_2023.pt").numpy().ravel()
 
-def train_svm(training_loader, model, epochs, learning_rate, C):
-    optimizer = optim.SGD(model.parameters(), lr=learning_rate)
-    for epoch in range(epochs):
-        for i, data in enumerate(training_loader, 0):
-            inputs, labels = data
-            labels[labels == 0] = -1  # Assuming binary labels {0, 1}; SVM needs {-1, 1}
-            optimizer.zero_grad()
-            outputs = model(inputs).squeeze()  # Remove unnecessary dimensions
+input_data = np.concatenate((input_data_2022, input_data_2023), axis=0)
+target_data = np.concatenate((target_data_2022, target_data_2023), axis=0)
 
-            # Hinge loss
-            loss = torch.mean(torch.clamp(1 - labels * outputs, min=0))
+# Normalize the data
+scaler = StandardScaler()
+input_data = scaler.fit_transform(input_data)
 
-            # L2 regularization term
-            loss += C * torch.mean(model.fc.weight**2)
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(input_data, target_data, test_size=0.2, random_state=42)
 
-            loss.backward()
-            optimizer.step()
+# Initialize the SVM classifier
+clf = svm.SVC(kernel='rbf', C=1.0, gamma='auto')  # RBF Kernel, you can tune these hyperparameters
 
-        print(f"Epoch {epoch+1}, Loss: {loss.item()}")
+# Train the SVM classifier
+clf.fit(X_train, y_train)
+
+# Predict the labels on the test set
+y_pred = clf.predict(X_test)
+
+# Print out the performance metrics
+print("Classification Report:")
+print(classification_report(y_test, y_pred))
+print("Accuracy:", accuracy_score(y_test, y_pred))
+
+# Additionally print out predictions vs actuals for insights
+for pred, actual in zip(y_pred, y_test):
+    print(f"Prediction: {pred}, Actual: {actual}")

@@ -1,75 +1,41 @@
-import players
 import numpy as np
 import torch
-import torch.nn.functional as F
-from torch.utils.data import DataLoader, TensorDataset, random_split
-from SVM import LinearSVM, train_svm  
+from sklearn import svm
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report, accuracy_score
 
-league = 1
-season = 2022
-normalize = 1
+# Load the data (assuming it's been preprocessed and saved as torch tensors)
+input_data_2022 = torch.load(f"input_data_1_2022.pt").numpy()
+target_data_2022 = torch.load(f"target_data_1_2022.pt").numpy().ravel()
 
-# Returns a dictionary of data for each game in a given league/season
-# Dictionary in the format: {game_name: {'input': input_data, 'target': target_data}}
-# input_data, target_data = players.get_pytorch_data(league, season)
+input_data_2023 = torch.load(f"input_data_1_2023.pt").numpy()
+target_data_2023 = torch.load(f"target_data_1_2023.pt").numpy().ravel()
 
-input_data_2022 = torch.load(f"input_data_1_2022.pt")
-target_data_2022 = torch.load(f"target_data_1_2022.pt")
-input_data_2023 = torch.load(f"input_data_1_2023.pt")
-target_data_2023 = torch.load(f"target_data_1_2023.pt")
+input_data = np.concatenate((input_data_2022, input_data_2023), axis=0)
+target_data = np.concatenate((target_data_2022, target_data_2023), axis=0)
 
-input_data = torch.cat((input_data_2022, input_data_2023), dim=0)
-target_data = torch.cat((target_data_2022, target_data_2023), dim=0)
+# Normalize the data
+scaler = StandardScaler()
+input_data = scaler.fit_transform(input_data)
 
-average_accuracy = 0
-iterations = 10
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(input_data, target_data, test_size=0.2, random_state=42)
 
-for i in range(10):
-    # Shuffle the data
-    shuffle = torch.randperm(input_data.shape[0])
-    input_data = input_data[shuffle]
-    target_data = target_data[shuffle]
+# Initialize the SVM classifier
+clf = svm.SVC(kernel='rbf', C=1.0, gamma='auto')  # RBF Kernel, you can tune these hyperparameters
 
-    # Normalize
-    if normalize:
-        input_data = F.normalize(input_data, p=2, dim=0)
+# Train the SVM classifier
+clf.fit(X_train, y_train)
 
-    # Calculate training size
-    train_size = int(0.8 * len(input_data))
-    print(f"Train size: {train_size}")
-    print(f"Validation size: {len(input_data) - train_size}")
+# Predict the labels on the test set
+y_pred = clf.predict(X_test)
 
-    # Create Datasets
-    training_set = TensorDataset(input_data[:train_size], target_data[:train_size])
-    validation_set = TensorDataset(input_data[train_size:], target_data[train_size:])
+# Print out the performance metrics
+print("Classification Report:")
+print(classification_report(y_test, y_pred))
+print("Accuracy:", accuracy_score(y_test, y_pred))
 
-    # Define batch size
-    batch_size = 8
-
-    # Create DataLoaders
-    training_loader = DataLoader(training_set, batch_size=batch_size, shuffle=True)
-    validation_loader = DataLoader(validation_set, batch_size=batch_size, shuffle=False)
-
-    # Create the SVM model
-    svm_model = LinearSVM(input_size=input_data.shape[1])
-
-    # Train the SVM model
-    train_svm(training_loader, svm_model, epochs=100, learning_rate=0.01, C=0.1)
-
-    # Predict the output on testing data and print the percent correct
-    correct = 0
-    total = 0
-    for inputs, targets in validation_loader:
-        preds = svm_model(inputs).squeeze()
-        rounded_preds = (preds > 0).long()  # Convert SVM outputs to 0 or 1
-        correct += (rounded_preds == targets).sum().item()
-        total += targets.size(0)
-        for pred, target in zip(rounded_preds, targets):
-            print(f"Prediction: {pred.item()}, Actual: {target.item()}")
-
-    accuracy = correct / total
-    average_accuracy += accuracy
-    print(f"Accuracy: {accuracy:.4f}")
-    print(f"Correct: {correct}, Total: {total}")
-
-print(f"Average accuracy: {average_accuracy / iterations:.4f}")
+# Additionally print out predictions vs actuals for insights
+for pred, actual in zip(y_pred, y_test):
+    print(f"Prediction: {pred}, Actual: {actual}")
