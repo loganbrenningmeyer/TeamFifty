@@ -30,10 +30,11 @@ function Tabs() {
                 className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
                 onClick={() => toggleTab(3)}
                 >Parameters</div>
-                <div 
+                
+                {/* <div 
                 className={toggleState === 4 ? "tabs active-tabs" : "tabs"}
                 onClick={() => toggleTab(4)}
-                >Train</div>
+                >Train</div> */}
             </div>
             
             <div className="content-tabs">

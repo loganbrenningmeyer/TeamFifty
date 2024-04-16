@@ -12,6 +12,8 @@ import Tabs from './components/ModelTabs/tab';
 import Navbar from './components/Navbar/navbar';
 import SignIn from './components/Signin';
 import SignUp from './components/Signup';
+import SavedModels from './components/SavedModels/savedmodel';
+import Leaderboard from './components/Leaderboard/Leaderboard';
 
 function App() {
   return (
@@ -19,13 +21,15 @@ function App() {
     <Router>
       <Navbar />
       <Routes>
-        <Route exact path="/about" element={<About/>} />
-        <Route exact path="/" element={<Dashboard/>} />
+        <Route exact path="/about" element={<Dashboard/>} />
+        <Route exact path="/" element={<About/>} />
         <Route exact path="/model" element={<Model/>} />
         <Route exact path="/data" element={<Data/>} />
         <Route exact path="/signin" element={<SignIn/>} />
         <Route exact path="/signup" element={<SignUp/>} />
+        <Route exact path="/savedmodels" element={<SavedModels/>} />
         <Route exact path="/parameters" element={<Parameters/>} />
+        <Route exact path="/leaderboard" element={<Leaderboard/>} />
         <Route exact path="/createmodel" element={<Tabs/>} />
       </Routes>
     </Router>
