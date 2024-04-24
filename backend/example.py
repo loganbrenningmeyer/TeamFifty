@@ -5,31 +5,33 @@ from pymongo.server_api import ServerApi
 from flask_cors import CORS, cross_origin
 import http.client
 import bcrypt
-from redis import Redis
 from datetime import timedelta
 import torch
 import torch.nn.functional as F
 from torch.utils.data import DataLoader, TensorDataset, random_split
-
 import players
 import ANN
+import os
+import bson
+from bson.binary import Binary
+import pickle
+import io
 
 #sets up flask for routes
 app = Flask(__name__)
 app.secret_key = 'secret'
-# app.config['SESSION_TYPE'] = 'redis'
-app.permanent_session_lifetime = timedelta(minutes=10)
-# app.config['SESSION_USE_SIGNER'] = True
-# app.config['SESSION_REDIS'] = Redis(host='localhost',port=6379,db=0)
-# server_session = Session(app)
-cors = CORS(app, supports_credentials=True)
+app.config["SESSION_TYPE"] = 'filesystem'
+app.permanent_session_lifetime = timedelta(days=1)
 app.config['CORS_HEADERS'] = 'Content-Type'
+Session(app)
+cors = CORS(app, supports_credentials=True)
 
 # Create a new client and connect to the database and collection
 uri = "mongodb+srv://TeamFifty:s3v6EdcMysAgxbdq@cluster0.uognzqp.mongodb.net/?retryWrites=true&w=majority"
 client = MongoClient(uri, server_api=ServerApi('1'))
 db = client.get_database('userAccountInfo')
 userInfoColl = db.get_collection('userInfo')
+savedModels = db.get_collection('modelStorage')
 
 #Parameters:user email and password
 #This function will make sure a user doesn't already exist with the given email and if not the account info will be saved to the database
@@ -69,24 +71,22 @@ def signInUser():
         #now we check if the input password matches correct password
         if bcrypt.checkpw(password.encode('utf-8'),search['password']) == True:
             session.permanent = True
-            session["user"] = userInfo['email']
+            session["email"] = email
             return '',204
         else:
             return 'Invalid Password',406
 
-
 @app.route("/logout")
 def logout():
-    session.pop("user",None)
+    session.pop("email",None)
     return '',204
 
 #this function checks whether or not the user is logged in
 @app.route("/auth")
 def checkAuth():
-    if "user" in session:
-        user = session["user"]
-        print(user)
-        return user,204
+    if "email" in session:
+        print(session['email'])
+        return session['email'],204
     return 'not logged in',206
 
 @app.route('/test', methods=['GET'])
@@ -127,6 +127,43 @@ def data():
 
     return jsonify({'data': selected_stats})
 
+#this function takes a model name and saves the model to mongodb
+@app.route('/save',methods=['POST'])
+def saveModel():
+    req = request.get_json()
+
+    modelName = req['model name']
+    #checks to make sure the user is logged in which they should be
+    if "email" in session:
+        email = session['email']
+        print(email)
+        buffer = io.BytesIO()
+        torch.save(model,buffer)
+        info = {
+            'email':email,
+            'model name':modelName,
+            'model': buffer.getvalue()
+        }
+        savedModels.insert_one(info)
+        return 'model successfully saved',204
+    return 'user not logged in',406
+
+#this function will return information for all of the models the current logged in user has created
+@app.route('/retrieveModels')
+def getModels():
+    if "email" in session:
+        model = ANN.ANN 
+
+        email = session['email']
+        for entries in savedModels.find({'email':email}):
+            buffer = io.BytesIO(entries['model'])
+            model = torch.load(buffer,weights_only=False)
+            print(model)
+        return 'successfull retrieval',204
+
+
+    return 'user not logged in',406
+
 @app.route('/train', methods=['POST'])
 def train():
     parameters = request.json
@@ -158,6 +195,7 @@ def train():
     input_data = torch.load("input_data.pt")
     target_data = torch.load("target_data.pt")
     
+    global model
     model = ANN.ANN(input_data.shape[1], 1,
                     hidden_sizes, 
                     activation_function, 
@@ -191,6 +229,7 @@ def train():
     validation_accuracy = model.test(validation_loader)
 
     return jsonify({'loss': "{:.3f}".format(loss), 'accuracy': "{:.2f}%".format(accuracy*100), 'validation_accuracy': "{:.2f}%".format(validation_accuracy*100)})
+
 
 # Send a ping to confirm a successful connection
 try:

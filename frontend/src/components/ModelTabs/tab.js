@@ -3,15 +3,22 @@ import './tab.css';
 import Model from '../Model/Model';
 import Data from '../Data/Data';
 import Parameters from '../Parameters/Parameters';
+import axios from 'axios';
 
 function Tabs() {
+    axios.defaults.withCredentials = true;
 
     const [toggleState, setToggleState] = useState(1);
+    const [modelName,setModelName] = useState('');
 
-        const toggleTab = (index) => {
-            setToggleState(index);
-        }
+    const toggleTab = (index) => {
+        setToggleState(index);
+    }
+    
+    const handleModelSave = async () => {
+        const response = await axios.post('http://localhost:5000/save',{'model name':modelName});
 
+    }
     return (
     <div className="bg">
     
@@ -31,10 +38,10 @@ function Tabs() {
                 onClick={() => toggleTab(3)}
                 >Parameters</div>
                 
-                {/* <div 
+                <div 
                 className={toggleState === 4 ? "tabs active-tabs" : "tabs"}
                 onClick={() => toggleTab(4)}
-                >Train</div> */}
+                >Save Model</div>
             </div>
             
             <div className="content-tabs">
@@ -53,10 +60,8 @@ function Tabs() {
 
                 <div className={toggleState === 4 ? "content active-content" : "content"}>
                     <h2>Train</h2>
-                    <hr />
-                    <p>
-                    Laggasgbnc,nbcvnbn 4
-                 </p>
+                    <input type='text' name='model name' id='modelName' onChange={(e) => setModelName(e.target.value)}/>
+                    <button onClick={handleModelSave}>Save</button>
                 </div>
             </div>
         </div>

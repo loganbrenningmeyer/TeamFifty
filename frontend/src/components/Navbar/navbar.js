@@ -65,7 +65,7 @@ const Navbar = () => {
                 Create Model
               </NavLink>
             ) : (
-              <NavLink to='/createmodel' activeStyle>
+              <NavLink activeStyle>
                 Create Model
               </NavLink>
             )}
@@ -74,7 +74,7 @@ const Navbar = () => {
                 Saved Models
               </NavLink>
             ) : (
-              <NavLink to='/savedmodels' activeStyle>
+              <NavLink activeStyle>
                 Saved Models
               </NavLink>
             )}

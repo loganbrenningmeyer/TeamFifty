@@ -7,13 +7,17 @@ import "swiper/css/pagination";
 import { Navigation } from "swiper/modules";
 import { Pagination } from "swiper/modules";
 import 'swiper/css';
-
+import axios from 'axios';
 
 
 const swagArray = ["card 1", "card 2", "card 3", "card 4"];
 
 const SavedModels = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const check = async () => 
+    {
+    const res = await axios.get('http://localhost:3000/retrieveModels');
+    } 
         
 const pagination = {
         clickable: true,
@@ -21,6 +25,8 @@ const pagination = {
           return '<span class="' + className + '">' + (index + 1) + '</span>';
         },
     };
+
+
 
   return (
     <div>
@@ -58,7 +64,7 @@ const pagination = {
       {isOpen && (
         <div className="bg-white p-4 shadow-lg absolute bottom-full w-full transform translate-y-1">
           <ul>
-            <li className="p-2 hover:bg-gray-100">Data 1</li>
+            <li className="p-2 hover:bg-gray-100" onClick={check}>Data 1</li>
             <li className="p-2 hover:bg-gray-100">Data Item 2</li>
             <li className="p-2 hover:bg-gray-100">Data Item 3</li>
           </ul>
