@@ -11,10 +11,7 @@ import torch.nn.functional as F
 from torch.utils.data import DataLoader, TensorDataset, random_split
 import players
 import ANN
-import os
-import bson
 from bson.binary import Binary
-import pickle
 import io
 
 #sets up flask for routes
@@ -138,12 +135,13 @@ def saveModel():
         email = session['email']
         print(email)
         buffer = io.BytesIO()
-        torch.save(model,buffer)
+        torch.save(session["ANNModel"],buffer)
         info = {
             'email':email,
             'model name':modelName,
             'model': buffer.getvalue()
         }
+        session.pop("ANNModel",None)
         savedModels.insert_one(info)
         return 'model successfully saved',204
     return 'user not logged in',406
@@ -159,6 +157,7 @@ def getModels():
             buffer = io.BytesIO(entries['model'])
             model = torch.load(buffer,weights_only=False)
             print(model)
+            #model.eval()
         return 'successfull retrieval',204
 
 
@@ -195,7 +194,7 @@ def train():
     input_data = torch.load("input_data.pt")
     target_data = torch.load("target_data.pt")
     
-    global model
+    #global model
     model = ANN.ANN(input_data.shape[1], 1,
                     hidden_sizes, 
                     activation_function, 
@@ -227,6 +226,8 @@ def train():
     loss, accuracy = model.train(training_loader, 100, learning_rate)
 
     validation_accuracy = model.test(validation_loader)
+
+    session["ANNModel"] = model
 
     return jsonify({'loss': "{:.3f}".format(loss), 'accuracy': "{:.2f}%".format(accuracy*100), 'validation_accuracy': "{:.2f}%".format(validation_accuracy*100)})
 
