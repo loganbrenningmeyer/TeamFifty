@@ -43,9 +43,9 @@ const SignUp = () => {
           });
         
       if (response.ok) {
-        const result = await response.json();
-        console.log('User added successfully:', result.intertedId);
-        navigate('/');
+        const result = await response.body;
+        console.log('User added successfully:', result);
+        navigate('/signin');
       } else {
         throw new Error('An error occured while signing up.');
       }

@@ -133,7 +133,7 @@ def saveModel():
     #checks to make sure the user is logged in which they should be
     if "email" in session:
         email = session['email']
-        print(email)
+        
         buffer = io.BytesIO()
         torch.save(session["ANNModel"],buffer)
         info = {
@@ -149,6 +149,7 @@ def saveModel():
 #this function will return information for all of the models the current logged in user has created
 @app.route('/retrieveModels')
 def getModels():
+    #check to make sure the user is logged in
     if "email" in session:
         model = ANN.ANN 
 

@@ -66,7 +66,7 @@ const Navbar = () => {
               </NavLink>
             ) : (
               <NavLink activeStyle>
-                Create Model
+                
               </NavLink>
             )}
             {loggedIn ? (
@@ -75,7 +75,7 @@ const Navbar = () => {
               </NavLink>
             ) : (
               <NavLink activeStyle>
-                Saved Models
+                
               </NavLink>
             )}
           </NavMenu>
