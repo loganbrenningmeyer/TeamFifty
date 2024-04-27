@@ -16,6 +16,7 @@ import { useLocation, useNavigate } from 'react-router-dom'; // Import useNaviga
 const Navbar = () => {
   const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate(); // Use useNavigate for navigation
+  const location = useLocation(); // Define location here
 
   const checkAuth = async () => {
     try {
@@ -33,7 +34,7 @@ const Navbar = () => {
 
   useEffect(() => {
     checkAuth();
-  }, [useLocation().pathname]); // React hooks should be called at the top level
+  }, [location.pathname]); // React hooks should be called at the top level
 
   const handleSignOut = async () => {
     try {

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -8,72 +8,212 @@ import { Navigation } from "swiper/modules";
 import { Pagination } from "swiper/modules";
 import 'swiper/css';
 import axios from 'axios';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
 
-
-const swagArray = ["card 1", "card 2", "card 3", "card 4"];
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const SavedModels = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const check = async () => 
-    {
-    const res = await axios.get('http://localhost:3000/retrieveModels');
-    } 
-        
-const pagination = {
-        clickable: true,
-        renderBullet: function (index, className) {
-          return '<span class="' + className + '">' + (index + 1) + '</span>';
-        },
+  const [models, setModels] = useState([]);
+  const [activeModelName, setActiveModelName] = useState('');
+  const [activeModelType, setActiveModelType] = useState('');
+
+  const [activeTrainingData, setActiveTrainingData] = useState({});
+  const [activeValidationData, setActiveValidationData] = useState({});
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchModels = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/retrieveModels');
+        setModels(response.data);
+        // Optionally set the name of the first model as the initial active model
+        if (response.data.length > 0) {
+          setActiveModelName(response.data[0].model_name);
+          setActiveModelType(response.data[0].model_type);
+
+          console.log(response.data[0].training_loss)
+          console.log(response.data[0].training_accuracy)
+
+          /* Set training loss data */
+          const training_data = {
+            labels: Array.from(Array(100).keys()),
+            datasets: [
+              {
+                label: 'Training Loss',
+                data: response.data[0].training_loss,
+                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgba(255, 99, 132, 0.5)'
+              },
+              {
+                label: 'Training Accuracy',
+                data: response.data[0].training_accuracy,
+                borderColor: 'rgb(0, 204, 102)',
+                backgroundColor: 'rgba(0, 204, 102, 0.5)'
+              }
+            ]
+          }
+
+          /* Set validation loss data */
+          const validation_data = {
+            labels: Array.from(Array(100).keys()),
+            datasets: [
+              {
+                label: 'Validation Loss',
+                data: response.data[0].validation_loss,
+                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgba(255, 99, 132, 0.5)'
+              },
+              {
+                label: 'Validation Accuracy',
+                data: response.data[0].validation_accuracy,
+                borderColor: 'rgb(0, 204, 102)',
+                backgroundColor: 'rgba(0, 204, 102, 0.5)'
+              }
+            ]
+          }
+
+          setActiveTrainingData(training_data);
+          setActiveValidationData(validation_data);
+        }
+      } catch (error) {
+        console.error('Failed to retrieve models:', error);
+        setModels([]);
+      }
     };
 
+    fetchModels();
+  }, []);
 
+  const handleSlideChange = (swiper) => {
+    const currentModel = models[swiper.activeIndex / 3];
+    console.log(currentModel)
+    console.log(currentModel.model_name)
+    console.log(currentModel.model_type)
+    if (currentModel) {
+      setActiveModelName(currentModel.model_name);
+      setActiveModelType(currentModel.model_type);
+      
+      /* Set training loss data */
+      const training_data = {
+        labels: Array.from(Array(100).keys()),
+        datasets: [
+          {
+            label: 'Training Loss',
+            data: currentModel.training_loss,
+            borderColor: 'rgb(255, 99, 132)',
+            backgroundColor: 'rgba(255, 99, 132, 0.5)'
+          },
+          {
+            label: 'Training Accuracy',
+            data: currentModel.training_accuracy,
+            borderColor: 'rgb(0, 204, 102)',
+            backgroundColor: 'rgba(0, 204, 102, 0.5)'
+          }
+        ]
+      }
+
+      /* Set validation loss data */
+      const validation_data = {
+        labels: Array.from(Array(100).keys()),
+        datasets: [
+          {
+            label: 'Validation Loss',
+            data: currentModel.validation_loss,
+            borderColor: 'rgb(255, 99, 132)',
+            backgroundColor: 'rgba(255, 99, 132, 0.5)'
+          },
+          {
+            label: 'Validation Accuracy',
+            data: currentModel.validation_accuracy,
+            borderColor: 'rgb(0, 204, 102)',
+            backgroundColor: 'rgba(0, 204, 102, 0.5)'
+          }
+        ]
+      }
+
+      setActiveTrainingData(training_data);
+      setActiveValidationData(validation_data);
+    }
+  };
 
   return (
     <div>
-    <Swiper
-      pagination={pagination}
-      navigation={true}
-      modules={[Pagination, Navigation]}
-      slidesPerView={3}
-      spaceBetween={30}
-      className="mySwiper"
-    >
-      {swagArray.map((data) => (
-        <SwiperSlide>Slide 1 {data}</SwiperSlide>
-      ))}
-    </Swiper>
-
-
-
-    <div className="fixed inset-x-0 bottom-0">
-      <button
-        className={`w-full bg-blue-500 text-white p-4 text-center flex justify-center items-center group`}
-        onClick={() => setIsOpen(!isOpen)}
+      <div className="grid-header">
+        <div>Inputs</div>
+        <div>{activeModelName} ({activeModelType})</div>
+        <div>Outputs</div>
+      </div>
+      <Swiper
+        onSlideChange={handleSlideChange}
+        pagination={{
+          clickable: true,
+          renderBullet: (index, className) => `<span class="${className}">${index + 1}</span>`,
+        }}
+        navigation={true}
+        modules={[Pagination, Navigation]}
+        slidesPerView={3}
+        slidesPerGroup={3}
+        spaceBetween={10}
+        className="mySwiper"
       >
-        Stats and Parameters
-        <span className={`ml-2 transform transition-transform duration-150 ${isOpen ? 'group-hover:translate-y-1' : 'group-hover:-translate-y-1'}`}>
-          <svg
-            className="w-4 h-4 fill-current"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-          >
-            <path d={`${isOpen ? "M5.293 7.293a1 1 0 0 1 1.414 0L10 10.586l3.293-3.293a1 1 0 0 1 1.414 0l.707.707a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414l-.707-.707z" : "M14.707 11.707a1 1 0 0 1-1.414 0L10 8.414l-3.293 3.293a1 1 0 0 1-1.414 0l-.707-.707a1 1 0 0 1 0-1.414l4-4a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1 0 1.414l.707.707z"}`}/>
-          </svg>
-        </span>
-      </button>
-      {isOpen && (
-        <div className="bg-white p-4 shadow-lg absolute bottom-full w-full transform translate-y-1">
-          <ul>
-            <li className="p-2 hover:bg-gray-100" onClick={check}>Data 1</li>
-            <li className="p-2 hover:bg-gray-100">Data Item 2</li>
-            <li className="p-2 hover:bg-gray-100">Data Item 3</li>
-          </ul>
+        {models.length > 0 ? models.flatMap((model, idx) => [
+          <SwiperSlide key={`params-${idx}`}>
+            <div className="parameters-grid">
+              {Object.entries(model.selected_stats).map(([key, value], index) => (
+                <div key={index} className="parameters-item">
+                  {value.replace(/_/g, " ")}
+                </div>
+              ))}
+            </div>
+          </SwiperSlide>,
+          <SwiperSlide key={`accuracy-${idx}`}>
+            Training Accuracy: {model.training_accuracy[0]}
+          </SwiperSlide>,
+          <SwiperSlide key={`validation-${idx}`}>
+            Validation Accuracy: {model.validation_accuracy[0]}
+          </SwiperSlide>
+        ]) : <SwiperSlide>Loading models...</SwiperSlide>}
+      </Swiper>
+
+      <div className={`popup ${isOpen ? "open" : ""}`}>
+        <button
+          className="w-full bg-blue-500 text-white p-4 text-center flex justify-center items-center group"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          Stats and Parameters {isOpen ? "⯆" : "⯅"}
+        </button>
+        <div className="popup-content">
+          <div className="stats-grid">
+            <div>
+              {activeTrainingData.datasets && <Line data={activeTrainingData} />}
+            </div>
+            <div>
+              {activeValidationData.datasets && <Line data={activeValidationData} />}
+            </div>
+          </div>
         </div>
-      )}
+      </div>
     </div>
-    </div> 
   );
 };
-
 
 export default SavedModels;

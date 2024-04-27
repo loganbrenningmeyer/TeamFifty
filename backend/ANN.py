@@ -12,7 +12,9 @@ class ANN(nn.Module):
                 activation_function, 
                 dropout_rate=0.5, 
                 loss_function='BCELoss',
-                optimizer='Adam'):
+                optimizer='Adam',
+                lr=0.001,
+                epochs=100):
         super(ANN, self).__init__()
         self.layers = nn.ModuleList()
 
@@ -21,6 +23,10 @@ class ANN(nn.Module):
 
         # Set optimizer
         self.optimizer = optimizer
+
+        # Set learning rate and epochs
+        self.lr = lr
+        self.epochs = epochs
 
         # Assuming input_size is for the first layer and hidden_sizes[i] for subsequent layers
         prev_size = input_size
@@ -61,58 +67,72 @@ class ANN(nn.Module):
             x = self.sigmoid(x)
         return x
     
-    def train(self, dataloader, epochs, lr):
+    def train(self, training_dataloader=None, validation_dataloader=None, mode=True):
+        # History lists to store loss and accuracy for each epoch
+        training_loss_history = []
+        training_accuracy_history = []
+        validation_loss_history = []
+        validation_accuracy_history = []
 
-        # Set loss function
-        if (self.loss_function == 'MSELoss'):
-            loss_function = nn.MSELoss()
-        else:
-            loss_function = nn.BCELoss()
+        if mode and training_dataloader is not None:
+            print("Training the model...")
+            # Set the loss function based on the configuration
+            loss_function = nn.MSELoss() if self.loss_function == 'MSELoss' else nn.BCELoss()
 
-        # Set optimizer
-        if (self.optimizer == 'SGD'):
-            optimizer = torch.optim.SGD(self.parameters(), lr=lr)
-        else:
-            optimizer = torch.optim.Adam(self.parameters(), lr=lr)
+            # Set the optimizer based on the configuration
+            optimizer = torch.optim.SGD(self.parameters(), lr=self.lr) if self.optimizer == 'SGD' else torch.optim.Adam(self.parameters(), lr=self.lr)
 
-        # Training loop
-        for epoch in range(epochs):
-            running_loss = 0.0
-            correct = 0
-            total = 0
+            # Training loop
+            for epoch in range(self.epochs):
+                # Training phase
+                self.train()  # Ensures the model is in training mode
+                running_loss = 0.0
+                correct = 0
+                total = 0
 
-            for i, data in enumerate(dataloader):
-                # Get the inputs and labels
-                inputs, labels = data
+                for data in training_dataloader:
+                    inputs, labels = data
+                    optimizer.zero_grad()
+                    outputs = self(inputs)
+                    loss = loss_function(outputs, labels)
+                    loss.backward()
+                    optimizer.step()
 
-                # Zero the parameter gradients
-                optimizer.zero_grad()
+                    running_loss += loss.item()
+                    predicted = (outputs > 0.5).float()
+                    total += labels.size(0)
+                    correct += (predicted == labels).sum().item()
 
-                # Forward pass
-                outputs = self(inputs)
+                training_loss = running_loss / len(training_dataloader)
+                training_accuracy = correct / total
+                training_loss_history.append(training_loss)
+                training_accuracy_history.append(training_accuracy)
 
-                # Compute the loss and gradients
-                loss = loss_function(outputs, labels)
-                loss.backward()
+                # Validation phase
+                self.train(mode=False, training_dataloader=None)  # Sets the model to evaluation mode
+                validation_loss = 0.0
+                correct = 0
+                total = 0
+                with torch.no_grad():
+                    for data in validation_dataloader:
+                        inputs, labels = data
+                        outputs = self(inputs)
+                        loss = loss_function(outputs, labels)
 
-                # Update the parameters
-                optimizer.step()
+                        validation_loss += loss.item()
+                        predicted = (outputs > 0.5).float()
+                        total += labels.size(0)
+                        correct += (predicted == labels).sum().item()
 
-                # Update loss and accuracy metrics
-                running_loss += loss.item()
-                predicted = (outputs > 0.5).float()
-                total += labels.size(0)
-                correct += (predicted == labels).sum().item()
+                validation_loss /= len(validation_dataloader)
+                validation_accuracy = correct / total
+                validation_loss_history.append(validation_loss)
+                validation_accuracy_history.append(validation_accuracy)
 
-            # Print the loss and accuracy for every epoch
-            epoch_loss = running_loss / len(dataloader)
-            epoch_accuracy = correct / total
-            # if (epoch_accuracy > 0.9): # Stop early if accuracy is high enough
-            #     break
-            print(f"Epoch {epoch+1}/{epochs}, Loss: {epoch_loss:.4f}, Accuracy: {epoch_accuracy:.4f}")
+                print(f"Epoch {epoch+1}/{self.epochs}, Training Loss: {training_loss:.4f}, Training Accuracy: {training_accuracy:.4f}, Validation Loss: {validation_loss:.4f}, Validation Accuracy: {validation_accuracy:.4f}")
 
-        # Return final loss/accuracy
-        return epoch_loss, epoch_accuracy
+            # Return the history of training and validation loss/accuracy
+            return training_loss_history, training_accuracy_history, validation_loss_history, validation_accuracy_history
     
     def test(self, validation_loader):
         # Predict the output on testing data and print the percent correct

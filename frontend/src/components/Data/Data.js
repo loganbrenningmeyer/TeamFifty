@@ -6,7 +6,26 @@ import './Data.css';
 function Data() {
 
   const navigate = useNavigate();
-  const [clickedButtons, setClickedButtons] = useState({});
+
+  /* Default all data selections to true */
+  const initialButtonStates = {
+    h2h: true, homeID: true, awayID: true, QB: true, RB: true, FB: true,
+    WR: true, TE: true, C: true, G: true, OT: true, DE: true, DT: true,
+    CB: true, LB: true, S: true, PK: true, P: true, LS: true,
+    first_downs_total: true, first_downs_passing: true, first_downs_rushing: true,
+    first_downs_from_penalties: true, first_downs_third_down_efficiency: true,
+    first_downs_fourth_down_efficiency: true, plays_total: true,
+    yards_total: true, yards_yards_per_play: true, yards_total_drives: true,
+    passing_total: true, passing_comp_att: true, passing_yards_per_pass: true,
+    passing_interceptions_thrown: true, passing_sacks_yards_lost: true,
+    rushings_total: true, rushings_attempts: true, rushings_yards_per_rush: true,
+    red_zone_made_att: true, penalties_total: true, turnovers_total: true,
+    turnovers_lost_fumbles: true, turnovers_interceptions: true,
+    posession_total: true, interceptions_total: true, fumbles_recovered_total: true,
+    sacks_total: true, safeties_total: true, int_touchdowns_total: true,
+    points_against_total: true
+  };
+  const [clickedButtons, setClickedButtons] = useState(initialButtonStates);
 
   const handleButtonClick = (buttonName) => {
     setClickedButtons((prevState) => ({
@@ -22,7 +41,7 @@ function Data() {
   return (
     <div style={{ textAlign: 'center', padding: '20px' }}>
       <h1>What NFL data would you like to include in your model?</h1>
-      <p>Select the statistics you would like to use to train your model</p>
+      <p>Select the statistics you would like to use to train your model (all selected by default)</p>
 
       <div className="grid-container">
         <div className="general">

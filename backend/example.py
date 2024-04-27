@@ -98,6 +98,9 @@ def data():
 
     print(selected_stats)
 
+    # Save the selected stats to the session
+    session["selected_stats"] = [key for key in selected_stats.keys() if selected_stats[key]]
+
     # Get all of the data
     input_data_2022 = torch.load(f"input_data_1_2022.pt")
     target_data_2022 = torch.load(f"target_data_1_2022.pt")
@@ -138,8 +141,14 @@ def saveModel():
         torch.save(session["ANNModel"],buffer)
         info = {
             'email':email,
-            'model name':modelName,
-            'model': buffer.getvalue()
+            'model_name':modelName,
+            'model_type':'ANN',
+            'model': buffer.getvalue(),
+            'selected_stats': session["selected_stats"],
+            'training_loss' : session["training_loss"],
+            'training_accuracy' : session["training_accuracy"],
+            'validation_loss' : session["validation_loss"],
+            'validation_accuracy' : session["validation_accuracy"]
         }
         session.pop("ANNModel",None)
         savedModels.insert_one(info)
@@ -147,19 +156,44 @@ def saveModel():
     return 'user not logged in',406
 
 #this function will return information for all of the models the current logged in user has created
-@app.route('/retrieveModels')
+@app.route('/retrieveModels', methods=['GET'])
 def getModels():
-    #check to make sure the user is logged in
+
+    db = client.get_database('userAccountInfo')
+    savedModels = db.get_collection('modelStorage')
+
+    saved_models = []
+
     if "email" in session:
         model = ANN.ANN 
 
         email = session['email']
         for entries in savedModels.find({'email':email}):
+            # Load PyTorch model
             buffer = io.BytesIO(entries['model'])
             model = torch.load(buffer,weights_only=False)
             print(model)
-            #model.eval()
-        return 'successfull retrieval',204
+
+            # Load input data
+            input_data = entries['selected_stats']
+            print(input_data)
+
+            print(f"Entries keys: {entries.keys()}")
+
+            saved_models.append({"email" : entries['email'],
+                                 "model_name" : entries['model_name'],
+                                "model_type" : entries['model_type'],
+                                "selected_stats" : entries['selected_stats'],
+                                "training_loss" : entries['training_loss'],
+                                "training_accuracy" : entries['training_accuracy'],
+                                "validation_loss" : entries['validation_loss'],
+                                "validation_accuracy" : entries['validation_accuracy']})
+
+            model.train(mode=False)
+
+        session["saved_models"] = saved_models
+
+        return jsonify(saved_models)
 
 
     return 'user not logged in',406
@@ -187,6 +221,10 @@ def train():
 
     # Optimizer
     optimizer = parameters['optimizer']
+    
+    # Learning rate
+    learning_rate = float(parameters['learning_rate'])
+
 
     # Activation function
     activation_function = parameters['activation']
@@ -201,7 +239,9 @@ def train():
                     activation_function, 
                     dropout_rate,
                     loss_function,
-                    optimizer)
+                    optimizer,
+                    learning_rate,
+                    epochs=100)
     
     print(model)
     
@@ -224,13 +264,23 @@ def train():
     training_loader = DataLoader(training_set, batch_size=batch_size, shuffle=True)
     validation_loader = DataLoader(validation_set, batch_size=batch_size, shuffle=False)
     
-    loss, accuracy = model.train(training_loader, 100, learning_rate)
+    training_loss, training_accuracy, validation_loss, validation_accuracy = model.train(training_dataloader=training_loader, validation_dataloader=validation_loader, mode=True) 
 
-    validation_accuracy = model.test(validation_loader)
+    print(training_loss)
+    print(training_accuracy)
+    print(validation_loss)
+    print(validation_accuracy)
 
+    # Save PyTorch model
     session["ANNModel"] = model
 
-    return jsonify({'loss': "{:.3f}".format(loss), 'accuracy': "{:.2f}%".format(accuracy*100), 'validation_accuracy': "{:.2f}%".format(validation_accuracy*100)})
+    # Save training loss/accuracy
+    session["training_loss"] = training_loss
+    session["training_accuracy"] = training_accuracy
+    session["validation_loss"] = validation_loss
+    session["validation_accuracy"] = validation_accuracy
+
+    return jsonify({'training_loss': training_loss, 'training_accuracy': training_accuracy, 'validation_loss': validation_loss, 'validation_accuracy': validation_accuracy})
 
 def searchModel(search):
     result = savedModels.aggregate([

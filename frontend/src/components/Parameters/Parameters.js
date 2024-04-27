@@ -24,9 +24,9 @@ function Parameters() {
   const handleTrain = async () => {
     setTrainOutput('Training model...')
     const response = await axios.post('http://localhost:5000/train', {...clickedButtons, ...inputValues});
-    const { loss, accuracy, validation_accuracy } = response.data;
-    setTrainOutput(`Training Loss: ${loss}, Training Accuracy: ${accuracy}`);
-    setTestOutput(`Validation Accuracy: ${validation_accuracy}`);
+    const { training_loss, training_accuracy, validation_loss, validation_accuracy } = response.data;
+    setTrainOutput(`Training Loss: ${training_loss[training_loss.length-1]}, Training Accuracy: ${training_accuracy[training_accuracy.length-1]}`);
+    setTestOutput(`Validation Accuracy: ${validation_accuracy[validation_accuracy.length-1]}`);
   };
 
   return (

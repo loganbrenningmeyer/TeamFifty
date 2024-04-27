@@ -13,9 +13,9 @@ function Model() {
   }
 
   // Removed for tab system
-  const handleContinue = () => {
-    navigate('/data');
-  }
+  // const handleContinue = () => {
+  //   navigate('/data');
+  // }
 
   return (
     <div className='bg'>
@@ -39,7 +39,7 @@ function Model() {
             Gradient Boosting
           </button>
         </div>
-        <button className='continue-button' onClick={handleContinue}>Continue</button>
+        {/* <button className='continue-button' onClick={handleContinue}>Continue</button> */}
       </div>
     </div>
   );
