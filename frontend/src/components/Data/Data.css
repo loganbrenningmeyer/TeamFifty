@@ -13,7 +13,7 @@
 .grid-container > div {
     background-color: #f1f1f1;
     text-align: left;
-    font-size: 16px;
+    font-size: 14px;
     padding: 10px;
     border-radius: 10px;
 }
@@ -178,6 +178,7 @@
 .team-grid-container > button {
     background-color: cornflowerblue;
     text-align: center;
+    font-size: 12px;
     height: 40px;
     border-radius: 10px;
     transition: background-color 0.5s, border 0.5s;
