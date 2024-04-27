@@ -232,6 +232,21 @@ def train():
 
     return jsonify({'loss': "{:.3f}".format(loss), 'accuracy': "{:.2f}%".format(accuracy*100), 'validation_accuracy': "{:.2f}%".format(validation_accuracy*100)})
 
+def searchModel(search):
+    result = savedModels.aggregate([
+        {
+            "$search":{
+                "index":"model_search",
+                "text":{
+                    "query":search,
+                    "path":["model_name","model_type"],
+                    "fuzzy":{}
+                }
+            }
+        }
+    ])
+    for r in result:
+        print(r['model_name'],r['model_type'])
 
 # Send a ping to confirm a successful connection
 try:
@@ -239,13 +254,7 @@ try:
     print("Pinged your deployment. You successfully connected to MongoDB!")
 except Exception as e:
     print(e)
-#how to insert into the database
-#userInfoColl.insert_one({"email":"cvan@yahoo.com","password":"turtle"})
-    
-#how to search for something in the database
-# query = {"email":"cvan@yahoo.com"}
-# result = userInfoColl.find_one(query)
-# print(result)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
