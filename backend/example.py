@@ -316,7 +316,10 @@ def train():
 
     return jsonify({'training_loss': training_loss, 'training_accuracy': training_accuracy, 'validation_loss': validation_loss, 'validation_accuracy': validation_accuracy})
 
-def searchModel(search):
+@app.route("/search",methods=['GET'])
+def searchModel():
+    search = request.args.get('q','')
+    
     result = savedModels.aggregate([
         {
             "$search":{
@@ -327,10 +330,21 @@ def searchModel(search):
                     "fuzzy":{}
                 }
             }
+        },
+        {
+            "$project":{
+                "_id":0,
+                "model":0
+            }
         }
     ])
+    modelsFound = []
     for r in result:
+        modelsFound.append(r)
         print(r['model_name'],r['model_type'])
+
+        
+    return jsonify(modelsFound)
 
 # Send a ping to confirm a successful connection
 try:
