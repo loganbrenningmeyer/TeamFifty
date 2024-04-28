@@ -34,7 +34,7 @@ const SavedModels = () => {
   const [models, setModels] = useState([]);
   const [activeModelName, setActiveModelName] = useState('');
   const [activeModelType, setActiveModelType] = useState('');
-
+  const [activeModelVis, setActiveModelVis] = useState('');
   const [activeTrainingData, setActiveTrainingData] = useState({});
   const [activeValidationData, setActiveValidationData] = useState({});
 
@@ -49,6 +49,7 @@ const SavedModels = () => {
         if (response.data.length > 0) {
           setActiveModelName(response.data[0].model_name);
           setActiveModelType(response.data[0].model_type);
+          setActiveModelVis(response.data[0].model_vis);
 
           console.log(response.data[0].training_loss)
           console.log(response.data[0].training_accuracy)
@@ -93,6 +94,9 @@ const SavedModels = () => {
 
           setActiveTrainingData(training_data);
           setActiveValidationData(validation_data);
+
+          /* Get model visualizations from backend */
+
         }
       } catch (error) {
         console.error('Failed to retrieve models:', error);
@@ -111,6 +115,7 @@ const SavedModels = () => {
     if (currentModel) {
       setActiveModelName(currentModel.model_name);
       setActiveModelType(currentModel.model_type);
+      setActiveModelVis(currentModel.model_vis);
       
       /* Set training loss data */
       const training_data = {
@@ -159,7 +164,7 @@ const SavedModels = () => {
     <div>
       <div className="grid-header">
         <div>Inputs</div>
-        <div>{activeModelName} ({activeModelType})</div>
+        <div>{activeModelName ? `${activeModelName} (${activeModelType})` : 'Model Name (Type)'}</div>
         <div>Outputs</div>
       </div>
       <Swiper
@@ -186,7 +191,9 @@ const SavedModels = () => {
             </div>
           </SwiperSlide>,
           <SwiperSlide key={`accuracy-${idx}`}>
-            Training Accuracy: {model.training_accuracy[0]}
+            <div className='model-vis'>
+              <img src={`data:image/png;base64,${activeModelVis}`} alt="Model Visualization" />
+            </div>
           </SwiperSlide>,
           <SwiperSlide key={`validation-${idx}`}>
             Validation Accuracy: {model.validation_accuracy[0]}

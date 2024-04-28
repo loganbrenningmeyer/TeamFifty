@@ -8,11 +8,20 @@ import bcrypt
 from datetime import timedelta
 import torch
 import torch.nn.functional as F
+import torch.nn as nn
 from torch.utils.data import DataLoader, TensorDataset, random_split
 import players
 import ANN
 from bson.binary import Binary
 import io
+
+# For model visualizations
+import visualkeras
+import tensorflow as tf
+import base64
+from PIL import ImageFont
+
+import torch2keras
 
 #sets up flask for routes
 app = Flask(__name__)
@@ -155,6 +164,16 @@ def saveModel():
         return 'model successfully saved',204
     return 'user not logged in',406
 
+def get_input_shape(model):
+    for layer in model.modules():
+        if isinstance(layer, nn.Conv2d):
+            # For Conv2d layers, the input shape includes the number of channels expected
+            return (layer.in_channels, layer.kernel_size[0], layer.kernel_size[1])
+        elif isinstance(layer, nn.Linear):
+            # For Linear layers, the input shape is the number of features (flattened input size)
+            return (layer.in_features,)
+    return "Input layer type not found or model does not have a recognizable first layer"
+
 #this function will return information for all of the models the current logged in user has created
 @app.route('/retrieveModels', methods=['GET'])
 def getModels():
@@ -169,20 +188,35 @@ def getModels():
 
         email = session['email']
         for entries in savedModels.find({'email':email}):
+
             # Load PyTorch model
             buffer = io.BytesIO(entries['model'])
             model = torch.load(buffer,weights_only=False)
-            print(model)
 
-            # Load input data
-            input_data = entries['selected_stats']
-            print(input_data)
+            input_shape = get_input_shape(model)
+            
+            keras_model = torch2keras.convert_pytorch_model_to_keras(model, input_shape)
 
-            print(f"Entries keys: {entries.keys()}")
+            font = ImageFont.truetype("ARIAL.ttf", 16)
+
+            # Get model visualization png
+            visualkeras.layered_view(keras_model, to_file='output.png', 
+                                     legend=True, 
+                                     scale_xy=1, scale_z=0.75, 
+                                     min_xy=64,
+                                     background_fill=None,
+                                     font=font)
+
+            try:
+                with open('output.png', 'rb') as image_file:
+                    model_vis = base64.b64encode(image_file.read()).decode('utf-8')
+            except FileNotFoundError:
+                model_vis = "Visualization not available" 
 
             saved_models.append({"email" : entries['email'],
                                  "model_name" : entries['model_name'],
                                 "model_type" : entries['model_type'],
+                                "model_vis" : model_vis,
                                 "selected_stats" : entries['selected_stats'],
                                 "training_loss" : entries['training_loss'],
                                 "training_accuracy" : entries['training_accuracy'],
