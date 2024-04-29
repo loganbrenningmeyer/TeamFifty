@@ -101,7 +101,6 @@ function SearchModels(){
         };
     };
 
-
     return(
         <div>
             <h1>Model Search</h1>
@@ -137,24 +136,26 @@ function SearchModels(){
                     </thead>
                     <tbody>
                     {
-                        searchResults.map((element,index) =>{
-                        return(
-                    <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {element.model_name}
-                        </th>
-                        <td class="px-6 py-4">
-                        {element.model_type}
-                        </td>
-                        <td class="px-6 py-4">
-                        {element.validation_accuracy[99]}
-                        </td>
-                        <td class="px-6 py-4">
-                            <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">View</a>
-                        </td>
-                    </tr>
-                        )})
+                        searchResults.length === 0 ? <p>No Models Were Found</p> :
+                            searchResults.map((element,index) =>{
+                                return(
+                            <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {element.model_name}
+                                </th>
+                                <td class="px-6 py-4">
+                                {element.model_type}
+                                </td>
+                                <td class="px-6 py-4">
+                                {element.validation_accuracy[99]}
+                                </td>
+                                <td class="px-6 py-4">
+                                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">View</a>
+                                </td>
+                            </tr>
+                                )})
                     }
+                    
                     </tbody>
                 </table>
             </div>

@@ -174,6 +174,15 @@ def get_input_shape(model):
             return (layer.in_features,)
     return "Input layer type not found or model does not have a recognizable first layer"
 
+@app.route('/getAllModels',methods=['GET'])
+def getAllModels():
+    modelList = []
+    for entries in savedModels.find({},{'_id':0,'model_name':1,'model_type':1,'validation_accuracy':1}):
+        modelList.append(entries)
+    
+    return jsonify(modelList)
+
+
 #this function will return information for all of the models the current logged in user has created
 @app.route('/retrieveModels', methods=['GET'])
 def getModels():
