@@ -14,6 +14,9 @@ import players
 import ANN
 from bson.binary import Binary
 import io
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn import svm, metrics
 
 # For model visualizations
 import visualkeras
@@ -324,6 +327,49 @@ def train():
     session["validation_accuracy"] = validation_accuracy
 
     return jsonify({'training_loss': training_loss, 'training_accuracy': training_accuracy, 'validation_loss': validation_loss, 'validation_accuracy': validation_accuracy})
+
+@app.route('/train_SVM', methods=['POST'])
+def train_SVM():
+    parameters = request.json
+    print("SVM training parameters:", parameters)
+
+    # Extract parameters
+    kernel = parameters.get('kernel', 'rbf')
+    C = float(parameters.get('C', 1.0))
+    gamma = parameters.get('gamma', 'scale')
+
+    # Load the data
+    input_data = torch.load("input_data.pt").numpy()
+    target_data = torch.load("target_data.pt").numpy()
+
+    # Data preprocessing
+    scaler = StandardScaler()
+    input_data = scaler.fit_transform(input_data)
+    X_train, X_test, y_train, y_test = train_test_split(input_data, target_data, test_size=0.2, random_state=42)
+
+    # SVM model initialization and training
+    model = svm.SVC(kernel=kernel, C=C, gamma=gamma)
+    model.fit(X_train, y_train)
+
+    # Predictions and evaluations
+    y_pred = model.predict(X_test)
+    accuracy = metrics.accuracy_score(y_test, y_pred)
+    confusion_matrix = metrics.confusion_matrix(y_test, y_pred)
+    classification_report = metrics.classification_report(y_test, y_pred, output_dict=True)
+
+    # Structure the classification report for easier consumption
+    report_details = {
+        "precision": classification_report['weighted avg']['precision'],
+        "recall": classification_report['weighted avg']['recall'],
+        "f1-score": classification_report['weighted avg']['f1-score'],
+        "support": classification_report['weighted avg']['support']
+    }
+
+    return jsonify({
+        'accuracy': f"{accuracy * 100:.2f}%",
+        'confusion_matrix': confusion_matrix.tolist(),
+        'detailed_report': report_details
+    })
 
 @app.route("/search",methods=['GET'])
 def searchModel():

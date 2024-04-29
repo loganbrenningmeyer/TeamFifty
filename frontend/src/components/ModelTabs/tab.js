@@ -4,17 +4,38 @@ import Model from '../Model/Model';
 import Data from '../Data/Data';
 import Parameters from '../Parameters/Parameters';
 import axios from 'axios';
+import SVMParameters from '../Parameters/parameters_svm'; 
 
 function Tabs() {
     axios.defaults.withCredentials = true;
 
     const [toggleState, setToggleState] = useState(1);
     const [modelName,setModelName] = useState('');
+    const [selectedModelType, setSelectedModelType] = useState(null); // State to store the selected model type
+    const [feedback, setFeedback] = useState(''); // Correct
 
     const toggleTab = (index) => {
         setToggleState(index);
     }
-    
+
+    const handleModelSelect = (modelType) => {
+        console.log(`Model selected: ${modelType}`);
+        setSelectedModelType(modelType); // Update the selected model type
+        setFeedback(`Model selected: ${modelType}`); // Set feedback message
+    };
+
+    const renderParametersComponent = () => {
+        console.log(`Rendering parameters for: ${selectedModelType}`);
+        switch (selectedModelType) {
+            case 'ANN':
+                return <Parameters />;
+            case 'SVM':
+                return <SVMParameters />;
+            // Add cases for any other models you have
+            default:
+                return <div>Select a model to see parameters</div>;
+        }
+    };
     const handleModelSave = async () => {
         const response = await axios.post('http://localhost:5000/save',{'model name':modelName});
 
@@ -47,7 +68,7 @@ function Tabs() {
             <div className="content-tabs">
             
                 <div className={toggleState === 1 ? "content active-content" : "content"} >
-                    <Model />
+                    <Model onModelSelect={handleModelSelect} />
                 </div>
 
                 <div className={toggleState === 2 ? "content active-content" : "content"}>
@@ -55,7 +76,7 @@ function Tabs() {
                 </div>
 
                 <div className={toggleState === 3 ? "content active-content" : "content"}>
-                    <Parameters />
+                    {renderParametersComponent()}
                 </div>
 
                 <div className={toggleState === 4 ? "content active-content" : "content"}>
@@ -63,6 +84,7 @@ function Tabs() {
                     <input type='text' name='model name' id='modelName' onChange={(e) => setModelName(e.target.value)}/>
                     <button onClick={handleModelSave}>Save</button>
                 </div>
+
             </div>
         </div>
         </div>
