@@ -174,6 +174,15 @@ def get_input_shape(model):
             return (layer.in_features,)
     return "Input layer type not found or model does not have a recognizable first layer"
 
+@app.route('/getAllModels',methods=['GET'])
+def getAllModels():
+    modelList = []
+    for entries in savedModels.find({},{'_id':0,'model_name':1,'model_type':1,'validation_accuracy':1}):
+        modelList.append(entries)
+    
+    return jsonify(modelList)
+
+
 #this function will return information for all of the models the current logged in user has created
 @app.route('/retrieveModels', methods=['GET'])
 def getModels():
@@ -316,7 +325,10 @@ def train():
 
     return jsonify({'training_loss': training_loss, 'training_accuracy': training_accuracy, 'validation_loss': validation_loss, 'validation_accuracy': validation_accuracy})
 
-def searchModel(search):
+@app.route("/search",methods=['GET'])
+def searchModel():
+    search = request.args.get('q','')
+    
     result = savedModels.aggregate([
         {
             "$search":{
@@ -327,10 +339,21 @@ def searchModel(search):
                     "fuzzy":{}
                 }
             }
+        },
+        {
+            "$project":{
+                "_id":0,
+                "model":0
+            }
         }
     ])
+    modelsFound = []
     for r in result:
+        modelsFound.append(r)
         print(r['model_name'],r['model_type'])
+
+        
+    return jsonify(modelsFound)
 
 # Send a ping to confirm a successful connection
 try:

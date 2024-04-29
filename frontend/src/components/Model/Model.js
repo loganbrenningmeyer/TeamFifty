@@ -18,7 +18,7 @@ function Model() {
   // }
 
   return (
-    <div className='bg'>
+    //<div className='bg'>
       <div className='modelcontainer'>
         <h1>Which model would you like to create?</h1>
         <p>Select the type of model you would like to customize</p>
@@ -41,7 +41,7 @@ function Model() {
         </div>
         {/* <button className='continue-button' onClick={handleContinue}>Continue</button> */}
       </div>
-    </div>
+    //</div>
   );
 }
 
