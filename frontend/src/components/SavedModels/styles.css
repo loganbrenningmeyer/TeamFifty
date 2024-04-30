@@ -94,8 +94,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #81858B;
-    border-color: #81858B;
+    background-color: transparent;
+    border-color: transparent;
     border-width: 15px;
     border-radius: 10px;
     width: 100%;

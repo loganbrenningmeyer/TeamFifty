@@ -217,7 +217,8 @@ def getModels():
                                      scale_xy=1, scale_z=0.75, 
                                      min_xy=64,
                                      background_fill=None,
-                                     font=font)
+                                     font=font,
+                                     font_color='white')
 
             try:
                 with open('output.png', 'rb') as image_file:
