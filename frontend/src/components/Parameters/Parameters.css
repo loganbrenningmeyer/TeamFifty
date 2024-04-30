@@ -133,7 +133,7 @@
   }
   
   .param-grid-container > div > button.clicked {
-    border: 2px solid #81858B;
+    border: 2px solid #FFFFFF;
   }
   
   .activation_fx { grid-area: activation_fx; }
@@ -153,7 +153,7 @@
   
   .train-button {
     grid-area: train-button;
-    background-color: rgb(0, 162, 255);
+    background-color: rgb(23, 146, 217);
     border: none;
     color: white;
     text-align: center;
