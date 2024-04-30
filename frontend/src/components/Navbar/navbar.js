@@ -63,11 +63,11 @@ const Navbar = () => {
               <img src={LeaderboardLogo} alt='LeaderboardLogo' style={{height: '75%'}}/>
             </NavLink>
             <NavLink to='/searchmodels' activeStyle>
-              <img src={SearchLogo} alt='SearchLogo' style={{height: '75%'}}/>
+              <img src={SearchLogo} alt='SearchLogo' style={{height: '80%'}}/>
             </NavLink>
             {loggedIn ? (
               <NavLink to='/createmodel' activeStyle>
-                <img src={CreateLogo} alt='CreateLogo' style={{height: '75%'}}/>
+                <img src={CreateLogo} alt='CreateLogo' style={{height: '65%'}}/>
               </NavLink>
             ) : (
               <NavLink activeStyle>
@@ -76,7 +76,7 @@ const Navbar = () => {
             )}
             {loggedIn ? (
               <NavLink to='/savedmodels' activeStyle>
-                <img src={SavedLogo} alt='SavedLogo' style={{height: '75%'}}/>
+                <img src={SavedLogo} alt='SavedLogo' style={{height: '50%'}}/>
               </NavLink>
             ) : (
               <NavLink activeStyle>
