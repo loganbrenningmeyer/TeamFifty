@@ -128,17 +128,8 @@ function SearchModels() {
   };
 
   return (
-    <div class="h-full bg-bg-grey">
-    <div class="h-full bg-bg-grey">
-      {/* <h1>Model Search</h1>
-            <input
-            required
-            type="text"
-            placeholder="Search models..."
-            onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <button onClick={handleSearch}>Search</button> */}
-
+    <div class="min-h-screen bg-bg-grey">
+    <div class="bg-contain bg-bg-grey">
       <div class="max-w-md mx-auto ">
         <label
           for="default-search"

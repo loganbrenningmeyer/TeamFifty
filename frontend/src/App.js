@@ -32,7 +32,7 @@ function App() {
         <Route exact path="/parameters" element={<Parameters/>} />
         <Route exact path="/leaderboard" element={<Leaderboard/>} />
         <Route exact path="/createmodel" element={<Tabs/>} />
-        <Route exact path="searchmodels" element={<SearchModels/>}/>
+        <Route exact path="/searchmodels" element={<SearchModels/>}/>
       </Routes>
     </Router>
   );
