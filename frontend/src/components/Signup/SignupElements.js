@@ -10,7 +10,7 @@ export const Container = styled.div`
     top: 0;
     z-index: 0;
     overflow: hidden;
-    background: #23272D
+    background: #121212
 `;
 
 export const FormWrap = styled.div`
@@ -50,7 +50,7 @@ justify-content: center;
 `;
 
 export const Form = styled.form`
-background: #010101;
+background: #191D21;
 max-width: 400px;
 height: auto;
 width: 100%;
