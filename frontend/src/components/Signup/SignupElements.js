@@ -50,7 +50,7 @@ justify-content: center;
 `;
 
 export const Form = styled.form`
-background: #191D21;
+background: #23272D;
 max-width: 400px;
 height: auto;
 width: 100%;
