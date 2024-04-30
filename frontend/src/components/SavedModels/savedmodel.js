@@ -203,7 +203,7 @@ const SavedModels = () => {
 
       <div className={`popup ${isOpen ? "open" : ""}`}>
         <button
-          className="w-full bg-blue-500 text-white p-4 text-center flex justify-center items-center group"
+          className="w-full bg-custom-blue text-white p-4 text-center flex justify-center items-center group"
           onClick={() => setIsOpen(!isOpen)}
         >
           Stats and Parameters {isOpen ? "⯆" : "⯅"}

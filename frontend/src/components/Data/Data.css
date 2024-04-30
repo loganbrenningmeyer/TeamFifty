@@ -41,6 +41,8 @@
 
 .general-grid-container > button {
     background-color: #203749;
+    border: 2px solid #203749;
+    transition: background-color 0.5s, border 0.5s;
     text-align: center;
     height: 40px;
     border-radius: 10px;
@@ -83,9 +85,11 @@
 
 .player-grid-container > button {
     background-color: #203749;
+    border: 2px solid #203749;
     text-align: center;
     height: 40px;
     border-radius: 10px;
+    transition: background-color 0.5s, border 0.5s;
 }
 
 .player-grid-container > button.clicked {
@@ -175,6 +179,8 @@
 
 .team-grid-container > button {
     background-color: #203749;
+    border: 2px solid #203749;
+    transition: background-color 0.5s, border 0.5s;
     text-align: center;
     font-size: 12px;
     height: 40px;
@@ -309,8 +315,9 @@
     position: fixed;
     bottom: 10px;
     right: 10px;
-    background-color: gray;
-    border: none;
+    background-color: #203749;
+    border: 2px solid #203749;
+    transition: background-color 0.5s, border 0.5s;
     color: white;
     padding: 10px 20px;
     text-align: center;

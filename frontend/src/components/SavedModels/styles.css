@@ -8,10 +8,10 @@
   }
   
   body {
-    background: #eee;
+    background: #121212;
     font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
     font-size: 14px;
-    color: #000;
+    color: white;
     margin: 0;
     padding: 0;
   }
@@ -22,12 +22,12 @@
     text-align: center;
     gap: 10px;
     padding: 10px;
-    background-color: #f8f8f8; /* Light gray background */
+    background-color: #121212; /* Light gray background */
     border-bottom: 1px solid #ccc; /* Separator line */
   }  
 
   .grid-header > div {
-    background-color: rgb(172, 195, 228); /* Solid white background */
+    background-color: #203749;
     padding: 10px 20px; /* Padding inside each grid item */
     border-radius: 10px; /* Rounded corners */
     box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Optional: adds shadow for 3D effect */
@@ -45,7 +45,7 @@
   
   
   .parameters-item {
-    background: #6c89e8;
+    background: #23272D;
     padding: 8px;
     border-radius: 5px;
     word-wrap: break-word; /* Ensures text fits within the item */
@@ -69,7 +69,7 @@
   }
 
   .popup-content {
-    background-color: white; /* Or any other color you prefer */
+    background-color: #121212; /* Or any other color you prefer */
     border: 1px solid #ccc; /* Optional, adds a light border around the popup content */
     height: 100%;
     padding: 10px; /* Provides some spacing inside the popup content */
@@ -85,7 +85,7 @@
     height: 50%; /* Each chart takes half the height of the popup content */
     width: 90%; /* Control width to 90% of the popup content */
     margin: 10px;
-    background-color: #d9e3f1; /* Light gray background, adjust as needed */
+    background-color: #23272D; /* Light gray background, adjust as needed */
     border-radius: 15px;
     padding: 10px;
   }
