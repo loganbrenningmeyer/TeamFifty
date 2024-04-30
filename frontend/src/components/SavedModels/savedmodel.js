@@ -196,14 +196,39 @@ const SavedModels = () => {
             </div>
           </SwiperSlide>,
           <SwiperSlide key={`validation-${idx}`}>
-            Validation Accuracy: {model.validation_accuracy[0]}
+            <div className="outputs">
+              <div className='training-output'>
+
+                <div className='training-text'>
+                  Training Accuracy
+                </div>
+                
+                <div className='training-accuracy'>
+                  {(model.training_accuracy[99]*100).toFixed(2)}%
+                </div>
+
+              </div>
+
+              <br/>
+
+              <div className='validation-output'>
+
+                <div className='validation-text'>
+                  Validation Accuracy
+                </div>
+                
+                <div className='validation-accuracy'>
+                  {(model.validation_accuracy[99]*100).toFixed(2)}%
+                </div>
+              </div>
+            </div>
           </SwiperSlide>
         ]) : <SwiperSlide>Loading models...</SwiperSlide>}
       </Swiper>
 
       <div className={`popup ${isOpen ? "open" : ""}`}>
         <button
-          className="w-full bg-custom-blue text-white p-4 text-center flex justify-center items-center group"
+          className="w-full bg-button-blue text-white p-4 text-center flex justify-center items-center group"
           onClick={() => setIsOpen(!isOpen)}
         >
           Stats and Parameters {isOpen ? "⯆" : "⯅"}

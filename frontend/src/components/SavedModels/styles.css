@@ -27,7 +27,8 @@
     }  
 
     .grid-header > div {
-      background-color: #203749;
+      background-color: #23272D;
+      border: 2px solid #FFFFFF;
       padding: 10px 20px; /* Padding inside each grid item */
       border-radius: 10px; /* Rounded corners */
       box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Optional: adds shadow for 3D effect */
@@ -35,17 +36,26 @@
 
     .parameters-grid {
       display: grid;
+      background-color: #191D21;
+      border-radius: 10px;
       grid-template-columns: repeat(4, minmax(0, 1fr)); /* Each column can shrink to 0 but otherwise takes up 1 fraction of the available space */
-      gap: 5px;
-      padding: 5px;
-      overflow: auto; /* Keep this to allow scrolling if needed */
+      gap: 10px;
+      padding: 10px;
+      overflow: scroll; /* Keep this to allow scrolling if needed */
       max-width: 100%; /* Ensures the grid does not exceed the slide */
       max-height: 100%; /* Ensures grid height fits within the slide */
+      /* Hide scrollbar */
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
     
-    
+    /* Hide scrollbar */
+    .parameters-grid::-webkit-scrollbar {
+      display: none;
+    }
+
     .parameters-item {
-      background: #23272D;
+      background: #203749;
       padding: 8px;
       border-radius: 5px;
       word-wrap: break-word; /* Ensures text fits within the item */
@@ -70,7 +80,6 @@
 
     .popup-content {
       background-color: #121212; /* Or any other color you prefer */
-      border: 1px solid #ccc; /* Optional, adds a light border around the popup content */
       height: 100%;
       padding: 10px; /* Provides some spacing inside the popup content */
     }
@@ -94,11 +103,57 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background-color: transparent;
-      border-color: transparent;
-      border-width: 15px;
+      background-color: #191D21;
+      padding: 15px;
       border-radius: 10px;
+      border: 1px solid #81858B;
       width: 100%;
+    }
+
+    .training-output {
+      background-color: #191D21;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      width: 100%;
+    }
+
+    .validation-output {
+      background-color: #191D21;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      width: 100%;
+    }
+
+    .validation-text {
+      font-weight: bold;
+      font-size: 30px;
+    }
+
+    .validation-accuracy {
+      display: inline-block;
+      margin: 10px;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-weight: bolder;
+      border: 1px solid #81858B;
+      font-size: 48px;
+    }
+
+    .training-text {
+      font-weight: bold;
+      font-size: 30px;
+    }
+
+    .training-accuracy {
+      display: inline-block;
+      margin: 10px;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-weight: bolder;
+      border: 1px solid #81858B;
+      font-size: 48px;
     }
 
     .bg-white {

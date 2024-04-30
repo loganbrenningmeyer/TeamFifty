@@ -46,7 +46,7 @@
     padding: 10px 40px;
     border-radius: 50px;
     margin: 5% 0% 10% 0%;
-    transition: background-color 0.3s;
+    transition: background-color 0.5s;
 }
 
 .save-button:hover {
