@@ -5,6 +5,10 @@ import Data from '../Data/Data';
 import Parameters from '../Parameters/Parameters';
 import axios from 'axios';
 import SVMParameters from '../Parameters/parameters_svm'; 
+import ModelLogo from '../images/Model.svg';
+import DataLogo from '../images/Data.svg';
+import ParametersLogo from '../images/Parameters.svg';
+import SaveLogo from '../images/Save.svg';
 
 function Tabs() {
     axios.defaults.withCredentials = true;
@@ -33,7 +37,7 @@ function Tabs() {
                 return <SVMParameters />;
             // Add cases for any other models you have
             default:
-                return <div>Select a model to see parameters</div>;
+                return <div style={{color: 'white'}}>Select a model to see parameters</div>;
         }
     };
     const handleModelSave = async () => {
@@ -49,20 +53,20 @@ function Tabs() {
             <div className="bloc-tabs">
                 <div className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
                 onClick={() => toggleTab(1)}
-                >Model</div>
+                ><img src={ModelLogo} class="center-img" width={100} height={100} alt='ModelLogo'/></div>
                 <div 
                 className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
                 onClick={() => toggleTab(2)}
-                >Data</div>
+                ><img src={DataLogo} class="center-img" width={75} height={75} img- alt='DataLogo'/></div>
                 <div 
                 className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
                 onClick={() => toggleTab(3)}
-                >Parameters</div>
+                ><img src={ParametersLogo} class="center-img" width={100} height={100} alt='ParametersLogo'/></div>
                 
                 <div 
                 className={toggleState === 4 ? "tabs active-tabs" : "tabs"}
                 onClick={() => toggleTab(4)}
-                >Save Model</div>
+                ><img src={SaveLogo} class="center-img" width={75} height={75} alt='SaveLogo'/></div>
             </div>
             
             <div className="content-tabs">

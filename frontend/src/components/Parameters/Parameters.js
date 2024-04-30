@@ -31,12 +31,12 @@ function Parameters() {
 
   return (
     <div style={{textAlign: 'center', padding: '20px'}}>
-      <h1>What parameters would you like for your model?</h1>
-        <p>Select the parameters you would like to use to train your model</p>
+      {/*<h1>What parameters would you like for your model?</h1>
+        <p>Select the parameters you would like to use to train your model</p>*/}
     
-        <div class='param-grid-container'>
+        <div class='param-grid-container' style={{background: '#23272D'}}>
 
-            <div class='layers-container'>
+            <div class='layers-container' style={{background: '#191D21'}}>
                 <h2 class='layers'>Neurons Per Hidden Layer</h2>
                 <input
                     class="layers_txt"
@@ -47,7 +47,7 @@ function Parameters() {
                 />
             </div>
 
-            <div class='dropout-container'>
+            <div class='dropout-container' style={{background: '#191D21'}}>
                 <h2 class='dropout'>Dropout Rate</h2>
                 <input
                     class="dropout_txt"
@@ -61,7 +61,7 @@ function Parameters() {
                 />
             </div>
 
-            <div class='learning-rate-container'>
+            <div class='learning-rate-container' style={{background: '#191D21'}}>
                 <h2 class='learning_rate'>Learning Rate</h2>
                 <input
                     class="learning_rate_txt"
@@ -75,7 +75,7 @@ function Parameters() {
                 />
             </div>
 
-            <div class='batch-size-container'>
+            <div class='batch-size-container' style={{background: '#191D21'}}>
                 <h2 class='batch_size'>Batch Size</h2>
                 <input
                     class="batch_size_txt"
@@ -90,7 +90,7 @@ function Parameters() {
             </div>
 
 
-            <div class='activation-container'>
+            <div class='activation-container' style={{background: '#191D21'}}>
                 
                 <h2 class='activation_fx'>Activation Function</h2>
                 <button 
@@ -108,7 +108,7 @@ function Parameters() {
                 </button>
             </div>
 
-            <div class='loss-container'>
+            <div class='loss-container' style={{background: '#191D21'}}>
                 <h2 class='loss_function'>Loss Function</h2>
                 <button 
                     class={clickedButtons.loss === 'MSELoss' ? 'clicked' : 'MSELoss'}
@@ -125,7 +125,7 @@ function Parameters() {
                 </button>
             </div>
 
-            <div class='optimizer-container'>
+            <div class='optimizer-container' style={{background: '#191D21'}}>
                 <h2 class='optimizer'>Optimizer</h2>
                 <button 
                     class={clickedButtons.optimizer === 'SGD' ? 'clicked' : 'SGD'}
@@ -143,7 +143,7 @@ function Parameters() {
             </div>
 
 
-            <div class='regularization-container'>
+            <div class='regularization-container' style={{background: '#191D21'}}>
                 <h2 class='regularization'>Regularization</h2>
                 <button 
                     class={clickedButtons.regularization === 'L1' ? 'clicked' : 'L1'}
@@ -161,7 +161,7 @@ function Parameters() {
             </div>
 
 
-            <div class='batch-container'>
+            <div class='batch-container' style={{background: '#191D21'}}>
                 <h2 class='batch_normalization'>Batch Normalization</h2>
                 <button 
                     class={clickedButtons.batch === 'on' ? 'clicked' : 'batch_norm_toggle'}
@@ -173,12 +173,12 @@ function Parameters() {
 
             <button className='train-button' onClick={handleTrain}>Train Model</button>
 
-            <div class='train-container'>
+            <div class='train-container' style={{background: '#191D21'}}>
                 <h2 class='train'>Training Statistics</h2>
                 <p>{trainOutput}</p>
             </div>
 
-            <div class='test-container'>
+            <div class='test-container' style={{background: '#191D21'}}>
                 <h2 class='test'>Validation Statistics</h2>
                 <p>{testOutput}</p>
             </div>

@@ -5,7 +5,7 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    padding: 50px;
+    padding: 75px;
 }
 .container {
     width: 1280px;
@@ -30,8 +30,7 @@
     padding: 10px 20px;
     cursor: pointer;
     text-align: center;
-    transition: background-color 0.3s;
-    
+    transition: background-color 0.2s;
 }
 
 /* Hover effect for tabs */
@@ -55,7 +54,7 @@
     transform: translateX(-50%);
     width: calc(100%);
     height: 5px;
-    background: rgb(88, 147, 241);
+    background: white;
 }
 
 /* Content area */
@@ -66,14 +65,24 @@
     width: 100%;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
+    justify-content: center;
+    align-items: center;
 }
 
 /* General content box styles */
 .content {
-    background: white;
+    background: #23272D;
     display: none;
     width: 100%;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.center-img {
+    text-align: center;
+    display: block;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
 }
 
 /* When content is active */

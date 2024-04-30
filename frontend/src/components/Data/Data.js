@@ -26,6 +26,7 @@ function Data() {
     points_against_total: true
   };
   const [clickedButtons, setClickedButtons] = useState(initialButtonStates);
+  const [continueClicked, setContinueClicked] = useState(false);  // New state for tracking the "Continue" button click
 
   const handleButtonClick = (buttonName) => {
     setClickedButtons((prevState) => ({
@@ -35,13 +36,12 @@ function Data() {
   };
 
   const handleContinue = () => {
+    setContinueClicked(true);
     axios.post('http://localhost:5000/data', clickedButtons);
   };
 
   return (
     <div style={{ textAlign: 'center', padding: '20px' }}>
-      <h1>What NFL data would you like to include in your model?</h1>
-      <p>Select the statistics you would like to use to train your model (all selected by default)</p>
 
       <div className="grid-container">
         <div className="general">
@@ -362,7 +362,7 @@ function Data() {
         </div>
       </div>
 
-      { <button className="continue-button" onClick={handleContinue}>Confirm Selection</button> }
+      { <button className={`continue-button ${continueClicked ? 'clicked' : ''}`} onClick={handleContinue}>Confirm Selection</button> }
     </div>
   );
 }

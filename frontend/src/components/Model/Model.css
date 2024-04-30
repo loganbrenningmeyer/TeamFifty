@@ -1,4 +1,4 @@
-
+/*
 .bg{
   display: flex;
   justify-content: center;
@@ -8,7 +8,7 @@
   height: 100vh;
   background-color: white;
 }
-
+*/
 
 .modelcontainer {
   text-Align: center;
@@ -31,14 +31,13 @@
   margin: 50px;
   cursor: pointer;
   border-radius: 20px;
-  height: 400px;
+  height: 500px;
   width: 250px;
   transition: background-color 0.5s, border 0.5s;
 }
 
-.select-nn.clicked {
-  background-color: #45a049;
-  border: 2px solid #3e623f;
+.select-nn.active {
+  border: 2px solid white;
 }
 
 .continue-button {

@@ -18,6 +18,7 @@
       "activation_fx activation_fx"
       "relu tanh";
     grid-gap: 10px;
+    color: white;
   }
   
   .loss-container {
@@ -27,6 +28,7 @@
       "loss_function loss_function"
       "MSELoss BCELoss";
     grid-gap: 10px;
+    color: white;
   }
   
   .optimizer-container {
@@ -36,6 +38,7 @@
       "optimizer optimizer"
       "SGD Adam";
     grid-gap: 10px;
+    color: white;
   }
   
   .regularization-container {
@@ -45,6 +48,7 @@
       "regularization regularization"
       "L1 L2";
     grid-gap: 10px;
+    color: white;
   }
   
   .learning-rate-container {
@@ -54,6 +58,7 @@
     grid-template-columns: 2fr 1fr;
     grid-gap: 10px;
     align-items: center;
+    color: white;
   }
   
   .batch-container {
@@ -62,6 +67,7 @@
     grid-template-areas: "batch_normalization batch_norm_toggle";
     grid-gap: 10px;
     align-items: center;
+    color: white;
   }
   
   .layers-container {
@@ -71,6 +77,7 @@
     grid-template-columns: 2fr 1fr;
     grid-gap: 10px;
     align-items: center;
+    color: white;
   }
   
   .dropout-container {
@@ -80,6 +87,7 @@
     grid-template-columns: 2fr 1fr;
     grid-gap: 10px;
     align-items: center;
+    color: white;
   }
   
   .batch-size-container {
@@ -89,6 +97,7 @@
     grid-template-columns: 2fr 1fr;
     grid-gap: 10px;
     align-items: center;
+    color: white;
   }
   
   .param-grid-container > div {
@@ -97,6 +106,7 @@
     font-size: 16px;
     padding: 10px;
     border-radius: 10px;
+    color: white;
   }
   
   .layers { grid-area: layers; }
@@ -113,17 +123,15 @@
   }
   
   .param-grid-container > div > button {
-    background-color: cornflowerblue;
+    background-color: #203749;
     text-align: center;
     height: 50px;
     border-radius: 10px;
     font-size: 16px;
-    transition: background-color 0.5s, border 0.5s;
   }
   
   .param-grid-container > div > button.clicked {
-    background-color: #45a049;
-    border: 2px solid #3e623f;
+    border: 2px solid #81858B;
   }
   
   .activation_fx { grid-area: activation_fx; }
@@ -143,7 +151,7 @@
   
   .train-button {
     grid-area: train-button;
-    background-color: #4CAF50;
+    background-color: rgb(0, 162, 255);
     border: none;
     color: white;
     text-align: center;

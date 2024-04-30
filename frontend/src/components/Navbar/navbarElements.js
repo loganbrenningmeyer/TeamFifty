@@ -39,6 +39,7 @@ export const NavLink = styled(Link)`
   }
 `;
 
+
 export const NavLogo = styled.img`
 color: #F7F4EF;
 justify-self: flex-Start;
@@ -49,7 +50,7 @@ align-items: center;
 margin-left: 24px;
 font-weight: bold;
 text-decoration: none;
-height: 90%;
+height: 125%;
 margin-top: 2px;
 `;
 

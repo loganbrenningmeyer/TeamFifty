@@ -9,7 +9,11 @@ import {
   NavLogo,
   NavbarContainer
 } from './navbarElements';
-import logo from '../images/football.jpg';
+import logo from '../images/Logo.svg';
+import LeaderboardLogo from '../images/Leaderboards.svg';
+import SearchLogo from '../images/Search.svg';
+import CreateLogo from '../images/Create.svg';
+import SavedLogo from '../images/Saved.svg';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom'; // Import useNavigate instead of useHistory
 
@@ -56,14 +60,14 @@ const Navbar = () => {
           <Bars />
           <NavMenu>
             <NavLink to='/leaderboard' activeStyle>
-              Leaderboard
+              <img src={LeaderboardLogo} alt='LeaderboardLogo' style={{height: '75%'}}/>
             </NavLink>
             <NavLink to='/searchmodels' activeStyle>
-              Search Models
+              <img src={SearchLogo} alt='SearchLogo' style={{height: '75%'}}/>
             </NavLink>
             {loggedIn ? (
               <NavLink to='/createmodel' activeStyle>
-                Create Model
+                <img src={CreateLogo} alt='CreateLogo' style={{height: '75%'}}/>
               </NavLink>
             ) : (
               <NavLink activeStyle>
@@ -72,7 +76,7 @@ const Navbar = () => {
             )}
             {loggedIn ? (
               <NavLink to='/savedmodels' activeStyle>
-                Saved Models
+                <img src={SavedLogo} alt='SavedLogo' style={{height: '75%'}}/>
               </NavLink>
             ) : (
               <NavLink activeStyle>
