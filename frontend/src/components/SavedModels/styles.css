@@ -85,7 +85,7 @@
     height: 50%; /* Each chart takes half the height of the popup content */
     width: 90%; /* Control width to 90% of the popup content */
     margin: 10px;
-    background-color: #23272D; /* Light gray background, adjust as needed */
+    background-color: #191D21; /* Light gray background, adjust as needed */
     border-radius: 15px;
     padding: 10px;
   }
@@ -94,8 +94,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #d9e3f1;
-    border-color: #d9e3f1;
+    background-color: #81858B;
+    border-color: #81858B;
     border-width: 15px;
     border-radius: 10px;
     width: 100%;
