@@ -85,16 +85,23 @@ padding: 16px 16px;
 margin-bottom: 32px;
 border: none;
 border-radius: 4px;
+color: #000
 `;
 
 export const FormButton = styled.button`
-background: #256ce1;
+background: rgb(23, 146, 217);
 padding: 16px 0;
 border: none;
 border-radius: 4px;
 color: #fff;
 font-size: 20px;
+transition: all 0.5s ease-in-out;
 cursor: pointer;
+
+&:hover {
+    transition: all 0.5s ease-in-out;
+    background: rgb(16, 106, 159);
+}
 `;
 
 export const Text = styled(Link)`

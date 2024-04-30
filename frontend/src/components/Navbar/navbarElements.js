@@ -102,21 +102,20 @@ export const NavBtn = styled.nav`
 
 export const NavBtnLink = styled(Link)`
   border-radius: 4px;
-  background: #256ce1;
+  background: rgb(23, 146, 217);
   padding: 10px 22px;
   color: #fff;
   outline: none;
   border: none;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.5s ease-in-out;
   text-decoration: none;
 
   /* Second Nav */
   margin-left: 24px;
 
   &:hover {
-    transition: all 0.2s ease-in-out;
-    background: #fff;
-    color: #010606;
+    transition: all 0.5s ease-in-out;
+    background: rgb(16, 106, 159);
   }
 `;

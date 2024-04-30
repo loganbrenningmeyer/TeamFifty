@@ -84,9 +84,12 @@ function Tabs() {
                 </div>
 
                 <div className={toggleState === 4 ? "content active-content" : "content"}>
-                    <h2>Train</h2>
-                    <input type='text' name='model name' id='modelName' onChange={(e) => setModelName(e.target.value)}/>
-                    <button onClick={handleModelSave}>Save</button>
+                    <div className='centered-content'>
+                        <h1 className='name-text'>What would you like to name your model?</h1>
+                        <input className='name-input' type='text' name='model name' id='modelName' onChange={(e) => setModelName(e.target.value)}/>
+                        <br/>
+                        <button className='save-button' onClick={handleModelSave}>Save</button>
+                    </div>
                 </div>
 
             </div>

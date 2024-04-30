@@ -1,142 +1,142 @@
-#app {
-    height: 100%;
-  }
-  html,
-  body {
-    position: relative;
-    height: 100%;
-  }
-  
-  body {
-    background: #121212;
-    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-    font-size: 14px;
-    color: white;
-    margin: 0;
-    padding: 0;
-  }
+  #app {
+      height: 100%;
+    }
+    html,
+    body {
+      position: relative;
+      height: 100%;
+    }
+    
+    body {
+      background: #121212;
+      font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
 
-  .grid-header {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    text-align: center;
-    gap: 10px;
-    padding: 10px;
-    background-color: #121212; /* Light gray background */
-    border-bottom: 1px solid #ccc; /* Separator line */
-  }  
+    .grid-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      text-align: center;
+      gap: 10px;
+      padding: 10px;
+      background-color: #121212; /* Light gray background */
+      border-bottom: 1px solid #ccc; /* Separator line */
+    }  
 
-  .grid-header > div {
-    background-color: #203749;
-    padding: 10px 20px; /* Padding inside each grid item */
-    border-radius: 10px; /* Rounded corners */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Optional: adds shadow for 3D effect */
-  }  
+    .grid-header > div {
+      background-color: #203749;
+      padding: 10px 20px; /* Padding inside each grid item */
+      border-radius: 10px; /* Rounded corners */
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Optional: adds shadow for 3D effect */
+    }  
 
-  .parameters-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr)); /* Each column can shrink to 0 but otherwise takes up 1 fraction of the available space */
-    gap: 5px;
-    padding: 5px;
-    overflow: auto; /* Keep this to allow scrolling if needed */
-    max-width: 100%; /* Ensures the grid does not exceed the slide */
-    max-height: 100%; /* Ensures grid height fits within the slide */
-  }
-  
-  
-  .parameters-item {
-    background: #23272D;
-    padding: 8px;
-    border-radius: 5px;
-    word-wrap: break-word; /* Ensures text fits within the item */
-    overflow: hidden; /* Prevents content from spilling out */
-    text-overflow: ellipsis; /* Adds an ellipsis if the text overflows */
-    display: block; /* Ensures the content respects padding and border settings */
-  }
+    .parameters-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr)); /* Each column can shrink to 0 but otherwise takes up 1 fraction of the available space */
+      gap: 5px;
+      padding: 5px;
+      overflow: auto; /* Keep this to allow scrolling if needed */
+      max-width: 100%; /* Ensures the grid does not exceed the slide */
+      max-height: 100%; /* Ensures grid height fits within the slide */
+    }
+    
+    
+    .parameters-item {
+      background: #23272D;
+      padding: 8px;
+      border-radius: 5px;
+      word-wrap: break-word; /* Ensures text fits within the item */
+      overflow: hidden; /* Prevents content from spilling out */
+      text-overflow: ellipsis; /* Adds an ellipsis if the text overflows */
+      display: block; /* Ensures the content respects padding and border settings */
+    }
 
-  .popup {
-    position: fixed;
-    width: 100%;
-    height: 90vh;
-    bottom: 0;
-    z-index: 10;
-    transform: translateY(calc(100% - 50px)); /* Start hidden below the screen */
-    transition: transform 0.3s ease; /* Smooth transition for the transform property */
-  }
+    .popup {
+      position: fixed;
+      width: 100%;
+      height: 90vh;
+      bottom: 0;
+      z-index: 10;
+      transform: translateY(calc(100% - 50px)); /* Start hidden below the screen */
+      transition: transform 0.3s ease; /* Smooth transition for the transform property */
+    }
 
-  .popup.open {
-      transform: translateY(0); /* Move to show the popup */
-  }
+    .popup.open {
+        transform: translateY(0); /* Move to show the popup */
+    }
 
-  .popup-content {
-    background-color: #121212; /* Or any other color you prefer */
-    border: 1px solid #ccc; /* Optional, adds a light border around the popup content */
-    height: 100%;
-    padding: 10px; /* Provides some spacing inside the popup content */
-  }
+    .popup-content {
+      background-color: #121212; /* Or any other color you prefer */
+      border: 1px solid #ccc; /* Optional, adds a light border around the popup content */
+      height: 100%;
+      padding: 10px; /* Provides some spacing inside the popup content */
+    }
 
-  .stats-grid {
-    display: flex;
-    flex-direction: row; /* Stack children vertically */
-    height: 100%; /* Full height of the popup content */
-  }
+    .stats-grid {
+      display: flex;
+      flex-direction: row; /* Stack children vertically */
+      height: 100%; /* Full height of the popup content */
+    }
 
-  .stats-grid > div {
-    height: 50%; /* Each chart takes half the height of the popup content */
-    width: 90%; /* Control width to 90% of the popup content */
-    margin: 10px;
-    background-color: #191D21; /* Light gray background, adjust as needed */
-    border-radius: 15px;
-    padding: 10px;
-  }
+    .stats-grid > div {
+      height: 50%; /* Each chart takes half the height of the popup content */
+      width: 90%; /* Control width to 90% of the popup content */
+      margin: 10px;
+      background-color: #191D21; /* Light gray background, adjust as needed */
+      border-radius: 15px;
+      padding: 10px;
+    }
 
-  .model-vis {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: transparent;
-    border-color: transparent;
-    border-width: 15px;
-    border-radius: 10px;
-    width: 100%;
-  }
+    .model-vis {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: transparent;
+      border-color: transparent;
+      border-width: 15px;
+      border-radius: 10px;
+      width: 100%;
+    }
 
-  .bg-white {
-    position: absolute;
-    /* bottom: 100%; This will place it directly above the bottom element */
-    left: 0;
-    right: 0;
-  }
-  
-  .swiper {
-    width: 100%;
-    height: 100%;
+    .bg-white {
+      position: absolute;
+      /* bottom: 100%; This will place it directly above the bottom element */
+      left: 0;
+      right: 0;
+    }
+    
+    .swiper {
+      width: 100%;
+      height: 100%;
 
-    /* Ensure swiper on bottom */
-    position: relative;
-    z-index: 0;
-  }
-  
-  .swiper-slide {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    padding: 10px;
-    box-sizing: border-box; 
-    height: 80vh; /* Includes padding in the width calculation */
-    width: 100%; /* Adjust if necessary to ensure it uses the correct amount of space */
-  }
-  
-  
-  .swiper-slide img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
+      /* Ensure swiper on bottom */
+      position: relative;
+      z-index: 0;
+    }
+    
+    .swiper-slide {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      padding: 10px;
+      box-sizing: border-box; 
+      height: 80vh; /* Includes padding in the width calculation */
+      width: 100%; /* Adjust if necessary to ensure it uses the correct amount of space */
+    }
+    
+    
+    .swiper-slide img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
 
-  .swiper-pagination-bullets {
-    display: none;
-  }
+    .swiper-pagination-bullets {
+      display: none;
+    }

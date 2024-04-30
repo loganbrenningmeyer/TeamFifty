@@ -23,7 +23,7 @@ function About() {
           <div className="hidden lg:block max-w-[700px] text-center lg:text-left text-md xs:text-lg lg:text-2xl pb-8">To get started you can hit the sign up button below or log in above.</div>
           <div className="grid xs:block gap-5 xs:gap-0 m-auto lg:m-0">
             <a href="/signup" className="m-auto">
-              <button className="transition-all inline-block text-2xl px-6 py-3 leading-none rounded font-bold text-white bg-blue-500 hover:bg-blue-400 drop-shadow hover:drop-shadow-sm">Sign Up</button>
+              <button className="transition-all duration-500 ease-in-out inline-block text-2xl px-6 py-3 leading-none rounded font-bold text-white bg-button-blue hover:bg-button-blue-hover drop-shadow hover:drop-shadow-sm">Sign Up</button>
             </a>
 
           </div>

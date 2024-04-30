@@ -7,6 +7,52 @@
     height: 100vh;
     padding: 75px;
 }
+
+.centered-content {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%; /* Ensures the content uses full width for center alignment */
+}
+
+.name-text {
+    display: inline-block;
+    margin: 10% 0% 5% 0%;
+    padding: 10px 20px 10px 20px;
+    border-radius: 50px;
+    font-size: 30px;
+    background-color: #191D21;
+}
+
+.name-input {
+    background-color: #191D21;
+    border: solid 2px #191D21;
+    outline: none;
+    transition: border 0.5s;
+    border-radius: 50px;
+    height: 100px;
+    width: 60%;
+    padding: 30px;
+    font-size: 30px;
+}
+
+.name-input:focus {
+    border: solid 2px #FFFFFF;
+}
+
+.save-button {
+    background-color: rgb(23, 146, 217);
+    font-size: 30px;
+    padding: 10px 40px;
+    border-radius: 50px;
+    margin: 5% 0% 10% 0%;
+    transition: background-color 0.3s;
+}
+
+.save-button:hover {
+    background-color: rgb(16, 106, 159);
+}
+
 .container {
     width: 1280px;
     height: 100%;
@@ -35,7 +81,12 @@
 
 /* Hover effect for tabs */
 .tabs:hover {
-    background-color: rgba(0,0,0,0.1);
+    background-color: rgba(0,0,0,0.15);
+}
+
+.active-tabs:hover {
+    background-color: #23272D;
+
 }
 
 /* Active tab style */

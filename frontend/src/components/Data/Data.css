@@ -41,7 +41,7 @@
 
 .general-grid-container > button {
     background-color: #203749;
-    border: 2px solid #203749;
+    border: 1px solid #203749;
     transition: background-color 0.5s, border 0.5s;
     text-align: center;
     height: 40px;
@@ -49,7 +49,7 @@
 }
 
 .general-grid-container > button.clicked {
-    border: 2px solid #FFFFFF;
+    border: 1px solid #FFFFFF;
 }
 
 .h2h {
@@ -85,7 +85,7 @@
 
 .player-grid-container > button {
     background-color: #203749;
-    border: 2px solid #203749;
+    border: 1px solid #203749;
     text-align: center;
     height: 40px;
     border-radius: 10px;
@@ -93,7 +93,7 @@
 }
 
 .player-grid-container > button.clicked {
-    border: 2px solid #FFFFFF;
+    border: 1px solid #FFFFFF;
 }
 
 .QB {
@@ -179,7 +179,7 @@
 
 .team-grid-container > button {
     background-color: #203749;
-    border: 2px solid #203749;
+    border: 1px solid #203749;
     transition: background-color 0.5s, border 0.5s;
     text-align: center;
     font-size: 12px;
@@ -188,7 +188,7 @@
 }
 
 .team-grid-container > button.clicked {
-    border: 2px solid #FFFFFF;
+    border: 1px solid #FFFFFF;
 }
 
 .first_downs_total {
@@ -316,7 +316,7 @@
     bottom: 10px;
     right: 10px;
     background-color: rgb(23, 146, 217);
-    border: 2px solid #203749;
+    border: 2px solid rgb(23, 146, 217);
     transition: background-color 0.5s, border 0.5s;
     color: white;
     padding: 10px 20px;
