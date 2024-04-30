@@ -7,7 +7,7 @@ import squid from '../images/brady.jpg';
 function About() {
   return (
 
-    <div className="flex relative justify-center h-[1000px] lg:h-[970px] bg-gray-900" id="Landing">
+    <div className="flex relative justify-center h-[1000px] lg:h-[970px] bg-bg-grey" id="Landing">
       <div className="bottom-0 absolute z-[2] translate-y-[6.9px] select-none">
         {/* <Image quality={100} priority={true} src={bg}/> */}
       </div>
