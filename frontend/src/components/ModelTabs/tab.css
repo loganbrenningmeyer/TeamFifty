@@ -20,7 +20,7 @@
     margin: 10% 0% 5% 0%;
     padding: 10px 20px 10px 20px;
     border-radius: 50px;
-    font-size: 30px;
+    font-size: 25px;
     background-color: #191D21;
 }
 
@@ -42,7 +42,7 @@
 
 .save-button {
     background-color: rgb(23, 146, 217);
-    font-size: 30px;
+    font-size: 25px;
     padding: 10px 40px;
     border-radius: 50px;
     margin: 5% 0% 10% 0%;

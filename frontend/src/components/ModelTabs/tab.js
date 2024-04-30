@@ -86,6 +86,7 @@ function Tabs() {
                 <div className={toggleState === 4 ? "content active-content" : "content"}>
                     <div className='centered-content'>
                         <h1 className='name-text'>What would you like to name your model?</h1>
+                        <br/>
                         <input className='name-input' type='text' name='model name' id='modelName' onChange={(e) => setModelName(e.target.value)}/>
                         <br/>
                         <button className='save-button' onClick={handleModelSave}>Save</button>
