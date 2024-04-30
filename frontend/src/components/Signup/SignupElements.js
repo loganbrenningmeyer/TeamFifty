@@ -84,6 +84,7 @@ export const FormInput = styled.input`
 padding: 16px 16px;
 margin-bottom: 32px;
 border: none;
+color: #000;
 border-radius: 4px;
 `;
 
