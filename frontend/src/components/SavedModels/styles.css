@@ -66,6 +66,7 @@
 
     .popup {
       position: fixed;
+      border-top: 2px solid #FFFFFF;
       width: 100%;
       height: 90vh;
       bottom: 0;
