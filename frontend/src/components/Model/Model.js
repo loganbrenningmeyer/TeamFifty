@@ -38,8 +38,8 @@ function Model({ onModelSelect }) { // onModelSelect function passed as a prop
             <img src={SVMLogo} alt='SVMLogo'/>
           </button>
           <button
-            className={`select-nn ${selectedModel === 'GradientBoosting' ? 'active' : ''}`}
-            onClick={() => handleButtonClick('GradientBoosting')}> {/* Updated model type */}
+            className={`select-nn ${selectedModel === 'GB' ? 'active' : ''}`}
+            onClick={() => handleButtonClick('GB')}> {/* Updated model type */}
             <img src={GBLogo} alt='GBLogo'/>
           </button>
         </div>

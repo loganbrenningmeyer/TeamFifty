@@ -9,6 +9,7 @@ import ModelLogo from '../images/Model.svg';
 import DataLogo from '../images/Data.svg';
 import ParametersLogo from '../images/Parameters.svg';
 import SaveLogo from '../images/Save.svg';
+import GBParameters from '../Parameters/parameters_gb';
 
 function Tabs() {
     axios.defaults.withCredentials = true;
@@ -35,6 +36,8 @@ function Tabs() {
                 return <Parameters />;
             case 'SVM':
                 return <SVMParameters />;
+            case 'GB':
+                return <GBParameters />;
             // Add cases for any other models you have
             default:
                 return <div style={{color: 'white'}}>Select a model to see parameters</div>;

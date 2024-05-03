@@ -14,15 +14,24 @@ import players
 import ANN
 from bson.binary import Binary
 import io
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, normalize
 from sklearn.model_selection import train_test_split
 from sklearn import svm, metrics
+import numpy as np
 
-# For model visualizations
+# Gradient Boosting
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.metrics import log_loss, accuracy_score
+import joblib
+
+# ANN visualization
 import visualkeras
 import tensorflow as tf
 import base64
 from PIL import ImageFont
+# GB visualization
+from sklearn.tree import plot_tree
+import matplotlib.pyplot as plt
 
 import torch2keras
 
@@ -150,11 +159,16 @@ def saveModel():
         email = session['email']
         
         buffer = io.BytesIO()
-        torch.save(session["ANNModel"],buffer)
+        if (session["model_type"] == "ANN"):
+            torch.save(session["model"],buffer)
+        elif (session["model_type"] == "GB"):
+            joblib.dump(session["model"], buffer)
+            buffer.seek(0)  # Rewind the buffer to the beginning after writing
+
         info = {
             'email':email,
             'model_name':modelName,
-            'model_type':'ANN',
+            'model_type' : session["model_type"],
             'model': buffer.getvalue(),
             'selected_stats': session["selected_stats"],
             'training_loss' : session["training_loss"],
@@ -162,7 +176,7 @@ def saveModel():
             'validation_loss' : session["validation_loss"],
             'validation_accuracy' : session["validation_accuracy"]
         }
-        session.pop("ANNModel",None)
+        session.pop("model",None)
         savedModels.insert_one(info)
         return 'model successfully saved',204
     return 'user not logged in',406
@@ -199,44 +213,55 @@ def getModels():
         model = ANN.ANN 
 
         email = session['email']
-        for entries in savedModels.find({'email':email}):
+        for entry in savedModels.find({'email':email}):
 
             # Load PyTorch model
-            buffer = io.BytesIO(entries['model'])
-            model = torch.load(buffer,weights_only=False)
+            if (entry['model_type'] == "ANN"):
+                buffer = io.BytesIO(entry['model'])
+                model = torch.load(buffer,weights_only=False)
 
-            input_shape = get_input_shape(model)
-            
-            keras_model = torch2keras.convert_pytorch_model_to_keras(model, input_shape)
+                model.train(mode=False)
 
-            font = ImageFont.truetype("ARIAL.ttf", 16)
+                input_shape = get_input_shape(model)
+                
+                keras_model = torch2keras.convert_pytorch_model_to_keras(model, input_shape)
 
-            # Get model visualization png
-            visualkeras.layered_view(keras_model, to_file='output.png', 
-                                     legend=True, 
-                                     scale_xy=1, scale_z=0.75, 
-                                     min_xy=64,
-                                     background_fill=None,
-                                     font=font,
-                                     font_color='white')
+                font = ImageFont.truetype("ARIAL.ttf", 16)
 
-            try:
+                # Get model visualization png
+                visualkeras.layered_view(keras_model, to_file='output.png', 
+                                        legend=True, 
+                                        scale_xy=1, scale_z=0.75, 
+                                        min_xy=64,
+                                        background_fill=None,
+                                        font=font,
+                                        font_color='white')
+
+                try:
+                    with open('output.png', 'rb') as image_file:
+                        model_vis = base64.b64encode(image_file.read()).decode('utf-8')
+                except FileNotFoundError:
+                    model_vis = "Visualization not available"
+            # Load GB model
+            elif (entry['model_type'] == "GB"):
+                model = joblib.load(io.BytesIO(entry['model']))
+
+                plt.figure(figsize=(20, 10), dpi=300)
+                plot_tree(model.estimators_[0][0], filled=True, rounded=True)
+                plt.savefig('output.png', transparent=True, bbox_inches='tight')
+
                 with open('output.png', 'rb') as image_file:
-                    model_vis = base64.b64encode(image_file.read()).decode('utf-8')
-            except FileNotFoundError:
-                model_vis = "Visualization not available" 
+                    model_vis = base64.b64encode(image_file.read()).decode('utf-8') 
 
-            saved_models.append({"email" : entries['email'],
-                                 "model_name" : entries['model_name'],
-                                "model_type" : entries['model_type'],
+            saved_models.append({"email" : entry['email'],
+                                 "model_name" : entry['model_name'],
+                                "model_type" : entry['model_type'],
                                 "model_vis" : model_vis,
-                                "selected_stats" : entries['selected_stats'],
-                                "training_loss" : entries['training_loss'],
-                                "training_accuracy" : entries['training_accuracy'],
-                                "validation_loss" : entries['validation_loss'],
-                                "validation_accuracy" : entries['validation_accuracy']})
-
-            model.train(mode=False)
+                                "selected_stats" : entry['selected_stats'],
+                                "training_loss" : entry['training_loss'],
+                                "training_accuracy" : entry['training_accuracy'],
+                                "validation_loss" : entry['validation_loss'],
+                                "validation_accuracy" : entry['validation_accuracy']})
 
         session["saved_models"] = saved_models
 
@@ -319,7 +344,8 @@ def train():
     print(validation_accuracy)
 
     # Save PyTorch model
-    session["ANNModel"] = model
+    session["model"] = model
+    session["model_type"] = "ANN"
 
     # Save training loss/accuracy
     session["training_loss"] = training_loss
@@ -328,6 +354,97 @@ def train():
     session["validation_accuracy"] = validation_accuracy
 
     return jsonify({'training_loss': training_loss, 'training_accuracy': training_accuracy, 'validation_loss': validation_loss, 'validation_accuracy': validation_accuracy})
+
+@app.route('/train_GB', methods=['POST'])
+def train_GB():
+    parameters = request.json
+    print("Gradient Boosting training parameters:", parameters)
+    
+    # Get the parameters from the frontend
+    n_estimators = int(parameters['n_estimators'])
+    learning_rate = float(parameters['gb_learning_rate'])
+    max_depth = int(parameters['max_depth'])
+    min_samples_split = int(parameters['min_samples_split'])
+    min_samples_leaf = int(parameters['min_samples_leaf'])
+    subsample = float(parameters['subsample'])
+    # Fix max_features naming
+    if (parameters['max_features'] == 'null'):
+        max_features = None
+    else:
+        max_features = parameters['max_features']
+
+    # Load the data
+    input_data = torch.load("input_data.pt")
+    target_data = torch.load("target_data.pt")
+
+    # Normalize the data
+    input_data = F.normalize(input_data, p=2, dim=0)
+
+    # Calculate training size
+    train_size = int(0.8 * len(input_data))
+
+    # Shuffle the data
+    shuffle = torch.randperm(input_data.shape[0])
+    input_data = input_data[shuffle]
+    target_data = target_data[shuffle]
+
+    # Split the data into training and testing datasets
+    X_train, X_test, y_train, y_test = train_test_split(input_data.numpy(), target_data.numpy(), test_size=0.2)
+    
+    gbc = GradientBoostingClassifier(
+        n_estimators=n_estimators,
+        learning_rate=learning_rate,
+        max_depth=max_depth,
+        min_samples_split=min_samples_split,
+        min_samples_leaf=min_samples_leaf,
+        max_features=max_features,
+        subsample=subsample
+    )
+
+    # List to hold metrics for each stage
+    training_loss = []
+    training_accuracy = []
+    validation_loss = []
+    validation_accuracy = []
+
+    # Fit the model incrementally and calculate metrics at each stage
+    gbc.fit(X_train, y_train)
+
+    # Iterate over the staged predictions for both training and testing sets
+    for train_pred in gbc.staged_predict(X_train):
+        training_accuracy.append(accuracy_score(y_train, train_pred))
+        training_loss.append(log_loss(y_train, train_pred))
+
+    for test_pred in gbc.staged_predict(X_test):
+        validation_accuracy.append(accuracy_score(y_test, test_pred))
+        validation_loss.append(log_loss(y_test, test_pred))
+
+    # Now print or store your metrics as needed
+    print("Training Losses:", training_loss)
+    print("Training Accuracies:", training_accuracy)
+    print("Validation Losses:", validation_loss)
+    print("Validation Accuracies:", validation_accuracy)
+
+    # Evaluate final model
+    final_accuracy = accuracy_score(y_test, gbc.predict(X_test))
+    print(f"Final Accuracy: {final_accuracy:.2f}")
+
+    # Save model
+    session["model"] = gbc
+    session["model_type"] = "GB"
+
+    # Save training loss/accuracy
+    session["training_loss"] = training_loss
+    session["training_accuracy"] = training_accuracy
+    session["validation_loss"] = validation_loss
+    session["validation_accuracy"] = validation_accuracy
+
+    return jsonify({
+        'training_loss': training_loss,
+        'training_accuracy': training_accuracy,
+        'validation_loss': validation_loss,
+        'validation_accuracy': validation_accuracy
+    })
 
 @app.route('/train_SVM', methods=['POST'])
 def train_SVM():
