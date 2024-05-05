@@ -174,7 +174,8 @@ def saveModel():
             'training_loss' : session["training_loss"],
             'training_accuracy' : session["training_accuracy"],
             'validation_loss' : session["validation_loss"],
-            'validation_accuracy' : session["validation_accuracy"]
+            'validation_accuracy' : session["validation_accuracy"],
+            'validation_data' : session["validation_data"]
         }
         session.pop("model",None)
         savedModels.insert_one(info)
@@ -332,16 +333,16 @@ def train():
     training_set = TensorDataset(input_data[:train_size], target_data[:train_size])
     validation_set = TensorDataset(input_data[train_size:], target_data[train_size:])
 
+    # For saving
+    validation_data_list = [tensor.numpy().tolist() for tensor in validation_set.tensors]
+
+    print("Validation data:", validation_data_list)
+
     # Create DataLoaders
     training_loader = DataLoader(training_set, batch_size=batch_size, shuffle=True)
     validation_loader = DataLoader(validation_set, batch_size=batch_size, shuffle=False)
     
     training_loss, training_accuracy, validation_loss, validation_accuracy = model.train(training_dataloader=training_loader, validation_dataloader=validation_loader, mode=True) 
-
-    print(training_loss)
-    print(training_accuracy)
-    print(validation_loss)
-    print(validation_accuracy)
 
     # Save PyTorch model
     session["model"] = model
@@ -352,6 +353,7 @@ def train():
     session["training_accuracy"] = training_accuracy
     session["validation_loss"] = validation_loss
     session["validation_accuracy"] = validation_accuracy
+    session["validation_data"] = validation_data_list
 
     return jsonify({'training_loss': training_loss, 'training_accuracy': training_accuracy, 'validation_loss': validation_loss, 'validation_accuracy': validation_accuracy})
 
@@ -391,6 +393,11 @@ def train_GB():
     # Split the data into training and testing datasets
     X_train, X_test, y_train, y_test = train_test_split(input_data.numpy(), target_data.numpy(), test_size=0.2)
     
+    # Get validation data for saving
+    validation_data_list = [X_test.tolist(), y_test.tolist()]
+
+    print("Validation data:", validation_data_list)
+
     gbc = GradientBoostingClassifier(
         n_estimators=n_estimators,
         learning_rate=learning_rate,
@@ -419,12 +426,6 @@ def train_GB():
         validation_accuracy.append(accuracy_score(y_test, test_pred))
         validation_loss.append(log_loss(y_test, test_pred))
 
-    # Now print or store your metrics as needed
-    print("Training Losses:", training_loss)
-    print("Training Accuracies:", training_accuracy)
-    print("Validation Losses:", validation_loss)
-    print("Validation Accuracies:", validation_accuracy)
-
     # Evaluate final model
     final_accuracy = accuracy_score(y_test, gbc.predict(X_test))
     print(f"Final Accuracy: {final_accuracy:.2f}")
@@ -438,6 +439,7 @@ def train_GB():
     session["training_accuracy"] = training_accuracy
     session["validation_loss"] = validation_loss
     session["validation_accuracy"] = validation_accuracy
+    session["validation_data"] = validation_data_list
 
     return jsonify({
         'training_loss': training_loss,
@@ -465,6 +467,9 @@ def train_SVM():
     input_data = scaler.fit_transform(input_data)
     X_train, X_test, y_train, y_test = train_test_split(input_data, target_data, test_size=0.2, random_state=42)
 
+    # Get validation data for saving
+    validation_data_list = [X_test.tolist(), y_test.tolist()]
+
     # SVM model initialization and training
     model = svm.SVC(kernel=kernel, C=C, gamma=gamma)
     model.fit(X_train, y_train)
@@ -474,6 +479,8 @@ def train_SVM():
     accuracy = metrics.accuracy_score(y_test, y_pred)
     confusion_matrix = metrics.confusion_matrix(y_test, y_pred)
     classification_report = metrics.classification_report(y_test, y_pred, output_dict=True)
+
+    session["validation_data"] = validation_data_list
 
     # Structure the classification report for easier consumption
     report_details = {

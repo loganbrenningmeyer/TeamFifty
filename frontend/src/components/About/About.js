@@ -19,7 +19,7 @@ function About() {
         </div>
         <div className="m-auto px-10 lg:p-0 flex flex-col text-white">
           <div className="m-auto lg:m-0 text-4xl lg:text-7xl text-center lg:text-left font-bold pb-8">Play Ball</div>
-          <div className="max-w-[700px] text-center lg:text-left text-md xs:text-lg lg:text-2xl pb-8">Ballgorithm is a public platform for creating/sharing custom sports betting machine learning models</div>
+          <div className="max-w-[700px] text-center lg:text-left text-md xs:text-lg lg:text-2xl pb-8">Ballgorithms is a public platform for creating/sharing custom sports betting machine learning models</div>
           <div className="hidden lg:block max-w-[700px] text-center lg:text-left text-md xs:text-lg lg:text-2xl pb-8">To get started you can hit the sign up button below or log in above.</div>
           <div className="grid xs:block gap-5 xs:gap-0 m-auto lg:m-0">
             <a href="/signup" className="m-auto">
