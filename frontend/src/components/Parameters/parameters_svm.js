@@ -4,9 +4,6 @@ import './parameters_svm.css';
 
 function SVMParameters() {
     const [inputValues, setInputValues] = useState({
-      kernel: 'rbf', // Default kernel type
-      C: 1.0,        // Default C value
-      gamma: '(scale,auto,>0)' // Default gamma value
     });
     const [output, setOutput] = useState({
       accuracy: '',
@@ -14,19 +11,32 @@ function SVMParameters() {
       detailedReport: {}
     });
 
+    const [inputValidity, setInputValidity] = useState({
+      C: false,
+      gamma: false
+    });
+
     const handleInputChange = (event) => {
       const { name, value } = event.target;
       setInputValues({ ...inputValues, [name]: value });
+      setInputValidity({ ...inputValidity, [name]: value.trim() !== '' });
     };
 
     const handleTrain = async () => {
       try {
-        const response = await axios.post('http://localhost:5000/train_SVM', inputValues);
-        setOutput({
+        const isValid = Object.values(inputValidity).every(valid => valid);
+        if(isValid){
+          const response = await axios.post('http://localhost:5000/train_SVM', inputValues);
+          setOutput({
           accuracy: response.data.accuracy,
           confusionMatrix: response.data.confusion_matrix,
           detailedReport: response.data.detailed_report
-        });
+          });
+        }
+        else{
+          alert('Please fill in all required fields.');
+          return;
+        }
       } catch (error) {
         console.error('Error during training:', error);
       }
@@ -52,8 +62,9 @@ function SVMParameters() {
             min="0.01"
             max="1000"
             name="C"
-            value={inputValues.C}
+            value={inputValues.C || ''}
             onChange={handleInputChange}
+            placeholder={'1'}
           />
         </div>
 
@@ -62,8 +73,9 @@ function SVMParameters() {
           <input className="input"
             type="text"
             name="gamma"
-            value={inputValues.gamma}
+            value={inputValues.gamma || ''}
             onChange={handleInputChange}
+            placeholder={'(scale,auto,>0)'}
           />
         </div>
 

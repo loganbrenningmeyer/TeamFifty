@@ -7,13 +7,16 @@ function GBParameters() {
         max_features: 'null'
     });//[
     const [inputValues, setInputValues] = useState({
-        n_estimators: 100,
-        max_depth: 3,
-        gb_learning_rate: 0.1,
-        subsample: 1.0,
-        min_samples_split: 2,
-        min_samples_leaf: 1
     });
+
+    const [inputValidity, setInputValidity] = useState({
+        n_estimators: false,
+        max_depth: false,
+        gb_learning_rate: false,
+        subsample: false,
+        min_samples_split:false,
+        min_samples_leaf: false
+      });
 
     // Output
     const [trainOutput, setTrainOutput] = useState('');
@@ -22,6 +25,7 @@ function GBParameters() {
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setInputValues({ ...inputValues, [name]: value });
+        setInputValidity({ ...inputValidity, [name]: value.trim() !== '' });
     };
 
     const handleButtonClick = (group, buttonName) => {
@@ -31,12 +35,19 @@ function GBParameters() {
 
     const handleTrain = async () => {
         try {
-            setTrainOutput('Training model...')
-            const response = await axios.post('http://localhost:5000/train_GB', {...clickedButtons, ...inputValues});
-            console.log(response);
-            const { training_loss, training_accuracy, validation_loss, validation_accuracy } = response.data;
-            setTrainOutput(`Training Loss: ${training_loss[training_loss.length-1].toFixed(3)}, Training Accuracy: ${(training_accuracy[training_accuracy.length-1]*100).toFixed(2)}%`);
-            setTestOutput(`Validation Accuracy: ${(validation_accuracy[validation_accuracy.length-1]*100).toFixed(2)}%`);
+            const isValid = Object.values(inputValidity).every(valid => valid);
+            if (isValid){
+                setTrainOutput('Training model...')
+                const response = await axios.post('http://localhost:5000/train_GB', {...clickedButtons, ...inputValues});
+                console.log(response);
+                const { training_loss, training_accuracy, validation_loss, validation_accuracy } = response.data;
+                setTrainOutput(`Training Loss: ${training_loss[training_loss.length-1].toFixed(3)}, Training Accuracy: ${(training_accuracy[training_accuracy.length-1]*100).toFixed(2)}%`);
+                setTestOutput(`Validation Accuracy: ${(validation_accuracy[validation_accuracy.length-1]*100).toFixed(2)}%`);
+            }
+            else{
+                alert('Please fill in all required fields.');
+                return;
+            }
         } catch (error) {
             console.error('Error during training:', error);
         }
@@ -55,6 +66,7 @@ function GBParameters() {
                         name="n_estimators"
                         value={inputValues.n_estimators || ''}
                         onChange={handleInputChange}
+                        placeholder='100'
                     />
                 </div>
 
@@ -68,6 +80,7 @@ function GBParameters() {
                         name="max_depth"
                         value={inputValues.max_depth || ''}
                         onChange={handleInputChange}
+                        placeholder='3'
                     />
                 </div>
 
@@ -82,6 +95,7 @@ function GBParameters() {
                         name="gb_learning_rate"
                         value={inputValues.gb_learning_rate || ''}
                         onChange={handleInputChange}
+                        placeholder='0.1'
                     />
                 </div>
 
@@ -96,6 +110,7 @@ function GBParameters() {
                         name="subsample"
                         value={inputValues.subsample || ''}
                         onChange={handleInputChange}
+                        placeholder='1.0'
                     />
                 </div>
 
@@ -108,6 +123,7 @@ function GBParameters() {
                         name="min_samples_split"
                         value={inputValues.min_samples_split || ''}
                         onChange={handleInputChange}
+                        placeholder='2'
                     />
                 </div>
 
@@ -120,6 +136,7 @@ function GBParameters() {
                         name="min_samples_leaf"
                         value={inputValues.min_samples_leaf || ''}
                         onChange={handleInputChange}
+                        placeholder='1'
                     />
                 </div>
 

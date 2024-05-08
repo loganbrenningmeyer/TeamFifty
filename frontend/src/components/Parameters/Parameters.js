@@ -10,6 +10,13 @@ function Parameters() {
   // Output
   const [trainOutput, setTrainOutput] = useState('');
   const [testOutput, setTestOutput] = useState('');
+  
+  const [inputValidity, setInputValidity] = useState({
+    layers: false,
+    dropout_rate: false,
+    learning_rate: false,
+    batch_size: false
+  });
 
   const handleButtonClick = (group, buttonName) => {
     // Toggle clicked state
@@ -19,14 +26,23 @@ function Parameters() {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setInputValues({ ...inputValues, [name]: value });
+    setInputValidity({ ...inputValidity, [name]: value.trim() !== '' });
+    
   };
 
   const handleTrain = async () => {
-    setTrainOutput('Training model...')
-    const response = await axios.post('http://localhost:5000/train', {...clickedButtons, ...inputValues});
-    const { training_loss, training_accuracy, validation_loss, validation_accuracy } = response.data;
-    setTrainOutput(`Training Loss: ${training_loss[training_loss.length-1]}, Training Accuracy: ${training_accuracy[training_accuracy.length-1]}`);
-    setTestOutput(`Validation Accuracy: ${validation_accuracy[validation_accuracy.length-1]}`);
+    const isValid = Object.values(inputValidity).every(valid => valid);
+    if(isValid){
+        setTrainOutput('Training model...')
+        const response = await axios.post('http://localhost:5000/train', {...clickedButtons, ...inputValues});
+        const { training_loss, training_accuracy, validation_loss, validation_accuracy } = response.data;
+        setTrainOutput(`Training Loss: ${training_loss[training_loss.length-1]}, Training Accuracy: ${training_accuracy[training_accuracy.length-1]}`);
+        setTestOutput(`Validation Accuracy: ${validation_accuracy[validation_accuracy.length-1]}`);
+    }
+    else
+    {
+        alert('Please fill in all required fields.')
+    }
   };
 
   return (
