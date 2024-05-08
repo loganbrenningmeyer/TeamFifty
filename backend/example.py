@@ -3,7 +3,6 @@ from flask_session import Session
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from flask_cors import CORS, cross_origin
-import http.client
 import bcrypt
 from datetime import timedelta
 import torch
@@ -164,6 +163,7 @@ def saveModel():
         elif (session["model_type"] == "GB"):
             joblib.dump(session["model"], buffer)
             buffer.seek(0)  # Rewind the buffer to the beginning after writing
+        #elif(session["model_type"] == "SVM"):
 
         info = {
             'email':email,

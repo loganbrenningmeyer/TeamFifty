@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './Data.css';
 
 function Data() {
-
-  const navigate = useNavigate();
 
   /* Default all data selections to true */
   const initialButtonStates = {
@@ -33,12 +31,17 @@ function Data() {
       ...prevState,
       [buttonName]: !prevState[buttonName],
     }));
+    axios.post('http://localhost:5000/data', clickedButtons);
   };
 
   const handleContinue = () => {
     setContinueClicked(true);
     axios.post('http://localhost:5000/data', clickedButtons);
   };
+
+  useEffect(() => {
+    axios.post('http://localhost:5000/data', clickedButtons);
+  },[]);
 
   return (
     <div style={{ textAlign: 'center', padding: '20px' }}>
