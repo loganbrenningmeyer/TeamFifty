@@ -546,13 +546,18 @@ def train_SVM():
     confusion_matrix = metrics.confusion_matrix(y_test, y_pred)
     classification_report = metrics.classification_report(y_test, y_pred, output_dict=True)
 
+    confuse = []
+    for array in confusion_matrix:
+        for num in array:
+            confuse.append(int(num))
+
     session["model"] = model
     session["model_type"] = "SVM"
-    session['training_accuracy'] = f"{training_accuracy[0] * 100:.2f}%"
-    session['validation_accuracy'] = f"{validation_accuracy[0] * 100:.2f}%"
+    session['training_accuracy'] = f"{training_accuracy[0] * 100:.2f}"
+    session['validation_accuracy'] = f"{validation_accuracy[0] * 100:.2f}"
     session['validation_loss'] = validation_loss
-    session['accuracy'] = f"{accuracy * 100:.2f}%"
-    session['confusion_matrix'] = confusion_matrix.tolist()
+    session['accuracy'] = f"{accuracy * 100:.2f}"
+    session['confusion_matrix'] = confuse
     session['detailed_report'] = classification_report['weighted avg']
 
     # Return metrics and reports

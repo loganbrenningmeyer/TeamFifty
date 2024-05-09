@@ -37,8 +37,9 @@ const SavedModels = () => {
   const [activeModelVis, setActiveModelVis] = useState('');
   const [activeTrainingData, setActiveTrainingData] = useState({});
   const [activeValidationData, setActiveValidationData] = useState({});
-
+  const [confusionMatrix,setConfusionMatrix] = useState([])
   const [isOpen, setIsOpen] = useState(false);
+  const [detailed_report,setDetailedReport] = useState({})
 
   useEffect(() => {
     const fetchModels = async () => {
@@ -53,8 +54,8 @@ const SavedModels = () => {
             {
               setActiveModelVis(response.data[0].model_vis);
 
-              console.log(response.data[0].training_loss)
-              console.log(response.data[0].training_accuracy)
+              //console.log(response.data[0].training_loss)
+              //console.log(response.data[0].training_accuracy)
     
               /* Set training loss data */
               const training_data = {
@@ -97,6 +98,7 @@ const SavedModels = () => {
               setActiveTrainingData(training_data);
               setActiveValidationData(validation_data);
             }
+        
           /* Get model visualizations from backend */
 
         }
@@ -111,12 +113,14 @@ const SavedModels = () => {
 
   const handleSlideChange = (swiper) => {
     const currentModel = models[swiper.activeIndex / 3];
-    console.log(currentModel)
-    console.log(currentModel.model_name)
-    console.log(currentModel.model_type)
+    //console.log(currentModel)
+    //console.log(currentModel.model_name)
+    //console.log(currentModel.model_type)
     if (currentModel) {
       setActiveModelName(currentModel.model_name);
       setActiveModelType(currentModel.model_type);
+      console.log(currentModel);
+
       if(currentModel.model_type !== 'SVM')
       {
         setActiveModelVis(currentModel.model_vis);
@@ -162,6 +166,12 @@ const SavedModels = () => {
         setActiveTrainingData(training_data);
         setActiveValidationData(validation_data);
       }
+      else{
+        const a = Array(Object.values(currentModel.confusion_matrix));
+        setConfusionMatrix(a[0])
+        setDetailedReport(currentModel.detailed_report)
+
+      }
     }
   };
 
@@ -197,7 +207,7 @@ const SavedModels = () => {
           </SwiperSlide>,
           <SwiperSlide key={`accuracy-${idx}`}>
             <div className='model-vis'>
-              <img src={`data:image/png;base64,${activeModelVis}`} alt="Model Visualization" />
+              {model.model_type === 'SVM' ? <img src={``} alt="Model Visualization" /> : <img src={`data:image/png;base64,${activeModelVis}`} alt="Model Visualization" />}
             </div>
           </SwiperSlide>,
           <SwiperSlide key={`validation-${idx}`}>
@@ -209,7 +219,7 @@ const SavedModels = () => {
                 </div>
                 
                 <div className='training-accuracy'>
-                  {(model.training_accuracy[99]*100).toFixed(2)}%
+                  {model.model_type === 'SVM' ? model.training_accuracy : (model.training_accuracy[99]*100).toFixed(2)}%
                 </div>
 
               </div>
@@ -223,7 +233,7 @@ const SavedModels = () => {
                 </div>
                 
                 <div className='validation-accuracy'>
-                  {(model.validation_accuracy[99]*100).toFixed(2)}%
+                  {model.model_type === 'SVM' ? model.validation_accuracy :(model.validation_accuracy[99]*100).toFixed(2)}%
                 </div>
               </div>
             </div>
@@ -240,12 +250,48 @@ const SavedModels = () => {
         </button>
         <div className="popup-content">
           <div className="stats-grid">
+            {activeModelType === 'SVM' ? <div>
+              <h2>Confusion Matrix</h2>
+              <table className="matrix-table">
+                <tbody>
+                    <tr>
+                        <td>{confusionMatrix[0]}</td>
+                        <td>{confusionMatrix[1]}</td>
+                    </tr>
+                    <tr>
+                        <td>{confusionMatrix[2]}</td>
+                        <td>{confusionMatrix[3]}</td>
+                    </tr>
+                </tbody>
+              </table>
+              <table className="matrix-table">
+                <thead>
+                  <th>f1 Score</th>
+                  <th>Precision</th>
+                  <th>Recall</th>
+                  <th>Support</th>
+                </thead>
+                <tbody>
+                    <tr>
+                    <td>{detailed_report['f1-score']}</td>
+                    <td>{detailed_report['precision']}</td>
+                    <td>{detailed_report['recall']}</td>
+                    <td>{detailed_report['support']}</td>
+                    </tr>
+                </tbody>
+              </table>
+            </div> 
+            : 
             <div>
               {activeTrainingData.datasets && <Line data={activeTrainingData} />}
             </div>
-            <div>
+            }
+            {activeModelType === 'SVM' ? <h1></h1> :
+              <div>
               {activeValidationData.datasets && <Line data={activeValidationData} />}
             </div>
+            }
+              
           </div>
         </div>
       </div>
