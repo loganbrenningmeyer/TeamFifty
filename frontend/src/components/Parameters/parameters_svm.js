@@ -91,7 +91,7 @@ function SVMParameters() {
           <h2>Training Statistics</h2>
           <p>Training Accuracy: {output.training_accuracy}</p>
           <p>Validation Accuracy: {output.validation_accuracy}</p>
-          <p>Validaiton Loss: {output.validation_loss}</p>
+          <p>Validation Loss: {output.validation_loss}</p>
           <p>Accuracy: {output.accuracy}</p>
           <p>Precision: {output.detailedReport.precision}</p>
           <p>Recall: {output.detailedReport.recall}</p>
