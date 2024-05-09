@@ -49,52 +49,54 @@ const SavedModels = () => {
         if (response.data.length > 0) {
           setActiveModelName(response.data[0].model_name);
           setActiveModelType(response.data[0].model_type);
-          setActiveModelVis(response.data[0].model_vis);
+          if(response.data[0].model_type !== 'SVM')
+            {
+              setActiveModelVis(response.data[0].model_vis);
 
-          console.log(response.data[0].training_loss)
-          console.log(response.data[0].training_accuracy)
-
-          /* Set training loss data */
-          const training_data = {
-            labels: Array.from(Array(100).keys()),
-            datasets: [
-              {
-                label: 'Training Loss',
-                data: response.data[0].training_loss,
-                borderColor: 'rgb(255, 99, 132)',
-                backgroundColor: 'rgba(255, 99, 132, 0.5)'
-              },
-              {
-                label: 'Training Accuracy',
-                data: response.data[0].training_accuracy,
-                borderColor: 'rgb(0, 204, 102)',
-                backgroundColor: 'rgba(0, 204, 102, 0.5)'
+              console.log(response.data[0].training_loss)
+              console.log(response.data[0].training_accuracy)
+    
+              /* Set training loss data */
+              const training_data = {
+                labels: Array.from(Array(100).keys()),
+                datasets: [
+                  {
+                    label: 'Training Loss',
+                    data: response.data[0].training_loss,
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)'
+                  },
+                  {
+                    label: 'Training Accuracy',
+                    data: response.data[0].training_accuracy,
+                    borderColor: 'rgb(0, 204, 102)',
+                    backgroundColor: 'rgba(0, 204, 102, 0.5)'
+                  }
+                ]
               }
-            ]
-          }
-
-          /* Set validation loss data */
-          const validation_data = {
-            labels: Array.from(Array(100).keys()),
-            datasets: [
-              {
-                label: 'Validation Loss',
-                data: response.data[0].validation_loss,
-                borderColor: 'rgb(255, 99, 132)',
-                backgroundColor: 'rgba(255, 99, 132, 0.5)'
-              },
-              {
-                label: 'Validation Accuracy',
-                data: response.data[0].validation_accuracy,
-                borderColor: 'rgb(0, 204, 102)',
-                backgroundColor: 'rgba(0, 204, 102, 0.5)'
+    
+              /* Set validation loss data */
+              const validation_data = {
+                labels: Array.from(Array(100).keys()),
+                datasets: [
+                  {
+                    label: 'Validation Loss',
+                    data: response.data[0].validation_loss,
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)'
+                  },
+                  {
+                    label: 'Validation Accuracy',
+                    data: response.data[0].validation_accuracy,
+                    borderColor: 'rgb(0, 204, 102)',
+                    backgroundColor: 'rgba(0, 204, 102, 0.5)'
+                  }
+                ]
               }
-            ]
-          }
-
-          setActiveTrainingData(training_data);
-          setActiveValidationData(validation_data);
-
+    
+              setActiveTrainingData(training_data);
+              setActiveValidationData(validation_data);
+            }
           /* Get model visualizations from backend */
 
         }
@@ -115,48 +117,51 @@ const SavedModels = () => {
     if (currentModel) {
       setActiveModelName(currentModel.model_name);
       setActiveModelType(currentModel.model_type);
-      setActiveModelVis(currentModel.model_vis);
+      if(currentModel.model_type !== 'SVM')
+      {
+        setActiveModelVis(currentModel.model_vis);
       
-      /* Set training loss data */
-      const training_data = {
-        labels: Array.from(Array(100).keys()),
-        datasets: [
-          {
-            label: 'Training Loss',
-            data: currentModel.training_loss,
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 99, 132, 0.5)'
-          },
-          {
-            label: 'Training Accuracy',
-            data: currentModel.training_accuracy,
-            borderColor: 'rgb(0, 204, 102)',
-            backgroundColor: 'rgba(0, 204, 102, 0.5)'
-          }
-        ]
+        /* Set training loss data */
+        const training_data = {
+          labels: Array.from(Array(100).keys()),
+          datasets: [
+            {
+              label: 'Training Loss',
+              data: currentModel.training_loss,
+              borderColor: 'rgb(255, 99, 132)',
+              backgroundColor: 'rgba(255, 99, 132, 0.5)'
+            },
+            {
+              label: 'Training Accuracy',
+              data: currentModel.training_accuracy,
+              borderColor: 'rgb(0, 204, 102)',
+              backgroundColor: 'rgba(0, 204, 102, 0.5)'
+            }
+          ]
+        }
+  
+        /* Set validation loss data */
+        const validation_data = {
+          labels: Array.from(Array(100).keys()),
+          datasets: [
+            {
+              label: 'Validation Loss',
+              data: currentModel.validation_loss,
+              borderColor: 'rgb(255, 99, 132)',
+              backgroundColor: 'rgba(255, 99, 132, 0.5)'
+            },
+            {
+              label: 'Validation Accuracy',
+              data: currentModel.validation_accuracy,
+              borderColor: 'rgb(0, 204, 102)',
+              backgroundColor: 'rgba(0, 204, 102, 0.5)'
+            }
+          ]
+        }
+  
+        setActiveTrainingData(training_data);
+        setActiveValidationData(validation_data);
       }
-
-      /* Set validation loss data */
-      const validation_data = {
-        labels: Array.from(Array(100).keys()),
-        datasets: [
-          {
-            label: 'Validation Loss',
-            data: currentModel.validation_loss,
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 99, 132, 0.5)'
-          },
-          {
-            label: 'Validation Accuracy',
-            data: currentModel.validation_accuracy,
-            borderColor: 'rgb(0, 204, 102)',
-            backgroundColor: 'rgba(0, 204, 102, 0.5)'
-          }
-        ]
-      }
-
-      setActiveTrainingData(training_data);
-      setActiveValidationData(validation_data);
     }
   };
 

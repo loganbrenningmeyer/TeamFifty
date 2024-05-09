@@ -160,12 +160,7 @@ def saveModel():
         buffer = io.BytesIO()
         if (session["model_type"] == "ANN"):
             torch.save(session["model"],buffer)
-        elif (session["model_type"] == "GB"):
-            joblib.dump(session["model"], buffer)
-            buffer.seek(0)  # Rewind the buffer to the beginning after writing
-        #elif(session["model_type"] == "SVM"):
-
-        info = {
+            info = {
             'email':email,
             'model_name':modelName,
             'model_type' : session["model_type"],
@@ -176,7 +171,39 @@ def saveModel():
             'validation_loss' : session["validation_loss"],
             'validation_accuracy' : session["validation_accuracy"],
             'validation_data' : session["validation_data"]
-        }
+            }
+        elif (session["model_type"] == "GB"):
+            joblib.dump(session["model"], buffer)
+            buffer.seek(0)  # Rewind the buffer to the beginning after writing
+            info = {
+            'email':email,
+            'model_name':modelName,
+            'model_type' : session["model_type"],
+            'model': buffer.getvalue(),
+            'selected_stats': session["selected_stats"],
+            'training_loss' : session["training_loss"],
+            'training_accuracy' : session["training_accuracy"],
+            'validation_loss' : session["validation_loss"],
+            'validation_accuracy' : session["validation_accuracy"],
+            'validation_data' : session["validation_data"]
+            }
+        elif(session["model_type"] == "SVM"):
+            joblib.dump(session['model'],buffer)
+            buffer.seek(0)
+            info = {
+            'email':email,
+            'model_name':modelName,
+            'model_type' : session["model_type"],
+            'model': buffer.getvalue(),
+            'selected_stats': session["selected_stats"],
+            'training_accuracy':session['training_accuracy'],
+            'validation_accuracy':session['validation_accuracy'],
+            'validation_loss':session['validation_loss'],
+            'accuracy':session['accuracy'],
+            'confusion_matrix':session['confusion_matrix'],
+            'detailed_report':session['detailed_report']
+            }
+
         session.pop("model",None)
         savedModels.insert_one(info)
         return 'model successfully saved',204
@@ -243,7 +270,16 @@ def getModels():
                         model_vis = base64.b64encode(image_file.read()).decode('utf-8')
                 except FileNotFoundError:
                     model_vis = "Visualization not available"
-            # Load GB model
+                saved_models.append({"email" : entry['email'],
+                    "model_name" : entry['model_name'],
+                    "model_type" : entry['model_type'],
+                    "model_vis" : model_vis,
+                    "selected_stats" : entry['selected_stats'],
+                    "training_loss" : entry['training_loss'],
+                    "training_accuracy" : entry['training_accuracy'],
+                    "validation_loss" : entry['validation_loss'],
+                    "validation_accuracy" : entry['validation_accuracy']})
+                # Load GB model
             elif (entry['model_type'] == "GB"):
                 model = joblib.load(io.BytesIO(entry['model']))
 
@@ -252,17 +288,34 @@ def getModels():
                 plt.savefig('output.png', transparent=True, bbox_inches='tight')
 
                 with open('output.png', 'rb') as image_file:
-                    model_vis = base64.b64encode(image_file.read()).decode('utf-8') 
+                    model_vis = base64.b64encode(image_file.read()).decode('utf-8')
 
-            saved_models.append({"email" : entry['email'],
-                                 "model_name" : entry['model_name'],
-                                "model_type" : entry['model_type'],
-                                "model_vis" : model_vis,
-                                "selected_stats" : entry['selected_stats'],
-                                "training_loss" : entry['training_loss'],
-                                "training_accuracy" : entry['training_accuracy'],
-                                "validation_loss" : entry['validation_loss'],
-                                "validation_accuracy" : entry['validation_accuracy']})
+                saved_models.append({"email" : entry['email'],
+                    "model_name" : entry['model_name'],
+                    "model_type" : entry['model_type'],
+                    "model_vis" : model_vis,
+                    "selected_stats" : entry['selected_stats'],
+                    "training_loss" : entry['training_loss'],
+                    "training_accuracy" : entry['training_accuracy'],
+                    "validation_loss" : entry['validation_loss'],
+                    "validation_accuracy" : entry['validation_accuracy']}) 
+                
+            elif (entry['model_type'] == "SVM"):
+                #model = joblib.load(io.BytesIO(entry['model']))
+
+                saved_models.append({"email" : entry['email'],
+                    "model_name" : entry['model_name'],
+                    "model_type" : entry['model_type'],
+                    "selected_stats" : entry['selected_stats'],
+                    "training_accuracy" : entry['training_accuracy'],
+                    "validation_loss" : entry['validation_loss'],
+                    "validation_accuracy" : entry['validation_accuracy'],
+                    'accuracy' : entry['accuracy'],
+                    'confusion_matrix': entry['confusion_matrix'],
+                    'detailed_report' : entry['detailed_report']
+                    })
+
+        
 
         session["saved_models"] = saved_models
 
@@ -492,6 +545,15 @@ def train_SVM():
     accuracy = metrics.accuracy_score(y_test, y_pred)
     confusion_matrix = metrics.confusion_matrix(y_test, y_pred)
     classification_report = metrics.classification_report(y_test, y_pred, output_dict=True)
+
+    session["model"] = model
+    session["model_type"] = "SVM"
+    session['training_accuracy'] = f"{training_accuracy[0] * 100:.2f}%"
+    session['validation_accuracy'] = f"{validation_accuracy[0] * 100:.2f}%"
+    session['validation_loss'] = validation_loss
+    session['accuracy'] = f"{accuracy * 100:.2f}%"
+    session['confusion_matrix'] = confusion_matrix.tolist()
+    session['detailed_report'] = classification_report['weighted avg']
 
     # Return metrics and reports
     return jsonify({
