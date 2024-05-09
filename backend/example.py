@@ -197,8 +197,7 @@ def saveModel():
             'model': buffer.getvalue(),
             'selected_stats': session["selected_stats"],
             'training_accuracy':session['training_accuracy'],
-            'validation_accuracy':session['validation_accuracy'],
-            'validation_loss':session['validation_loss'],
+            'validation_data':session['validation_data'],
             'accuracy':session['accuracy'],
             'confusion_matrix':session['confusion_matrix'],
             'detailed_report':session['detailed_report']
@@ -310,8 +309,7 @@ def getModels():
                     "model_type" : entry['model_type'],
                     "selected_stats" : entry['selected_stats'],
                     "training_accuracy" : entry['training_accuracy'],
-                    "validation_loss" : entry['validation_loss'],
-                    "validation_accuracy" : entry['validation_accuracy'],
+                    "validation_data" : entry['validation_data'],
                     'accuracy' : entry['accuracy'],
                     'confusion_matrix': entry['confusion_matrix'],
                     'detailed_report' : entry['detailed_report']
@@ -515,16 +513,28 @@ def train_SVM():
     gamma = parameters.get('gamma', 'scale')
 
     # Load and preprocess data
-    input_data = torch.load("input_data.pt").numpy()
-    target_data = torch.load("target_data.pt").numpy().ravel()
-    scaler = StandardScaler()
-    input_data = scaler.fit_transform(input_data)
+    input_data = torch.load("input_data.pt")
+    target_data = torch.load("target_data.pt")
+    
+    # Calculate training size
+    train_size = int(0.8 * len(input_data))
 
-    # Split data
-    X_train, X_test, y_train, y_test = train_test_split(input_data, target_data, test_size=0.2, random_state=42)
+    # Shuffle the data
+    shuffle = torch.randperm(input_data.shape[0])
+    input_data = input_data[shuffle]
+    target_data = target_data[shuffle]
 
-    # Further split for validation during training (if needed)
-    X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.1, random_state=101)
+    # Get validation data for saving
+    validation_data_list = [input_data[train_size:].numpy().tolist(), target_data[train_size:].numpy().tolist()]
+
+    # Normalize the data
+    input_data = F.normalize(input_data, p=2, dim=0)
+
+    # Split the data into training and testing datasets matching the validation data 
+    X_train, X_test, y_train, y_test = train_test_split(input_data.numpy(), target_data.numpy(), shuffle=False, test_size=0.2)
+
+    # # Further split for validation during training (if needed)
+    # X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.1, random_state=101)
 
     # Initialize SVM and lists for tracking metrics
     model = svm.SVC(kernel=kernel, C=C, gamma=gamma, probability=True)
@@ -538,10 +548,10 @@ def train_SVM():
     training_accuracy.append(accuracy_score(y_train, training_predictions))
 
     # Validation performance
-    val_predictions = model.predict(X_val)
-    validation_accuracy.append(accuracy_score(y_val, val_predictions))
-    probs = model.predict_proba(X_val)
-    validation_loss.append(log_loss(y_val, probs))
+    # val_predictions = model.predict(X_test)
+    # validation_accuracy.append(accuracy_score(y_test, val_predictions))
+    # probs = model.predict_proba(X_test)
+    # validation_loss.append(log_loss(y_test, probs))
 
     # Testing and final evaluation
     y_pred = model.predict(X_test)
@@ -557,8 +567,9 @@ def train_SVM():
     session["model"] = model
     session["model_type"] = "SVM"
     session['training_accuracy'] = f"{training_accuracy[0] * 100:.2f}"
-    session['validation_accuracy'] = f"{validation_accuracy[0] * 100:.2f}"
-    session['validation_loss'] = validation_loss
+    # session['validation_accuracy'] = f"{validation_accuracy[0] * 100:.2f}"
+    # session['validation_loss'] = validation_loss
+    session['validation_data'] = validation_data_list
     session['accuracy'] = f"{accuracy * 100:.2f}"
     session['confusion_matrix'] = confuse
     session['detailed_report'] = classification_report['weighted avg']
@@ -566,8 +577,8 @@ def train_SVM():
     # Return metrics and reports
     return jsonify({
         'training_accuracy': f"{training_accuracy[0] * 100:.2f}%",
-        'validation_accuracy': f"{validation_accuracy[0] * 100:.2f}%",
-        'validation_loss': validation_loss,
+        # 'validation_accuracy': f"{validation_accuracy[0] * 100:.2f}%",
+        # 'validation_loss': validation_loss,
         'accuracy': f"{accuracy * 100:.2f}%",
         'confusion_matrix': confusion_matrix.tolist(),
         'detailed_report': classification_report['weighted avg']
@@ -606,54 +617,39 @@ def searchModel():
 @app.route("/predict", methods=['POST'])
 def predict():
     data = request.json
-
-    # Get the index
     index = data['index']
-
-    # Get the model with the given name
     model_name = data['model_name']
     model_entry = savedModels.find_one({'model_name': model_name})
     model = model_entry['model']
     model_type = model_entry['model_type']
     model_data = model_entry['validation_data']
 
-    # Get the input data as numpy array and normalize as tensor
     input = np.array(model_data[0])
     input = F.normalize(torch.tensor(input, dtype=torch.float32), p=2, dim=0)
-    target = np.array(model_data[1])[index]
+    target = float(np.array(model_data[1])[index])
 
-    # Load the model and make the prediction
+    prediction = 0
+
     if model_type == "ANN":
         buffer = io.BytesIO(model)
-        model = torch.load(buffer,weights_only=False)
-        model.train(mode=False)
+        model = torch.load(buffer, map_location=torch.device('cpu'))
+        model.train(mode=False)  # Ensures the model is in evaluation mode
 
         # Make the prediction
-        prediction = model(input[index])
-        print(f"Prediction: {prediction}, Target: {target}")
-    elif model_type == "GB":
+        with torch.no_grad():  # Temporarily set all the requires_grad flags to false
+            prediction = model(input[index].unsqueeze(0))
+
+        # Convert the prediction to float for JSON response
+        prediction = float(prediction.detach().numpy())
+        
+    elif model_type in ["GB", "SVM"]:
         model = joblib.load(io.BytesIO(model))
-
-        # Reshape input
         input = input[index].numpy().reshape(1, -1)
+        prediction = float(model.predict(input)[0])  # Assume predict returns an array
 
-        # Make the prediction
-        prediction = model.predict(input)
-        print(f"Prediction: {prediction}, Target: {target}")
+    print(f"Prediction: {prediction}, Target: {target}, Correct: {round(prediction) == target}")
 
-    elif model_type == "SVM":
-        model = joblib.load(io.BytesIO(model))
-
-        # Reshape input
-        input = input[index].numpy().reshape(1, -1)
-
-        # Make the prediction
-        prediction = model.predict(input)
-        print(f"Prediction: {prediction}, Target: {target}")
-
-    # Make the prediction
-
-    return jsonify({'result': 'Prediction'})
+    return jsonify({'prediction': prediction, 'target': target, 'correct': round(prediction) == target})
 
 # Send a ping to confirm a successful connection
 try:

@@ -7,8 +7,6 @@ function SVMParameters() {
     });
     const [output, setOutput] = useState({
       training_accuracy: [],
-      validation_accuracy: [],
-      validation_loss: [],
       accuracy: '',
       confusionMatrix: [],
       detailedReport: {}
@@ -32,8 +30,6 @@ function SVMParameters() {
           const response = await axios.post('http://localhost:5000/train_SVM', inputValues);
           setOutput({
           training_accuracy: response.data.training_accuracy,
-          validation_accuracy: response.data.validation_accuracy,
-          validation_loss: response.data.validation_loss,
           accuracy: response.data.accuracy,
           confusionMatrix: response.data.confusion_matrix,
           detailedReport: response.data.detailed_report
@@ -90,8 +86,6 @@ function SVMParameters() {
         <div className="results-container">
           <h2>Training Statistics</h2>
           <p>Training Accuracy: {output.training_accuracy}</p>
-          <p>Validation Accuracy: {output.validation_accuracy}</p>
-          <p>Validation Loss: {output.validation_loss}</p>
           <p>Accuracy: {output.accuracy}</p>
           <p>Precision: {output.detailedReport.precision}</p>
           <p>Recall: {output.detailedReport.recall}</p>

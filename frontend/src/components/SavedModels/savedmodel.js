@@ -139,6 +139,10 @@ const SavedModels = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [detailed_report,setDetailedReport] = useState({})
 
+  const [predictionResults, setPredictionResults] = useState({});
+  const [buttonClicked, setButtonClicked] = useState({});
+
+
   useEffect(() => {
     const fetchModels = async () => {
       try {
@@ -277,6 +281,18 @@ const SavedModels = () => {
     return async () => {
       try {
         const response = await axios.post('http://localhost:3000/predict', { model_name, index });
+        const data = response.data
+        // Assuming the response includes a 'correct' boolean indicating prediction success
+        setPredictionResults(prevResults => ({
+          ...prevResults,
+          [`${model_name}-${index}`]: data.correct
+        }));
+        // Mark the button as clicked
+        setButtonClicked(prevState => ({
+          ...prevState,
+          [`${model_name}-${index}`]: true
+        }));
+        console.log(`Prediction: ${data.prediction}, ${data.correct}`);
       } catch (error) {
         console.error('Failed to make prediction:', error);
       }
@@ -323,7 +339,12 @@ const SavedModels = () => {
               {model.validation_data[0].slice(0, 10).map((input, index) => (
                 <div key={index} className="data-pair">
                   <div>{getGameName(input[1], input[awayIDIndex(model.selected_stats)])}</div>
-                  <button className="predict-button" onClick={handlePredictButton(model.model_name, index)} >Predict</button>
+                  <button 
+                    className={`predict-button ${buttonClicked[`${model.model_name}-${index}`] ? (predictionResults[`${model.model_name}-${index}`] ? 'correct' : 'incorrect') : ''}`}
+                    onClick={handlePredictButton(model.model_name, index)} 
+                  >
+                    Predict
+                  </button>
                 </div>
               ))}
             </div>
