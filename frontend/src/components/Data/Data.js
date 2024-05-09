@@ -25,23 +25,32 @@ function Data() {
   };
   const [clickedButtons, setClickedButtons] = useState(initialButtonStates);
   const [continueClicked, setContinueClicked] = useState(false);  // New state for tracking the "Continue" button click
-
+  
   const handleButtonClick = (buttonName) => {
-    setClickedButtons((prevState) => ({
-      ...prevState,
-      [buttonName]: !prevState[buttonName],
-    }));
-    axios.post('http://localhost:5000/data', clickedButtons);
+    setClickedButtons((prevState) => {
+      const newState = { ...prevState, [buttonName]: !prevState[buttonName] };
+      sendData(newState);
+      return newState;
+    });
   };
 
   const handleContinue = () => {
-    setContinueClicked(true);
-    axios.post('http://localhost:5000/data', clickedButtons);
+    sendData(clickedButtons);
+  };
+
+  const sendData = (data) => {
+    axios.post('http://localhost:5000/data', data)
+      .then((response) => {
+        console.log('Data sent successfully:', response.data);
+      })
+      .catch((error) => {
+        console.error('Error sending data:', error);
+      });
   };
 
   useEffect(() => {
-    axios.post('http://localhost:5000/data', clickedButtons);
-  },[]);
+    sendData(clickedButtons);
+  }, []);
 
   return (
     <div style={{ textAlign: 'center', padding: '20px' }}>
