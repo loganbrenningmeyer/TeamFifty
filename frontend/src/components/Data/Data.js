@@ -364,8 +364,6 @@ function Data() {
           </button>
         </div>
       </div>
-
-      { <button className={`continue-button ${continueClicked ? 'clicked' : ''}`} onClick={handleContinue}>Confirm Selection</button> }
     </div>
   );
 }

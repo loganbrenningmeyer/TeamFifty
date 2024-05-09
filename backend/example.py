@@ -198,7 +198,7 @@ def saveModel():
             'selected_stats': session["selected_stats"],
             'training_accuracy':session['training_accuracy'],
             'validation_data':session['validation_data'],
-            'accuracy':session['accuracy'],
+            'validation_accuracy':session['validation_accuracy'],
             'confusion_matrix':session['confusion_matrix'],
             'detailed_report':session['detailed_report']
             }
@@ -222,6 +222,7 @@ def get_input_shape(model):
 def getAllModels():
     modelList = []
     for entries in savedModels.find({},{'_id':0,'model_name':1,'model_type':1,'validation_accuracy':1}):
+        print(entries['validation_accuracy'])
         modelList.append(entries)
     
     return jsonify(modelList)
@@ -310,7 +311,7 @@ def getModels():
                     "selected_stats" : entry['selected_stats'],
                     "training_accuracy" : entry['training_accuracy'],
                     "validation_data" : entry['validation_data'],
-                    'accuracy' : entry['accuracy'],
+                    'validation_accuracy' : entry['validation_accuracy'],
                     'confusion_matrix': entry['confusion_matrix'],
                     'detailed_report' : entry['detailed_report']
                     })
@@ -555,7 +556,7 @@ def train_SVM():
 
     # Testing and final evaluation
     y_pred = model.predict(X_test)
-    accuracy = metrics.accuracy_score(y_test, y_pred)
+    validation_accuracy = metrics.accuracy_score(y_test, y_pred)
     confusion_matrix = metrics.confusion_matrix(y_test, y_pred)
     classification_report = metrics.classification_report(y_test, y_pred, output_dict=True)
 
@@ -566,12 +567,11 @@ def train_SVM():
 
     session["model"] = model
     session["model_type"] = "SVM"
-    session['training_accuracy'] = f"{training_accuracy[0] * 100:.2f}"
+    session['training_accuracy'] = training_accuracy[0]
     # session['validation_accuracy'] = f"{validation_accuracy[0] * 100:.2f}"
     # session['validation_loss'] = validation_loss
     session['validation_data'] = validation_data_list
-    session['accuracy'] = f"{accuracy * 100:.2f}"
-    session['confusion_matrix'] = confuse
+    session['validation_accuracy'] = [validation_accuracy]
     session['detailed_report'] = classification_report['weighted avg']
 
     # Return metrics and reports
@@ -579,7 +579,7 @@ def train_SVM():
         'training_accuracy': f"{training_accuracy[0] * 100:.2f}%",
         # 'validation_accuracy': f"{validation_accuracy[0] * 100:.2f}%",
         # 'validation_loss': validation_loss,
-        'accuracy': f"{accuracy * 100:.2f}%",
+        'validation_accuracy': f"{validation_accuracy * 100:.2f}%",
         'confusion_matrix': confusion_matrix.tolist(),
         'detailed_report': classification_report['weighted avg']
     })

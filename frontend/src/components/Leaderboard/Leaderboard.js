@@ -8,7 +8,7 @@ const Leaderboard = () => {
     const fetchModels = async () => {
       const response = await axios.get("http://localhost:3000/getAllModels");
       setModelList(response.data.sort(
-        (a, b) => b.validation_accuracy[99] - a.validation_accuracy[99]
+        (a, b) => b.validation_accuracy[(b.validation_accuracy).length-1] - a.validation_accuracy[(a.validation_accuracy).length-1]
       ));
     };
     fetchModels();
@@ -35,7 +35,7 @@ const Leaderboard = () => {
                 {element.model_name}
               </td>
               <td class="px-6 py-4">{element.model_type}</td>
-              <td class="px-6 py-4">{element.validation_accuracy[99]}</td>
+              <td class="px-6 py-4">{element.validation_accuracy[element.validation_accuracy.length - 1]}</td>
               <td class="px-6 py-4">
                 <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">View</a>
               </td>

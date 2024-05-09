@@ -113,7 +113,7 @@ function SearchModels() {
             {element.model_name}
           </th>
           <td class="px-6 py-4">{element.model_type}</td>
-          <td class="px-6 py-4">{element.validation_accuracy[99]}</td>
+          <td class="px-6 py-4">{element.validation_accuracy[element.validation_accuracy.length - 1]}</td>
           <td class="px-6 py-4">
             <a
               href="#"
