@@ -35,6 +35,8 @@
     }  
 
     .outputs-grid {
+      max-height: 95%;
+      overflow-y: auto;
       width: 100%;
       background-color: #191D21;
       border-radius: 10px;
