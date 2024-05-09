@@ -278,7 +278,8 @@ def getModels():
                     "training_loss" : entry['training_loss'],
                     "training_accuracy" : entry['training_accuracy'],
                     "validation_loss" : entry['validation_loss'],
-                    "validation_accuracy" : entry['validation_accuracy']})
+                    "validation_accuracy" : entry['validation_accuracy'],
+                    "validation_data" : entry['validation_data']})
                 # Load GB model
             elif (entry['model_type'] == "GB"):
                 model = joblib.load(io.BytesIO(entry['model']))
@@ -298,7 +299,8 @@ def getModels():
                     "training_loss" : entry['training_loss'],
                     "training_accuracy" : entry['training_accuracy'],
                     "validation_loss" : entry['validation_loss'],
-                    "validation_accuracy" : entry['validation_accuracy']}) 
+                    "validation_accuracy" : entry['validation_accuracy'],
+                    "validation_data" : entry['validation_data']}) 
                 
             elif (entry['model_type'] == "SVM"):
                 #model = joblib.load(io.BytesIO(entry['model']))
@@ -372,7 +374,7 @@ def train():
     print(model)
     
     # Normalize the data
-    input_data = F.normalize(input_data, p=2, dim=0)
+    # input_data = F.normalize(input_data, p=2, dim=0)
 
     # Calculate training size
     train_size = int(0.8 * len(input_data))
@@ -433,7 +435,7 @@ def train_GB():
     target_data = torch.load("target_data.pt")
 
     # Normalize the data
-    input_data = F.normalize(input_data, p=2, dim=0)
+    # input_data = F.normalize(input_data, p=2, dim=0)
 
     # Calculate training size
     train_size = int(0.8 * len(input_data))

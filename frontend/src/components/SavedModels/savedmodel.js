@@ -30,6 +30,104 @@ ChartJS.register(
   Legend
 );
 
+function awayIDIndex(selected_stats) {
+  const statLengths = {'h2h': 1,
+    'homeID': 1,
+    'QB': 24,
+    'RB': 171,
+    'FB': 38,
+    'WR': 230,
+    'TE': 81,
+    'C': 15,
+    'G': 15,
+    'OT': 15,
+    'DE': 30,
+    'DT': 45,
+    'CB': 75,
+    'LB': 90,
+    'S': 45,
+    'PK': 36,
+    'P': 12,
+    'LS': 15,
+    'first_downs_total': 1,
+    'first_downs_passing': 1,
+    'first_downs_rushing': 1,
+    'first_downs_from_penalties': 1,
+    'first_downs_third_down_efficiency': 1,
+    'first_downs_fourth_down_efficiency': 1,
+    'plays_total': 1,
+    'yards_total': 1,
+    'yards_yards_per_play': 1,
+    'yards_total_drives': 1,
+    'passing_total': 1,
+    'passing_comp_att': 1,
+    'passing_yards_per_pass': 1,
+    'passing_interceptions_thrown': 1,
+    'passing_sacks_yards_lost': 1,
+    'rushings_total': 1,
+    'rushings_attempts': 1,
+    'rushings_yards_per_rush': 1,
+    'red_zone_made_att': 1,
+    'penalties_total': 1,
+    'turnovers_total': 1,
+    'turnovers_lost_fumbles': 1,
+    'turnovers_interceptions': 1,
+    'posession_total': 1,
+    'interceptions_total': 1,
+    'fumbles_recovered_total': 1,
+    'sacks_total': 1,
+    'safeties_total': 1,
+    'int_touchdowns_total': 1,
+    'points_against_total': 1,
+    'awayID': 1
+  };
+
+  const missingStatsLength = Object.keys(statLengths)
+    .filter(stat => !selected_stats.includes(stat))
+    .reduce((sum, stat) => sum + statLengths[stat], 0);
+  
+    return 969 - missingStatsLength;
+}
+
+function getGameName(homeID, awayID) {
+  const teamNames = {
+    1: 'Las Vegas Raiders', 
+    2: 'Jacksonville Jaguars', 
+    3: 'New England Patriots', 
+    4: 'New York Giants', 
+    5: 'Baltimore Ravens', 
+    6: 'Tennessee Titans', 
+    7: 'Detroit Lions', 
+    8: 'Atlanta Falcons', 
+    9: 'Cleveland Browns', 
+    10: 'Cincinnati Bengals', 
+    11: 'Arizona Cardinals', 
+    12: 'Philadelphia Eagles', 
+    13: 'New York Jets', 
+    14: 'San Francisco 49ers', 
+    15: 'Green Bay Packers', 
+    16: 'Chicago Bears', 
+    17: 'Kansas City Chiefs', 
+    18: 'Washington Commanders', 
+    19: 'Carolina Panthers', 
+    20: 'Buffalo Bills', 
+    21: 'Indianapolis Colts', 
+    22: 'Pittsburgh Steelers', 
+    23: 'Seattle Seahawks', 
+    24: 'Tampa Bay Buccaneers', 
+    25: 'Miami Dolphins', 
+    26: 'Houston Texans', 
+    27: 'New Orleans Saints', 
+    28: 'Denver Broncos', 
+    29: 'Dallas Cowboys', 
+    30: 'Los Angeles Chargers', 
+    31: 'Los Angeles Rams', 
+    32: 'Minnesota Vikings'
+  }
+
+  return `${teamNames[homeID]} vs ${teamNames[awayID]}`;
+}
+
 const SavedModels = () => {
   const [models, setModels] = useState([]);
   const [activeModelName, setActiveModelName] = useState('');
@@ -211,31 +309,13 @@ const SavedModels = () => {
             </div>
           </SwiperSlide>,
           <SwiperSlide key={`validation-${idx}`}>
-            <div className="outputs">
-              <div className='training-output'>
-
-                <div className='training-text'>
-                  Training Accuracy
+            <div className="outputs-grid">
+              {model.validation_data[0].slice(0, 10).map((input, index) => (
+                <div key={index} className="data-pair">
+                  <div>{getGameName(input[1], input[awayIDIndex(model.selected_stats)])}</div>
+                  <button className="predict-button">Predict</button>
                 </div>
-                
-                <div className='training-accuracy'>
-                  {model.model_type === 'SVM' ? model.training_accuracy : (model.training_accuracy[99]*100).toFixed(2)}%
-                </div>
-
-              </div>
-
-              <br/>
-
-              <div className='validation-output'>
-
-                <div className='validation-text'>
-                  Validation Accuracy
-                </div>
-                
-                <div className='validation-accuracy'>
-                  {model.model_type === 'SVM' ? model.validation_accuracy :(model.validation_accuracy[99]*100).toFixed(2)}%
-                </div>
-              </div>
+              ))}
             </div>
           </SwiperSlide>
         ]) : <SwiperSlide>Loading models...</SwiperSlide>}
