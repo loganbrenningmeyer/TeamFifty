@@ -458,42 +458,49 @@ def train_SVM():
     C = float(parameters.get('C', 1.0))
     gamma = parameters.get('gamma', 'scale')
 
-    # Load the data
+    # Load and preprocess data
     input_data = torch.load("input_data.pt").numpy()
-    target_data = torch.load("target_data.pt").numpy()
-
-    # Data preprocessing
+    target_data = torch.load("target_data.pt").numpy().ravel()
     scaler = StandardScaler()
     input_data = scaler.fit_transform(input_data)
+
+    # Split data
     X_train, X_test, y_train, y_test = train_test_split(input_data, target_data, test_size=0.2, random_state=42)
 
-    # Get validation data for saving
-    validation_data_list = [X_test.tolist(), y_test.tolist()]
+    # Further split for validation during training (if needed)
+    X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.1, random_state=101)
 
-    # SVM model initialization and training
-    model = svm.SVC(kernel=kernel, C=C, gamma=gamma)
+    # Initialize SVM and lists for tracking metrics
+    model = svm.SVC(kernel=kernel, C=C, gamma=gamma, probability=True)
+    training_accuracy = []
+    validation_accuracy = []
+    validation_loss = []
+
+    # Fit model and monitor performance
     model.fit(X_train, y_train)
+    training_predictions = model.predict(X_train)
+    training_accuracy.append(accuracy_score(y_train, training_predictions))
 
-    # Predictions and evaluations
+    # Validation performance
+    val_predictions = model.predict(X_val)
+    validation_accuracy.append(accuracy_score(y_val, val_predictions))
+    probs = model.predict_proba(X_val)
+    validation_loss.append(log_loss(y_val, probs))
+
+    # Testing and final evaluation
     y_pred = model.predict(X_test)
     accuracy = metrics.accuracy_score(y_test, y_pred)
     confusion_matrix = metrics.confusion_matrix(y_test, y_pred)
     classification_report = metrics.classification_report(y_test, y_pred, output_dict=True)
 
-    session["validation_data"] = validation_data_list
-
-    # Structure the classification report for easier consumption
-    report_details = {
-        "precision": classification_report['weighted avg']['precision'],
-        "recall": classification_report['weighted avg']['recall'],
-        "f1-score": classification_report['weighted avg']['f1-score'],
-        "support": classification_report['weighted avg']['support']
-    }
-
+    # Return metrics and reports
     return jsonify({
+        'training_accuracy': f"{training_accuracy[0] * 100:.2f}%",
+        'validation_accuracy': f"{validation_accuracy[0] * 100:.2f}%",
+        'validation_loss': f"{validation_loss[0] * 100:.2f}%",
         'accuracy': f"{accuracy * 100:.2f}%",
         'confusion_matrix': confusion_matrix.tolist(),
-        'detailed_report': report_details
+        'detailed_report': classification_report['weighted avg']
     })
 
 @app.route("/search",methods=['GET'])
