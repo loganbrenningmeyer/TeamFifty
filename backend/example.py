@@ -497,7 +497,7 @@ def train_SVM():
     return jsonify({
         'training_accuracy': f"{training_accuracy[0] * 100:.2f}%",
         'validation_accuracy': f"{validation_accuracy[0] * 100:.2f}%",
-        'validation_loss': f"{validation_loss[0] * 100:.2f}%",
+        'validation_loss': validation_loss,
         'accuracy': f"{accuracy * 100:.2f}%",
         'confusion_matrix': confusion_matrix.tolist(),
         'detailed_report': classification_report['weighted avg']
