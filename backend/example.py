@@ -372,9 +372,6 @@ def train():
                     epochs=100)
     
     print(model)
-    
-    # Normalize the data
-    # input_data = F.normalize(input_data, p=2, dim=0)
 
     # Calculate training size
     train_size = int(0.8 * len(input_data))
@@ -383,13 +380,16 @@ def train():
     shuffle = torch.randperm(input_data.shape[0])
     input_data = input_data[shuffle]
     target_data = target_data[shuffle]
+    
+    # Save validation data
+    validation_data_list = [input_data[train_size:].numpy().tolist(), target_data[train_size:].numpy().tolist()]
+
+    # Normalize the data
+    input_data = F.normalize(input_data, p=2, dim=0)
 
     # Create Datasets
     training_set = TensorDataset(input_data[:train_size], target_data[:train_size])
     validation_set = TensorDataset(input_data[train_size:], target_data[train_size:])
-
-    # For saving
-    validation_data_list = [tensor.numpy().tolist() for tensor in validation_set.tensors]
 
     print("Validation data:", validation_data_list)
 
@@ -434,9 +434,6 @@ def train_GB():
     input_data = torch.load("input_data.pt")
     target_data = torch.load("target_data.pt")
 
-    # Normalize the data
-    # input_data = F.normalize(input_data, p=2, dim=0)
-
     # Calculate training size
     train_size = int(0.8 * len(input_data))
 
@@ -445,11 +442,15 @@ def train_GB():
     input_data = input_data[shuffle]
     target_data = target_data[shuffle]
 
-    # Split the data into training and testing datasets
-    X_train, X_test, y_train, y_test = train_test_split(input_data.numpy(), target_data.numpy(), test_size=0.2)
-    
     # Get validation data for saving
-    validation_data_list = [X_test.tolist(), y_test.tolist()]
+    validation_data_list = [input_data[train_size:].numpy().tolist(), target_data[train_size:].numpy().tolist()]
+
+    # Normalize the data
+    input_data = F.normalize(input_data, p=2, dim=0)
+
+    # Split the data into training and testing datasets matching the validation data 
+    X_train, X_test, y_train, y_test = train_test_split(input_data.numpy(), target_data.numpy(), shuffle=False, test_size=0.2)
+    
 
     print("Validation data:", validation_data_list)
 
@@ -601,6 +602,58 @@ def searchModel():
 
         
     return jsonify(modelsFound)
+
+@app.route("/predict", methods=['POST'])
+def predict():
+    data = request.json
+
+    # Get the index
+    index = data['index']
+
+    # Get the model with the given name
+    model_name = data['model_name']
+    model_entry = savedModels.find_one({'model_name': model_name})
+    model = model_entry['model']
+    model_type = model_entry['model_type']
+    model_data = model_entry['validation_data']
+
+    # Get the input data as numpy array and normalize as tensor
+    input = np.array(model_data[0])
+    input = F.normalize(torch.tensor(input, dtype=torch.float32), p=2, dim=0)
+    target = np.array(model_data[1])[index]
+
+    # Load the model and make the prediction
+    if model_type == "ANN":
+        buffer = io.BytesIO(model)
+        model = torch.load(buffer,weights_only=False)
+        model.train(mode=False)
+
+        # Make the prediction
+        prediction = model(input[index])
+        print(f"Prediction: {prediction}, Target: {target}")
+    elif model_type == "GB":
+        model = joblib.load(io.BytesIO(model))
+
+        # Reshape input
+        input = input[index].numpy().reshape(1, -1)
+
+        # Make the prediction
+        prediction = model.predict(input)
+        print(f"Prediction: {prediction}, Target: {target}")
+
+    elif model_type == "SVM":
+        model = joblib.load(io.BytesIO(model))
+
+        # Reshape input
+        input = input[index].numpy().reshape(1, -1)
+
+        # Make the prediction
+        prediction = model.predict(input)
+        print(f"Prediction: {prediction}, Target: {target}")
+
+    # Make the prediction
+
+    return jsonify({'result': 'Prediction'})
 
 # Send a ping to confirm a successful connection
 try:

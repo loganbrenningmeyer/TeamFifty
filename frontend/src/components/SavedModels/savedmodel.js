@@ -273,6 +273,16 @@ const SavedModels = () => {
     }
   };
 
+  const handlePredictButton = (model_name, index) => {
+    return async () => {
+      try {
+        const response = await axios.post('http://localhost:3000/predict', { model_name, index });
+      } catch (error) {
+        console.error('Failed to make prediction:', error);
+      }
+    };
+  };
+
   return (
     <div>
       <div className="grid-header">
@@ -313,7 +323,7 @@ const SavedModels = () => {
               {model.validation_data[0].slice(0, 10).map((input, index) => (
                 <div key={index} className="data-pair">
                   <div>{getGameName(input[1], input[awayIDIndex(model.selected_stats)])}</div>
-                  <button className="predict-button">Predict</button>
+                  <button className="predict-button" onClick={handlePredictButton(model.model_name, index)} >Predict</button>
                 </div>
               ))}
             </div>
