@@ -1,0 +1,334 @@
+.grid-container {
+    display: grid;
+    grid-template-areas: 
+        "general"
+        "general-grid-container"
+        "player"
+        "player-grid-container"
+        "team"
+        "team-grid-container";
+    grid-gap: 10px;
+    background-color: #23272D;
+}
+
+.grid-container > div {
+    background-color: #191D21;
+    text-align: left;
+    font-size: 14px;
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
+}
+
+.general h2,
+.player h2,
+.team h2 {
+    margin: 0;
+}
+
+/* GENERAL GRID */
+
+.general {
+    grid-area: general;
+}
+
+.general-grid-container {
+    display: grid;
+    grid-area: general-grid-container;
+    grid-template-areas: "h2h homeID awayID";
+    grid-gap: 150px;
+}
+
+.general-grid-container > button {
+    background-color: #203749;
+    border: 1px solid #203749;
+    transition: background-color 0.5s, border 0.5s;
+    text-align: center;
+    height: 40px;
+    border-radius: 10px;
+}
+
+.general-grid-container > button.clicked {
+    border: 1px solid #FFFFFF;
+}
+
+.h2h {
+    grid-area: h2h;
+}
+
+.homeID {
+    grid-area: homeID;
+}
+
+.awayID {
+    grid-area: awayID;
+}
+
+/* PLAYER GRID */
+
+.player {
+    grid-area: player;
+}
+
+/* 
+# # Order of stats by position
+# Offense: QB, RB, FB, WR, TE, C, G, OT
+# Defense: DE, DT, CB, LB, S
+# Special: PK, P, LS */
+
+.player-grid-container {
+    display: grid;
+    grid-area: player-grid-container;
+    grid-template-areas: "QB RB FB WR TE C G OT DE DT CB LB S PK P LS";
+    grid-gap: 10px;
+}
+
+.player-grid-container > button {
+    background-color: #203749;
+    border: 1px solid #203749;
+    text-align: center;
+    height: 40px;
+    border-radius: 10px;
+    transition: background-color 0.5s, border 0.5s;
+}
+
+.player-grid-container > button.clicked {
+    border: 1px solid #FFFFFF;
+}
+
+.QB {
+    grid-area: QB;
+}
+
+.RB {
+    grid-area: RB;
+}
+
+.FB {
+    grid-area: FB;
+}
+
+.WR {
+    grid-area: WR;
+}
+
+.TE {
+    grid-area: TE;
+}
+
+.C {
+    grid-area: C;
+}
+
+.G {
+    grid-area: G;
+}
+
+.OT {
+    grid-area: OT;
+}
+
+.DE {
+    grid-area: DE;
+}
+
+.DT {
+    grid-area: DT;
+}
+
+.CB {
+    grid-area: CB;
+}
+
+.LB {
+    grid-area: LB;
+}
+
+.S {
+    grid-area: S;
+}
+
+.PK {
+    grid-area: PK;
+}
+
+.P {
+    grid-area: P;
+}
+
+.LS {
+    grid-area: LS;
+}
+
+/* TEAM GRID */
+
+.team {
+    grid-area: team;
+}
+
+.team-grid-container {
+    display: grid;
+    grid-template-areas: 
+        "first_downs_total first_downs_passing first_downs_rushing first_downs_from_penalties first_downs_third_down_efficiency first_downs_fourth_down_efficiency"
+        "plays_total yards_total yards_yards_per_play yards_total_drives passing_total passing_comp_att"
+        "passing_yards_per_pass passing_interceptions_thrown passing_sacks_yards_lost rushings_total rushings_attempts rushings_yards_per_rush"
+        "red_zone_made_att penalties_total turnovers_total turnovers_lost_fumbles turnovers_interceptions posession_total"
+        "interceptions_total fumbles_recovered_total sacks_total safeties_total int_touchdowns_total points_against_total";
+    grid-gap: 10px;
+}
+
+.team-grid-container > button {
+    background-color: #203749;
+    border: 1px solid #203749;
+    transition: background-color 0.5s, border 0.5s;
+    text-align: center;
+    font-size: 12px;
+    height: 40px;
+    border-radius: 10px;
+}
+
+.team-grid-container > button.clicked {
+    border: 1px solid #FFFFFF;
+}
+
+.first_downs_total {
+    grid-area: first_downs_total;
+}
+
+.first_downs_passing {
+    grid-area: first_downs_passing;
+}
+
+.first_downs_rushing {
+    grid-area: first_downs_rushing;
+}
+
+.first_downs_from_penalties {
+    grid-area: first_downs_from_penalties;
+}
+
+.first_downs_third_down_efficiency {
+    grid-area: first_downs_third_down_efficiency;
+}
+
+.first_downs_fourth_down_efficiency {
+    grid-area: first_downs_fourth_down_efficiency;
+}
+
+.plays_total {
+    grid-area: plays_total;
+}
+
+.yards_total {
+    grid-area: yards_total;
+}
+
+.yards_yards_per_play {
+    grid-area: yards_yards_per_play;
+}
+
+.yards_total_drives {
+    grid-area: yards_total_drives;
+}
+
+.passing_total {
+    grid-area: passing_total;
+}
+
+.passing_comp_att {
+    grid-area: passing_comp_att;
+}
+
+.passing_yards_per_pass {
+    grid-area: passing_yards_per_pass;
+}
+
+.passing_interceptions_thrown {
+    grid-area: passing_interceptions_thrown;
+}
+
+.passing_sacks_yards_lost {
+    grid-area: passing_sacks_yards_lost;
+}
+
+.rushings_total {
+    grid-area: rushings_total;
+}
+
+.rushings_attempts {
+    grid-area: rushings_attempts;
+}
+
+.rushings_yards_per_rush {
+    grid-area: rushings_yards_per_rush;
+}
+
+.red_zone_made_att {
+    grid-area: red_zone_made_att;
+}
+
+.penalties_total {
+    grid-area: penalties_total;
+}
+
+.turnovers_total {
+    grid-area: turnovers_total;
+}
+
+.turnovers_lost_fumbles {
+    grid-area: turnovers_lost_fumbles;
+}
+
+.turnovers_interceptions {
+    grid-area: turnovers_interceptions;
+}
+
+.posession_total {
+    grid-area: posession_total;
+}
+
+.interceptions_total {
+    grid-area: interceptions_total;
+}
+
+.fumbles_recovered_total {
+    grid-area: fumbles_recovered_total;
+}
+
+.sacks_total {
+    grid-area: sacks_total;
+}
+
+.safeties_total {
+    grid-area: safeties_total;
+}
+
+.int_touchdowns_total {
+    grid-area: int_touchdowns_total;
+}
+
+.points_against_total {
+    grid-area: points_against_total;
+}
+
+.continue-button {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background-color: rgb(23, 146, 217);
+    border: 2px solid rgb(23, 146, 217);
+    transition: background-color 0.5s, border 0.5s;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 20px;
+  }
+
+  .continue-button.clicked {
+    border: 2px solid white;
+  }

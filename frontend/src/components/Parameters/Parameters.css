@@ -1,0 +1,181 @@
+.param-grid-container {
+    display: grid;
+    grid-template-areas:
+      "activation-container loss-container"
+      "layers-container optimizer-container"
+      "dropout-container regularization-container"
+      "learning-rate-container batch-container"
+      "batch-size-container train-button"
+      "train-container test-container";
+    grid-gap: 10px;
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .activation-container {
+    display: grid;
+    grid-area: activation-container;
+    grid-template-areas:
+      "activation_fx activation_fx"
+      "relu tanh";
+    grid-gap: 10px;
+    color: white;
+  }
+  
+  .loss-container {
+    display: grid;
+    grid-area: loss-container;
+    grid-template-areas:
+      "loss_function loss_function"
+      "MSELoss BCELoss";
+    grid-gap: 10px;
+    color: white;
+  }
+  
+  .optimizer-container {
+    display: grid;
+    grid-area: optimizer-container;
+    grid-template-areas:
+      "optimizer optimizer"
+      "SGD Adam";
+    grid-gap: 10px;
+    color: white;
+  }
+  
+  .regularization-container {
+    display: grid;
+    grid-area: regularization-container;
+    grid-template-areas:
+      "regularization regularization"
+      "L1 L2";
+    grid-gap: 10px;
+    color: white;
+  }
+  
+  .learning-rate-container {
+    display: grid;
+    grid-area: learning-rate-container;
+    grid-template-areas: "learning_rate learning_rate_txt";
+    grid-template-columns: 2fr 1fr;
+    grid-gap: 10px;
+    align-items: center;
+    color: white;
+  }
+  
+  .batch-container {
+    display: grid;
+    grid-area: batch-container;
+    grid-template-areas: "batch_normalization batch_norm_toggle";
+    grid-gap: 10px;
+    align-items: center;
+    color: white;
+  }
+  
+  .layers-container {
+    display: grid;
+    grid-area: layers-container;
+    grid-template-areas: "layers layers_txt";
+    grid-template-columns: 2fr 1fr;
+    grid-gap: 10px;
+    align-items: center;
+    color: white;
+  }
+  
+  .dropout-container {
+    display: grid;
+    grid-area: dropout-container;
+    grid-template-areas: "dropout dropout_txt";
+    grid-template-columns: 2fr 1fr;
+    grid-gap: 10px;
+    align-items: center;
+    color: white;
+  }
+  
+  .batch-size-container {
+    display: grid;
+    grid-area: batch-size-container;
+    grid-template-areas: "batch_size batch_size_txt";
+    grid-template-columns: 2fr 1fr;
+    grid-gap: 10px;
+    align-items: center;
+    color: white;
+  }
+  
+  .param-grid-container > div {
+    background-color: #f1f1f1;
+    text-align: left;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
+  }
+  
+  .layers { grid-area: layers; }
+  .layers_txt { grid-area: layers_txt; }
+  .dropout { grid-area: dropout; }
+  .dropout_txt { grid-area: dropout_txt; }
+  .learning_rate { grid-area: learning_rate; }
+  .learning_rate_txt { grid-area: learning_rate_txt; }
+  .batch_size { grid-area: batch_size; }
+  .batch_size_txt { grid-area: batch_size_txt; }
+  
+  .param-grid-container > div > h2 {
+    margin: 0;
+  }
+  
+  .param-grid-container > div > button {
+    background-color: #203749;
+    border: 2px solid #203749;
+    transition: background-color 0.5s, border 0.5s;
+    text-align: center;
+    height: 50px;
+    border-radius: 10px;
+    font-size: 16px;
+  }
+  
+  .param-grid-container > div > button.clicked {
+    border: 2px solid #FFFFFF;
+  }
+  
+  .activation_fx { grid-area: activation_fx; }
+  .relu { grid-area: relu; }
+  .tanh { grid-area: tanh; }
+  .loss_function { grid-area: loss_function; }
+  .MSELoss { grid-area: MSELoss; }
+  .BCELoss { grid-area: BCELoss; }
+  .optimizer { grid-area: optimizer; }
+  .SGD { grid-area: SGD; }
+  .Adam { grid-area: Adam; }
+  .regularization { grid-area: regularization; }
+  .L1 { grid-area: L1; }
+  .L2 { grid-area: L2; }
+  .batch_normalization { grid-area: batch_normalization; }
+  .batch_norm_toggle { grid-area: batch_norm_toggle; }
+  
+  .train-button {
+    grid-area: train-button;
+    background-color: rgb(23, 146, 217);
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: background-color 0.5s;
+  }
+
+  .train-button:hover {
+    background-color: rgb(16, 106, 159);
+  }
+  
+  .param-grid-container input[type="text"],
+  .param-grid-container input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    color: black;
+    font-size: 16px;
+  }

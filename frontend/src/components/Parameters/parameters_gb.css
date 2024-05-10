@@ -1,0 +1,132 @@
+.gb-param-grid-container {
+    display: grid;
+    grid-template-areas: 
+        "n_estimators_container max_depth_container"
+        "gb_learning_rate_container subsample_container"
+        "min_samples_split_container min_samples_leaf_container"
+        "max_features_container max_features_container"
+        "gb-train-button gb-train-button";
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+}
+
+.gb-param-grid-container > div {
+    display: grid;
+    text-align: left;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
+    align-items: center;
+    grid-gap: 10px;
+}
+
+.gb-param-grid-container input[type="text"],
+.gb-param-grid-container input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    color: black;
+    font-size: 16px;
+}
+
+.gb-param-grid-container > div > h2 {
+    margin: 0;
+}
+
+.gb-param-grid-container > div > button {
+    background-color: #203749;
+    border: 2px solid #203749;
+    transition: background-color 0.5s, border 0.5s;
+    text-align: center;
+    height: 50px;
+    border-radius: 10px;
+    font-size: 16px;
+  }
+  
+.gb-param-grid-container > div > button.clicked {
+    border: 2px solid #FFFFFF;
+}
+
+.n_estimators_container {
+    grid-area: n_estimators_container;
+    grid-template-areas: "n_estimators n_estimators_txt";
+    grid-template-columns: 2fr 1fr;
+}
+
+.max_depth_container {
+    grid-area: max_depth_container;
+    grid-template-areas: "max_depth max_depth_txt";
+    grid-template-columns: 2fr 1fr;
+}
+
+.gb_learning_rate_container {
+    grid-area: gb_learning_rate_container;
+    grid-template-areas: "gb_learning_rate gb_learning_rate_txt";
+    grid-template-columns: 2fr 1fr;
+}
+
+.subsample_container {
+    grid-area: subsample_container;
+    grid-template-areas: "subsample subsample_txt";
+    grid-template-columns: 2fr 1fr;
+}
+
+.min_samples_split_container {
+    grid-area: min_samples_split_container;
+    grid-template-areas: "min_samples_split min_samples_split_txt";
+    grid-template-columns: 2fr 1fr;
+}
+
+.min_samples_leaf_container {
+    grid-area: min_samples_leaf_container;
+    grid-template-areas: "min_samples_leaf min_samples_leaf_txt";
+    grid-template-columns: 2fr 1fr;
+}
+
+.max_features_container {
+    grid-area: max_features_container;
+    grid-template-areas: 
+        "max_features max_features max_features"
+        "sqrt log2 null";
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.gb-train-button {
+    grid-area: train-button;
+    background-color: rgb(23, 146, 217);
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    height: 75px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: background-color 0.5s;
+}
+
+.gb-train-button:hover {
+background-color: rgb(16, 106, 159);
+}
+
+.n_estimators { grid-area: n_estimators; }
+.n_estimators_txt { grid-area: n_estimators_txt; }
+.max_depth { grid-area: max_depth; }
+.max_depth_txt { grid-area: max_depth_txt; }
+.gb_learning_rate { grid-area: gb_learning_rate;}
+.gb_learning_rate_txt { grid-area: gb_learning_rate_txt;}
+.subsample { grid-area: subsample; }
+.subsample_txt { grid-area: subsample_txt; }
+.min_samples_split { grid-area: min_samples_split; }
+.min_samples_split_txt { grid-area: min_samples_split_txt; }
+.min_samples_leaf { grid-area: min_samples_leaf; }
+.min_samples_leaf_txt { grid-area: min_samples_leaf_txt; }
+.max_features { grid-area: max_features; }
+.automatic { grid-area: automatic; }
+.sqrt { grid-area: sqrt; }
+.log2 { grid-area: log2; }
+.null { grid-area: null; }
+.gb-train-button { grid-area: gb-train-button;}

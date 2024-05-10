@@ -1,0 +1,157 @@
+/* Container for all tabs */
+.bg{
+    background-color: #121212;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 75px;
+}
+
+.centered-content {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%; /* Ensures the content uses full width for center alignment */
+}
+
+.name-text {
+    display: inline-block;
+    margin: 10% 0% 5% 0%;
+    padding: 10px 20px 10px 20px;
+    border-radius: 50px;
+    font-size: 25px;
+    background-color: #191D21;
+}
+
+.name-input {
+    background-color: #191D21;
+    border: solid 2px #191D21;
+    outline: none;
+    transition: border 0.5s;
+    border-radius: 50px;
+    height: 100px;
+    width: 60%;
+    padding: 30px;
+    font-size: 30px;
+}
+
+.name-input:focus {
+    border: solid 2px #FFFFFF;
+}
+
+.save-button {
+    background-color: rgb(23, 146, 217);
+    font-size: 25px;
+    padding: 10px 40px;
+    border-radius: 50px;
+    margin: 5% 0% 10% 0%;
+    transition: background-color 0.5s;
+}
+
+.save-button:hover {
+    background-color: rgb(16, 106, 159);
+}
+
+.container {
+    width: 1280px;
+    height: 100%;
+    background-color: #121212;
+    padding-top: 30px;
+    border-radius: 20px;
+}
+
+.bloc-tabs {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    background: #191D21;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+/* General styles for each tab */
+.tabs {
+    width: 100%;
+    padding: 10px 20px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.2s;
+}
+
+/* Hover effect for tabs */
+.tabs:hover {
+    background-color: rgba(0,0,0,0.15);
+}
+
+.active-tabs:hover {
+    background-color: #23272D;
+
+}
+
+/* Active tab style */
+.active-tabs {
+    background: #23272D;
+    border-bottom: 1px solid transparent;
+    position: relative;
+}
+
+.active-tabs::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100%);
+    height: 5px;
+    background: white;
+}
+
+/* Content area */
+.content-tabs {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* General content box styles */
+.content {
+    background: #23272D;
+    display: none;
+    width: 100%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.center-img {
+    text-align: center;
+    display: block;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+}
+
+/* When content is active */
+.active-content {
+    display: block;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+/* Additional aesthetic details */
+
+
+.content hr {
+    width: 100px;
+    height: 2px;
+    background: #222;
+}
+
+.content p {
+    width: 100%;
+}
