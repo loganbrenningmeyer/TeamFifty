@@ -25,7 +25,7 @@ function Data() {
   };
   const [clickedButtons, setClickedButtons] = useState(initialButtonStates);
   const [continueClicked, setContinueClicked] = useState(false);  // New state for tracking the "Continue" button click
-  
+
   const handleButtonClick = (buttonName) => {
     setClickedButtons((prevState) => {
       const newState = { ...prevState, [buttonName]: !prevState[buttonName] };
@@ -61,26 +61,9 @@ function Data() {
         </div>
 
         <div className="general-grid-container">
-          <button
-            className={clickedButtons.h2h ? 'clicked' : 'h2h'}
-            onClick={() => handleButtonClick('h2h')}
-          >
-            Head-to-Head Winner
-          </button>
-
-          <button
-            className={clickedButtons.homeID ? 'clicked' : 'homeID'}
-            onClick={() => handleButtonClick('homeID')}
-          >
-            Home Team ID
-          </button>
-
-          <button
-            className={clickedButtons.awayID ? 'clicked' : 'awayID'}
-            onClick={() => handleButtonClick('awayID')}
-          >
-            Away Team ID
-          </button>
+          <div className="h2h">Head-to-Head Winner</div>
+          <div className="homeID">Home Team ID</div>
+          <div className="awayID">Away Team ID</div>
         </div>
 
         <div className="player">
