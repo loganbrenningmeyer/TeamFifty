@@ -10,6 +10,7 @@ import torch.nn.functional as F
 import torch.nn as nn
 from torch.utils.data import DataLoader, TensorDataset, random_split
 import players
+from bson.binary import Binary
 import ANN
 import io
 from sklearn.preprocessing import StandardScaler, normalize
@@ -198,7 +199,7 @@ def saveModel():
             'training_accuracy':session['training_accuracy'],
             'validation_data':session['validation_data'],
             'validation_accuracy':session['validation_accuracy'],
-            'confusion_matrix':session['confusion_matrix'],
+            'confusion_matrix':session['confusion_matrix'].tolist(),
             'detailed_report':session['detailed_report']
             }
 
@@ -572,6 +573,7 @@ def train_SVM():
     session['validation_data'] = validation_data_list
     session['validation_accuracy'] = [validation_accuracy]
     session['detailed_report'] = classification_report['weighted avg']
+    session['confusion_matrix'] = confusion_matrix
 
     # Return metrics and reports
     return jsonify({
