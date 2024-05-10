@@ -44,7 +44,7 @@ Session(app)
 cors = CORS(app, supports_credentials=True)
 
 # Create a new client and connect to the database and collection
-uri = "mongodb+srv://TeamFifty:s3v6EdcMysAgxbdq@cluster0.uognzqp.mongodb.net/?retryWrites=true&w=majority"
+uri = "mongodb+srv://TeamFifty:UHlxsbCWfUvr0af5@cluster0.v2xiito.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 client = MongoClient(uri, server_api=ServerApi('1'))
 db = client.get_database('userAccountInfo')
 userInfoColl = db.get_collection('userInfo')
