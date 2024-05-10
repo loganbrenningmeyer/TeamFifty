@@ -200,7 +200,7 @@ const SavedModels = () => {
               setActiveTrainingData(training_data);
               setActiveValidationData(validation_data);
             }
-        
+            
           /* Get model visualizations from backend */
 
         }
@@ -269,7 +269,8 @@ const SavedModels = () => {
         setActiveValidationData(validation_data);
       }
       else{
-        const a = Array(Object.values(currentModel.confusion_matrix));
+        console.log(currentModel.confusion_matrix)
+        const a = Array(currentModel.confusion_matrix);
         setConfusionMatrix(a[0])
         setDetailedReport(currentModel.detailed_report)
 
@@ -366,12 +367,12 @@ const SavedModels = () => {
               <table className="matrix-table">
                 <tbody>
                     <tr>
-                        <td>{confusionMatrix[0]}</td>
-                        <td>{confusionMatrix[1]}</td>
+                        <td>{confusionMatrix[0][0]}</td>
+                        <td>{confusionMatrix[0][1]}</td>
                     </tr>
                     <tr>
-                        <td>{confusionMatrix[2]}</td>
-                        <td>{confusionMatrix[3]}</td>
+                        <td>{confusionMatrix[1][0]}</td>
+                        <td>{confusionMatrix[1][1]}</td>
                     </tr>
                 </tbody>
               </table>
